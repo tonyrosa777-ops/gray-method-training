@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { hero } from "@/data/site";
 import Button from "@/components/ui/Button";
 import PhotoPlaceholder from "@/components/ui/PhotoPlaceholder";
+import HeroParticles from "@/components/sections/HeroParticles";
 
 /* ---- Word-by-word tagline ---- */
 function TaglineReveal({ text }: { text: string }) {
@@ -64,23 +65,37 @@ export default function Hero() {
       className="relative min-h-screen bg-gray-bg overflow-hidden flex items-center"
       aria-label="Hero — Gray Method Training"
     >
-      {/* Ember orb — atmospheric bottom-left glow */}
-      <div
-        className="absolute bottom-0 left-0 w-[600px] h-[600px] -translate-x-1/3 translate-y-1/3 rounded-full pointer-events-none"
+      {/* Particle layer — stars, embers, glimmers */}
+      <HeroParticles />
+
+      {/* Ember orb — atmospheric bottom-left glow, breathing */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-[700px] h-[700px] -translate-x-1/3 translate-y-1/3 rounded-full pointer-events-none orb-breathe"
         style={{
           background:
-            "radial-gradient(circle, rgba(232,98,26,0.18) 0%, rgba(200,169,110,0.08) 50%, transparent 70%)",
-          filter: "blur(80px)",
+            "radial-gradient(circle, rgba(232,98,26,0.22) 0%, rgba(200,169,110,0.1) 45%, transparent 70%)",
+          filter: "blur(90px)",
         }}
         aria-hidden="true"
       />
-      {/* Secondary orb — top right */}
-      <div
-        className="absolute top-0 right-0 w-[400px] h-[400px] translate-x-1/3 -translate-y-1/3 rounded-full pointer-events-none"
+      {/* Secondary orb — top right, offset breathing phase */}
+      <motion.div
+        className="absolute top-0 right-0 w-[500px] h-[500px] translate-x-1/3 -translate-y-1/3 rounded-full pointer-events-none orb-breathe-slow"
         style={{
-          background: "radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%)",
-          filter: "blur(80px)",
+          background: "radial-gradient(circle, rgba(200,169,110,0.12) 0%, rgba(232,98,26,0.04) 50%, transparent 70%)",
+          filter: "blur(90px)",
         }}
+        aria-hidden="true"
+      />
+      {/* Centre-top accent orb */}
+      <motion.div
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(200,169,110,0.05) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         aria-hidden="true"
       />
 
@@ -106,7 +121,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <span className="text-gold">Gray Method</span>{" "}
+              <span className="text-shimmer">Gray Method</span>{" "}
               <span className="block mt-1">Online Health</span>
               <span className="block">&amp; Fitness</span>
             </motion.h1>

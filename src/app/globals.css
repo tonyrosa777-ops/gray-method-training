@@ -188,6 +188,45 @@
   padding-left: 1.5rem;
 }
 
+/* ---- Hero shimmer text animation --------------------------- */
+@keyframes shimmer-sweep {
+  0%   { background-position: -250% center; }
+  100% { background-position: 250% center; }
+}
+
+@keyframes orb-breathe {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.18); }
+}
+
+@utility text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #C8A96E  0%,
+    #C8A96E 22%,
+    #F5E6C0 42%,
+    #FFFBF2 50%,
+    #F5E6C0 58%,
+    #C8A96E 78%,
+    #C8A96E 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer-sweep 5s linear infinite;
+}
+
+@utility orb-breathe {
+  animation: orb-breathe 6s ease-in-out infinite;
+}
+
+@utility orb-breathe-slow {
+  animation: orb-breathe 9s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
 /* ---- Reduced motion ---------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
