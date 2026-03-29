@@ -1,23 +1,24 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import { photos, type PhotoSlot } from "@/lib/photos";
-import { existsSync } from "fs";
-import path from "path";
 
 interface PhotoPlaceholderProps {
   /** Key from the photos manifest */
   photoKey: keyof typeof photos;
   className?: string;
-  /** Passed to next/image — overrides sizes from slot aspect ratio */
   sizes?: string;
   priority?: boolean;
 }
 
 /**
- * Checks if the real photo file exists in /public/images/.
- * If yes: renders next/image with the real photo.
- * If no: renders a styled placeholder showing the slot name + description.
+ * Renders next/image for a named photo slot.
+ * On image load error (file not yet added), falls back to a styled
+ * placeholder showing the slot name + description for the demo.
  *
- * This is a SERVER COMPONENT — the file check runs at build/render time.
+ * Drop the photo at public/images/[filename] and the placeholder auto-resolves
+ * on next page load — zero code changes needed.
  */
 export default function PhotoPlaceholder({
   photoKey,
@@ -26,24 +27,17 @@ export default function PhotoPlaceholder({
   priority = false,
 }: PhotoPlaceholderProps) {
   const slot: PhotoSlot = photos[photoKey];
+  const [hasError, setHasError] = useState(false);
+
   const [w, h] = slot.aspectRatio.split("/").map(Number);
   const paddingPercent = ((h / w) * 100).toFixed(2);
-
-  // Check if the real file exists at build time
-  let fileExists = false;
-  try {
-    const publicPath = path.join(process.cwd(), "public", slot.src);
-    fileExists = existsSync(publicPath);
-  } catch {
-    fileExists = false;
-  }
 
   return (
     <div
       className={`relative overflow-hidden ${className}`}
       style={{ paddingBottom: `${paddingPercent}%` }}
     >
-      {fileExists ? (
+      {!hasError ? (
         <Image
           src={slot.src}
           alt={slot.alt}
@@ -51,25 +45,32 @@ export default function PhotoPlaceholder({
           sizes={sizes}
           priority={priority}
           className="object-cover"
+          onError={() => setHasError(true)}
         />
-      ) : (
-        // Placeholder — visible during demo, automatically replaced when photo is added
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-elevated border border-dashed border-gold/30 gap-2 p-4">
-          <div className="text-gold/50 text-4xl mb-1">◆</div>
-          <p className="font-mono text-gold text-xs tracking-wider text-center">
-            {slot.id}
-          </p>
-          <p className="font-body text-gray-text-2 text-xs text-center max-w-[200px] leading-relaxed">
-            {slot.description}
-          </p>
-          <p className="font-mono text-gray-muted text-xs mt-2">
-            {slot.aspectRatio} · {slot.usedIn}
-          </p>
-          <p className="font-body text-gray-muted text-xs mt-1 opacity-60">
-            Drop: public{slot.src}
-          </p>
-        </div>
-      )}
+      ) : null}
+
+      {/* Placeholder — always rendered, sits behind image, visible when image absent/errors */}
+      <div
+        className={[
+          "absolute inset-0 flex flex-col items-center justify-center bg-gray-elevated border border-dashed border-gold/30 gap-2 p-4",
+          hasError ? "z-10" : "z-0",
+        ].join(" ")}
+        aria-hidden={!hasError}
+      >
+        <div className="text-gold/40 text-3xl mb-1" aria-hidden="true">◆</div>
+        <p className="font-mono text-gold/70 text-xs tracking-wider text-center">
+          {slot.id}
+        </p>
+        <p className="font-body text-gray-text-2 text-xs text-center max-w-[180px] leading-relaxed">
+          {slot.description}
+        </p>
+        <p className="font-mono text-gray-muted text-xs mt-1">
+          {slot.aspectRatio}
+        </p>
+        <p className="font-body text-gray-muted text-[10px] mt-1 opacity-50 text-center">
+          Drop: /public{slot.src}
+        </p>
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function ScaleIn({
   delay = 0,
   duration = 0.6,
 }: ScaleInProps) {
-  const { ref, inView } = useInView({ once: true, rootMargin: "-80px" });
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "-80px" });
   const reduced = prefersReducedMotion();
 
   return (
@@ -29,7 +29,7 @@ export default function ScaleIn({
       transition={{
         duration: reduced ? 0 : duration,
         delay: reduced ? 0 : delay,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
       }}
     >
       {children}

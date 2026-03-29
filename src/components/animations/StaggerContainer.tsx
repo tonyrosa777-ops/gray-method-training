@@ -18,7 +18,7 @@ export default function StaggerContainer({
   staggerDelay = 0.1,
   initialDelay = 0,
 }: StaggerContainerProps) {
-  const { ref, inView } = useInView({ once: true, rootMargin: "-80px" });
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "-80px" });
   const reduced = prefersReducedMotion();
 
   const containerVariants = {
@@ -52,7 +52,7 @@ export const staggerItemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] as [number, number, number, number] },
   },
 };
 
@@ -61,6 +61,6 @@ export const staggerItemScaleVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] as [number, number, number, number] },
   },
 };

@@ -15,10 +15,12 @@ const overlayVariants = {
   exit: { opacity: 0, transition: { duration: 0.2, delay: 0.1 } },
 };
 
+const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
+
 const panelVariants = {
   hidden: { x: "100%" },
-  visible: { x: 0, transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } },
-  exit: { x: "100%", transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] } },
+  visible: { x: 0, transition: { duration: 0.35, ease: EASE } },
+  exit: { x: "100%", transition: { duration: 0.25, ease: EASE } },
 };
 
 const linkContainerVariants = {
@@ -30,7 +32,7 @@ const linkContainerVariants = {
 
 const linkVariants = {
   hidden: { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: EASE } },
 };
 
 export default function MobileNav({ onClose }: MobileNavProps) {

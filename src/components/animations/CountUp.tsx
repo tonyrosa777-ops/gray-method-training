@@ -26,7 +26,7 @@ export default function CountUp({
   decimals = 0,
   className,
 }: CountUpProps) {
-  const { ref, inView } = useInView({ once: true, rootMargin: "-80px" });
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "-80px" });
   const [value, setValue] = useState(start);
   const frameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);

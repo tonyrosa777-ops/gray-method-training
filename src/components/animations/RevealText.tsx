@@ -22,7 +22,7 @@ export default function RevealText({
   charDelay = 0.02,
   as: Tag = "span",
 }: RevealTextProps) {
-  const { ref, inView } = useInView({ once: true, rootMargin: "-80px" });
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "-80px" });
   const reduced = prefersReducedMotion();
 
   const containerVariants = {

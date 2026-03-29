@@ -1,0 +1,11 @@
+export { default as Hero } from "./Hero";
+export { default as PainPoints } from "./PainPoints";
+export { default as AdamStory } from "./AdamStory";
+export { default as GrayMethodPhilosophy } from "./GrayMethodPhilosophy";
+export { default as Programs } from "./Programs";
+export { default as Stats } from "./Stats";
+export { default as Testimonials } from "./Testimonials";
+export { default as InstagramFeed } from "./InstagramFeed";
+export { default as QuizCTA } from "./QuizCTA";
+export { default as BlogPreview } from "./BlogPreview";
+export { default as FinalCTA } from "./FinalCTA";

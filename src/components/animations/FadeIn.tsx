@@ -17,7 +17,7 @@ export default function FadeIn({
   delay = 0,
   duration = 0.5,
 }: FadeInProps) {
-  const { ref, inView } = useInView({ once: true, rootMargin: "-80px" });
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "-80px" });
   const reduced = prefersReducedMotion();
 
   return (
