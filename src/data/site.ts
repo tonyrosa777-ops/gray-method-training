@@ -15,6 +15,7 @@ export const nav = {
   links: [
     { label: "About", href: "/about" },
     { label: "Programs", href: "/programs" },
+    { label: "Pricing", href: "/pricing" },
     { label: "Shop", href: "/shop" },
     { label: "Reviews", href: "/reviews" },
     { label: "Blog", href: "/blog" },
@@ -129,6 +130,154 @@ export const programs = {
       cta: { label: "Learn More", href: "/programs/group" },
     },
   ],
+};
+
+/* ---- Pricing ---------------------------------------------- */
+export const pricing = {
+  eyebrow: "Built to win you clients",
+  headline: "A website that pays for itself should not look like a template.",
+  sub:
+    "Three one-time package options for a Gray Method site that feels premium, earns trust fast, and turns the right visitors into booked calls.",
+  chips: [
+    "One-time payment",
+    "Mobile-first",
+    "Built around real leads",
+    "You own the asset forever",
+  ],
+  tiers: [
+    {
+      id: "starter",
+      name: "Starter",
+      price: 1500,
+      tag: "Foundation",
+      description:
+        "The lean setup for getting the brand online with a clean, persuasive core site.",
+      features: [
+        "Custom homepage and hero structure",
+        "About, contact, and programs pages",
+        "Mobile-first responsive layout",
+        "Basic SEO, metadata, and launch setup",
+        "Contact form and call-to-action flow",
+      ],
+      cta: "Start with Starter",
+      featured: false,
+    },
+    {
+      id: "pro",
+      name: "Pro",
+      price: 3000,
+      tag: "Recommended",
+      description:
+        "The full brand experience with the integrations that actually help the site convert.",
+      features: [
+        "Everything in Starter",
+        "Instagram feed integration and social proof",
+        "Blog or CMS setup",
+        "Testimonials and story-driven sections",
+        "Quiz or lead capture integration",
+        "Launch support and handoff walkthrough",
+      ],
+      cta: "Choose Pro",
+      featured: true,
+    },
+    {
+      id: "premium",
+      name: "Premium",
+      price: 5500,
+      tag: "Full Stack",
+      description:
+        "The complete business platform for a site that has room to grow into every channel.",
+      features: [
+        "Everything in Pro",
+        "Shop / commerce integration",
+        "Advanced ROI or calculator section",
+        "Expanded content structure and page set",
+        "Priority revisions and launch day support",
+        "1-on-1 training for future updates",
+      ],
+      cta: "Build the Full Stack",
+      featured: false,
+    },
+  ],
+  roi: {
+    eyebrow: "Run the numbers",
+    headline: "How many new clients does it take to pay this off?",
+    sub:
+      "Use conservative sales assumptions to see how quickly the site can cover its own cost. The math is simple: if the site helps you book more qualified calls, even a single close can move the needle fast.",
+    defaults: {
+      monthlyLeads: 4,
+      closeRate: 25,
+      averageClientValue: 3000,
+    },
+    note:
+      "Benchmarks are informed by HubSpot's 2-5% lead-to-customer range, Close sales funnel research, and 2025 personal-training pricing references. Warm website inquiries are typically stronger than cold outreach, so adjust the sliders to match your real funnel.",
+  },
+  comparison: {
+    eyebrow: "Compare packages",
+    headline: "What changes as the investment goes up",
+    rows: [
+      {
+        feature: "Custom design direction",
+        starter: true,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Mobile-first responsive build",
+        starter: true,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Contact / call booking flow",
+        starter: true,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Story-led About section",
+        starter: true,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Instagram integration",
+        starter: false,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Blog or CMS setup",
+        starter: false,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Lead magnet / quiz integration",
+        starter: false,
+        pro: true,
+        premium: true,
+      },
+      {
+        feature: "Shop / commerce layer",
+        starter: false,
+        pro: false,
+        premium: true,
+      },
+      {
+        feature: "Advanced calculator section",
+        starter: false,
+        pro: false,
+        premium: true,
+      },
+      {
+        feature: "SEO setup and launch support",
+        starter: true,
+        pro: true,
+        premium: true,
+      },
+    ],
+  },
 };
 
 /* ---- Shop Preview ----------------------------------------- */
