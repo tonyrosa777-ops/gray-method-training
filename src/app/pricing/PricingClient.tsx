@@ -209,9 +209,9 @@ function PricingCalculator() {
           </FadeUp>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-[28px] border border-white/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 shadow-card lg:p-8">
-            <div className="mb-6 flex flex-wrap gap-3">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+          <div className="flex h-full min-h-[760px] flex-col rounded-[28px] border border-white/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 shadow-card lg:p-8">
+            <div className="grid gap-3 sm:grid-cols-3">
               {pricing.tiers.map((tier) => {
                 const active = selectedPackage === tier.id;
                 return (
@@ -220,105 +220,140 @@ function PricingCalculator() {
                     type="button"
                     onClick={() => setSelectedPackage(tier.id as PackageId)}
                     className={[
-                      "rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] transition-all duration-200",
+                      "rounded-2xl border px-4 py-4 text-left transition-all duration-200",
                       active
                         ? tier.featured
-                          ? "border-gold bg-gold text-gray-bg"
+                          ? "border-gold bg-gold text-gray-bg shadow-[0_10px_30px_rgba(200,169,110,0.2)]"
                           : "border-gold bg-white/5 text-gold"
-                        : "border-white/10 bg-gray-bg/40 text-gray-text-2 hover:border-gold/30 hover:text-gray-text",
+                        : "border-white/10 bg-gray-bg/40 text-gray-text-2 hover:border-gold/30 hover:text-gray-text hover:bg-white/7",
                     ].join(" ")}
                   >
-                    {tier.name} {formatCurrency(tier.price)}
+                    <span className="block font-mono text-[11px] uppercase tracking-[0.18em]">
+                      {tier.tag}
+                    </span>
+                    <span className="mt-2 block font-display text-lg font-semibold leading-none">
+                      {tier.name}
+                    </span>
+                    <span className="mt-2 block font-body text-sm opacity-90">
+                      {formatCurrency(tier.price)}
+                    </span>
                   </button>
                 );
               })}
             </div>
 
-            <div className="space-y-5">
-              <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-5">
-                <div className="mb-3 flex items-start justify-between gap-4">
+            <div className="mt-6 flex flex-1 flex-col justify-between gap-6">
+              <div className="space-y-6">
+                <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-6 lg:p-7">
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <div>
+                      <span className="block font-display text-xl font-semibold text-gray-text">
+                        Monthly qualified leads from the site
+                      </span>
+                      <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
+                        Warm inquiries from the new site
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-gold/20 bg-gold/10 px-4 py-2 font-display text-[28px] font-semibold leading-none text-gold">
+                      <CountUp end={monthlyLeads} />
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={20}
+                    step={1}
+                    value={monthlyLeads}
+                    onChange={(event) => setMonthlyLeads(Number(event.target.value))}
+                    className="w-full accent-gold"
+                  />
+                  <div className="mt-3 flex justify-between font-mono text-xs text-gray-muted">
+                    <span>1 lead</span>
+                    <span>20 leads</span>
+                  </div>
+                </label>
+
+                <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-6 lg:p-7">
+                  <div className="mb-4 flex items-start justify-between gap-4">
                   <div>
-                    <span className="font-body text-sm text-gray-text-2">Monthly qualified leads from the site</span>
-                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
+                      <span className="block font-display text-xl font-semibold text-gray-text">
+                        Call-to-client close rate
+                      </span>
+                      <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
                       Warm inquiries from the new site
-                    </p>
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-orange-accent/20 bg-orange-accent/10 px-4 py-2 font-display text-[28px] font-semibold leading-none text-orange-accent">
+                      <CountUp end={closeRate} suffix="%" />
+                    </span>
                   </div>
-                  <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1 font-display text-title-md font-semibold text-gold">
-                    <CountUp end={monthlyLeads} />
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={1}
-                  max={20}
-                  step={1}
-                  value={monthlyLeads}
-                  onChange={(event) => setMonthlyLeads(Number(event.target.value))}
-                  className="w-full accent-gold"
-                />
-                <div className="mt-2 flex justify-between font-mono text-xs text-gray-muted">
-                  <span>1 lead</span>
-                  <span>20 leads</span>
-                </div>
-              </label>
+                  <input
+                    type="range"
+                    min={5}
+                    max={50}
+                    step={1}
+                    value={closeRate}
+                    onChange={(event) => setCloseRate(Number(event.target.value))}
+                    className="w-full accent-gold"
+                  />
+                  <div className="mt-3 flex justify-between font-mono text-xs text-gray-muted">
+                    <span>5%</span>
+                    <span>50%</span>
+                  </div>
+                </label>
 
-              <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-5">
-                <div className="mb-3 flex items-start justify-between gap-4">
-                  <div>
-                    <span className="font-body text-sm text-gray-text-2">Call-to-client close rate</span>
-                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
-                      Conservative by design
-                    </p>
+                <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-6 lg:p-7">
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <div>
+                      <span className="block font-display text-xl font-semibold text-gray-text">
+                        Average client value
+                      </span>
+                      <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
+                        Based on your actual offer
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-display text-[28px] font-semibold leading-none text-gray-text">
+                      {formatCurrency(averageClientValue)}
+                    </span>
                   </div>
-                  <span className="rounded-full border border-orange-accent/20 bg-orange-accent/10 px-3 py-1 font-display text-title-md font-semibold text-orange-accent">
-                    <CountUp end={closeRate} suffix="%" />
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={5}
-                  max={50}
-                  step={1}
-                  value={closeRate}
-                  onChange={(event) => setCloseRate(Number(event.target.value))}
-                  className="w-full accent-gold"
-                />
-                <div className="mt-2 flex justify-between font-mono text-xs text-gray-muted">
-                  <span>5%</span>
-                  <span>50%</span>
-                </div>
-              </label>
+                  <input
+                    type="range"
+                    min={500}
+                    max={10000}
+                    step={250}
+                    value={averageClientValue}
+                    onChange={(event) => setAverageClientValue(Number(event.target.value))}
+                    className="w-full accent-gold"
+                  />
+                  <div className="mt-3 flex justify-between font-mono text-xs text-gray-muted">
+                    <span>$500</span>
+                    <span>$10k</span>
+                  </div>
+                </label>
+              </div>
 
-              <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-5">
-                <div className="mb-3 flex items-start justify-between gap-4">
-                  <div>
-                    <span className="font-body text-sm text-gray-text-2">Average client value</span>
-                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
-                      Based on your actual offer
-                    </p>
-                  </div>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-display text-title-md font-semibold text-gray-text">
-                    {formatCurrency(averageClientValue)}
-                  </span>
+              <div className="rounded-2xl border border-white/5 bg-gray-bg/40 p-5 lg:p-6">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold">
+                  What this is showing
+                </p>
+                <p className="mt-3 font-body text-sm leading-relaxed text-gray-text-2">
+                  The sliders let Adam test the site against a realistic lead flow, so the page sells the investment instead of pretending the numbers are magic.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {pricing.roi.proofs.map((proof) => (
+                    <span
+                      key={proof}
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-gray-text-2"
+                    >
+                      {proof}
+                    </span>
+                  ))}
                 </div>
-                <input
-                  type="range"
-                  min={500}
-                  max={10000}
-                  step={250}
-                  value={averageClientValue}
-                  onChange={(event) => setAverageClientValue(Number(event.target.value))}
-                  className="w-full accent-gold"
-                />
-                <div className="mt-2 flex justify-between font-mono text-xs text-gray-muted">
-                  <span>$500</span>
-                  <span>$10k</span>
-                </div>
-              </label>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="flex h-full flex-col gap-4">
             <div className="rounded-[28px] border border-white/5 bg-gray-elevated p-6 lg:p-7">
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-gray-muted">
                 Selected package

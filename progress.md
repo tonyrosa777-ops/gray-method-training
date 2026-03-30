@@ -239,6 +239,8 @@
 - 2026-03-29 · Pricing refinement pass: removed the calculator from the Premium package copy, refocused Premium on
   commerce / checkout architecture, and turned the ROI section into a clearer sales-proof panel with stronger hierarchy,
   readability, and persuasion cues.
+- 2026-03-29 · Pricing ROI readability pass: enlarged the slider controls, expanded the left calculator column, and
+  added a bottom support block so the panel fills the page space more naturally.
 
 ---
 
