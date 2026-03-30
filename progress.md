@@ -246,6 +246,8 @@
   understated.
 - 2026-03-29 · Shop preview layout pass: replaced the left narrative panel with a centered 4-card grid (2 digital,
   2 merch) and kept the CTA focused on browsing the full shop.
+- 2026-03-29 · Shop header copy pass: updated the homepage and shop-page hero language so the collection clearly
+  includes both digital resources and merch, with a more compelling mixed-collection headline.
 
 ---
 

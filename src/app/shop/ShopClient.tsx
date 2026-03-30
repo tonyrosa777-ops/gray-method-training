@@ -209,10 +209,10 @@ export default function ShopClient({ products }: ShopClientProps) {
             Gray Method Shop
           </p>
           <h1 className="font-display text-display font-semibold leading-[1.05] text-gray-text">
-            Guides, tools, and gear that work with the method.
+            Digital resources, merch, and small tools that stay close to the work.
           </h1>
           <p className="mt-4 font-body text-lead leading-relaxed text-gray-text-2">
-            Digital resources land instantly. Merch ships after checkout. Your cart stays local until you are ready to check out.
+            Browse the Gray Method collection at your pace. Some items are instant downloads, some ship after checkout, and all of them are built to be useful.
           </p>
         </FadeIn>
 
