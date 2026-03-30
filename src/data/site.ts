@@ -288,22 +288,22 @@ export const pricing = {
 /* ---- Shop Preview ----------------------------------------- */
 export const shopPreview = {
   eyebrow: "From the shop",
-  headline: "Guides, tools, and gear that stay close to the work.",
-  sub: "A small Gray Method collection built to be useful right now: digital resources you can download immediately and merch that keeps the brand visible without turning the site into a storefront.",
+  headline: "Small digital resources that stay close to the work.",
+  sub: "A compact Gray Method collection built for the people who want something useful right now, not another noisy storefront.",
   intro:
-    "The preview below is intentionally practical. It shows the current product mix, keeps the cart accessible, and leaves room for the Printful layer later without changing the shape of the homepage.",
+    "A quiet preview of the shop: a couple of digital resources, a simple path to the full collection, and nothing that pulls attention away from the coaching story.",
   highlights: [
     {
       title: "Digital downloads",
       body: "Starter materials and nutrition guidance that fit the coaching framework.",
     },
     {
-      title: "Merch",
-      body: "Simple apparel and accessories for the Gray Method community.",
+      title: "Practical tools",
+      body: "Resources that help the right people move from reading to doing.",
     },
     {
-      title: "Saved cart",
-      body: "Items stay in place so shoppers can come back when they are ready.",
+      title: "Always available",
+      body: "A small collection that stays easy to browse whenever the timing is right.",
     },
   ],
   cta: { label: "Browse the shop", href: "/shop" },

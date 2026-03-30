@@ -2,7 +2,7 @@
  * GRAY METHOD TRAINING - Shop Products
  *
  * Digital products are fulfilled manually.
- * Merch is structured for Printful-backed fulfillment and seeded fallback data.
+ * Merch is structured for physical fulfillment and seeded fallback data.
  */
 
 export type ProductCategory = "digital" | "merch";
@@ -72,7 +72,7 @@ export const products: Product[] = [
     description:
       "Soft fitted tee with a clean Gray Method chest mark. Built for everyday wear.",
     longDescription:
-      "100% cotton soft-style women's fitted tee with a minimalist Gray Method wordmark on the left chest. Built for the first Printful-backed merch drop.",
+      "100% cotton soft-style women's fitted tee with a minimalist Gray Method wordmark on the left chest. Built for the current Gray Method merch drop.",
     category: "merch",
     fulfillment: "printful",
     url: "/shop",

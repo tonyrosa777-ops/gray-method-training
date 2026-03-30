@@ -20,12 +20,12 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 
 const categoryLabels: Record<Product["category"], string> = {
   digital: "Digital download",
-  merch: "Printful merch",
+  merch: "Merch",
 };
 
 const categoryDescriptions: Record<Product["category"], string> = {
   digital: "Instant access after checkout.",
-  merch: "Physical item fulfilled through Printful.",
+  merch: "Physical item shipped after checkout.",
 };
 
 function ProductArt({ product }: { product: Product }) {
@@ -141,11 +141,6 @@ function ProductCard({ product }: { product: Product }) {
           <span className="rounded-full border border-white/8 bg-gray-bg px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-text-2">
             {categoryDescriptions[product.category]}
           </span>
-          {product.fulfillment === "printful" ? (
-            <span className="rounded-full border border-white/8 bg-gray-bg px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-text-2">
-              Printful ready
-            </span>
-          ) : null}
         </div>
 
         {product.variants ? (
@@ -217,7 +212,7 @@ export default function ShopClient({ products }: ShopClientProps) {
             Guides, tools, and gear that work with the method.
           </h1>
           <p className="mt-4 font-body text-lead leading-relaxed text-gray-text-2">
-            Digital resources land instantly. Merch is ready for Printful-backed fulfillment. Your cart stays local until you are ready to check out.
+            Digital resources land instantly. Merch ships after checkout. Your cart stays local until you are ready to check out.
           </p>
         </FadeIn>
 

@@ -241,6 +241,9 @@
   readability, and persuasion cues.
 - 2026-03-29 · Pricing ROI readability pass: enlarged the slider controls, expanded the left calculator column, and
   added a bottom support block so the panel fills the page space more naturally.
+- 2026-03-29 · Shop refinement pass: reduced the homepage ShopPreview to a smaller digital-product teaser, removed
+  public-facing Printful language, and simplified the shop page labels/copy so the collection feels cleaner and more
+  understated.
 
 ---
 

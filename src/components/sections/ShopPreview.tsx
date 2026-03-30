@@ -14,16 +14,16 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-const featuredProducts = products.slice(0, 4);
+const featuredProducts = products.filter((product) => product.category === "digital").slice(0, 2);
 
 function categoryCopy(category: "digital" | "merch") {
-  return category === "digital" ? "Digital download" : "Printful merch";
+  return category === "digital" ? "Digital download" : "Merch";
 }
 
 function deliveryCopy(category: "digital" | "merch") {
   return category === "digital"
     ? "Instant access by email"
-    : "Physical item fulfilled after checkout";
+    : "Ships after checkout";
 }
 
 function categoryIcon(category: "digital" | "merch") {
@@ -49,7 +49,7 @@ function categoryIcon(category: "digital" | "merch") {
 export default function ShopPreview() {
   return (
     <section
-      className="relative bg-gray-bg-2 py-24 lg:py-32 overflow-hidden"
+      className="relative overflow-hidden bg-gray-bg-2 py-20 lg:py-24"
       aria-label="Gray Method shop preview"
     >
       <div
@@ -67,8 +67,8 @@ export default function ShopPreview() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <FadeUp className="mb-12 max-w-3xl">
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
+        <FadeUp className="mb-8 max-w-3xl">
           <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-3">
             {shopPreview.eyebrow}
           </p>
@@ -80,8 +80,8 @@ export default function ShopPreview() {
           </p>
         </FadeUp>
 
-        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] items-start">
-          <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-gray-elevated p-8 lg:p-10 shadow-card">
+        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] items-start">
+          <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-gray-elevated p-7 lg:p-8 shadow-card">
             <div
               className="absolute inset-0 pointer-events-none"
               aria-hidden="true"
@@ -92,13 +92,13 @@ export default function ShopPreview() {
             />
             <div className="relative z-10">
               <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-gray-muted">
-                Practical by design
+                Digital collection
               </p>
-              <p className="mt-4 font-display text-title-lg font-semibold text-gray-text">
+              <p className="mt-4 max-w-xl font-display text-title-lg font-semibold leading-tight text-gray-text">
                 {shopPreview.intro}
               </p>
 
-              <div className="mt-8 space-y-4">
+              <div className="mt-8 space-y-3">
                 {shopPreview.highlights.map((item, index) => (
                   <div
                     key={item.title}
@@ -117,7 +117,7 @@ export default function ShopPreview() {
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-wrap gap-3">
                 <Button href={shopPreview.cta.href} variant="gold" size="md">
                   {shopPreview.cta.label}
                 </Button>
@@ -167,11 +167,6 @@ export default function ShopPreview() {
                     <span className="rounded-full border border-white/8 bg-gray-bg px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-text-2">
                       {deliveryCopy(product.category)}
                     </span>
-                    {product.variants ? (
-                      <span className="rounded-full border border-white/8 bg-gray-bg px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-text-2">
-                        {product.variants.name} options
-                      </span>
-                    ) : null}
                   </div>
 
                   <Link
