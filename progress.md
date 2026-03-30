@@ -248,6 +248,8 @@
   2 merch) and kept the CTA focused on browsing the full shop.
 - 2026-03-29 · Shop header copy pass: updated the homepage and shop-page hero language so the collection clearly
   includes both digital resources and merch, with a more compelling mixed-collection headline.
+- 2026-03-29 · Shop catalog expansion: added a third digital product plus a broader merch lineup inspired by the
+  reference shop so the actual `/shop` page feels fuller and the homepage teaser can show 1 digital + 3 merch items.
 
 ---
 

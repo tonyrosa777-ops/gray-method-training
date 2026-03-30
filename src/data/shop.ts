@@ -65,6 +65,20 @@ export const products: Product[] = [
     url: "/shop",
   },
   {
+    id: "gm-weekly-reset-planner",
+    slug: "gray-method-weekly-reset-planner",
+    name: "Gray Method Weekly Reset Planner",
+    price: 19,
+    description:
+      "A simple weekly reset template for planning training, meals, and habits without overthinking.",
+    longDescription:
+      "A printable and fillable planner that helps you map the week, choose the one habit that matters, and stay aligned without overcomplicating the process.",
+    category: "digital",
+    fulfillment: "download",
+    badge: "DIGITAL DOWNLOAD",
+    url: "/shop",
+  },
+  {
     id: "gm-tee-fitted",
     slug: "gray-method-fitted-tee",
     name: "Gray Method Fitted Tee",
@@ -89,6 +103,29 @@ export const products: Product[] = [
     },
   },
   {
+    id: "gm-crop-hoodie",
+    slug: "gray-method-crop-hoodie",
+    name: "Gray Method Crop Hoodie",
+    price: 54.5,
+    description:
+      "Relaxed crop hoodie with a subtle Gray Method mark. Easy to wear, easy to layer.",
+    longDescription:
+      "Midweight crop hoodie with a soft hand feel and a small Gray Method chest mark. Built to be a simple, wearable staple in the collection.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910003,
+    variants: {
+      name: "Size",
+      options: [
+        { label: "Small", value: "S", printfulVariantId: 91000301 },
+        { label: "Medium", value: "M", printfulVariantId: 91000302 },
+        { label: "Large", value: "L", printfulVariantId: 91000303 },
+        { label: "X-Large", value: "XL", printfulVariantId: 91000304 },
+      ],
+    },
+  },
+  {
     id: "gm-dad-hat",
     slug: "gray-method-dad-hat",
     name: "Gray Method Dad Hat",
@@ -101,6 +138,90 @@ export const products: Product[] = [
     fulfillment: "printful",
     url: "/shop",
     printfulProductId: 910002,
+  },
+  {
+    id: "gm-journal",
+    slug: "gray-method-journal",
+    name: "Gray Method Journal",
+    price: 24,
+    description:
+      "A clean notebook for resets, planning, and the work you actually want to remember.",
+    longDescription:
+      "A hardcover spiral journal with lined pages and a minimal Gray Method cover mark. Useful for weekly resets, reflections, and client planning.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910004,
+  },
+  {
+    id: "gm-tumbler",
+    slug: "gray-method-stainless-tumbler",
+    name: "Gray Method Stainless Tumbler",
+    price: 35,
+    description:
+      "Insulated tumbler for the long days, early mornings, and everything in between.",
+    longDescription:
+      "A stainless steel insulated tumbler with a minimal Gray Method mark. Built for hot coffee, cold water, and anywhere the day takes you.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910005,
+  },
+  {
+    id: "gm-water-bottle",
+    slug: "gray-method-water-bottle",
+    name: "Gray Method Water Bottle",
+    price: 29,
+    description:
+      "Clean aluminum bottle with a subtle logo and a simple everyday shape.",
+    longDescription:
+      "A lightweight metal water bottle with a Gray Method logo, made to sit comfortably on a desk, in a bag, or beside a training mat.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910006,
+  },
+  {
+    id: "gm-tote-bag",
+    slug: "gray-method-tote-bag",
+    name: "Gray Method Tote Bag",
+    price: 26,
+    description:
+      "Simple carry-all tote for books, groceries, and the things that leave the house with you.",
+    longDescription:
+      "A sturdy everyday tote with a minimal Gray Method print. Easy to fold, easy to grab, and designed to stay in the rotation.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910007,
+  },
+  {
+    id: "gm-backpack",
+    slug: "gray-method-backpack",
+    name: "Gray Method Backpack",
+    price: 62,
+    description:
+      "Everyday backpack with enough room for work, travel, and the gym.",
+    longDescription:
+      "A structured backpack with a clean Gray Method logo and practical storage for a laptop, notebook, and daily essentials.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910008,
+  },
+  {
+    id: "gm-laptop-sleeve",
+    slug: "gray-method-laptop-sleeve",
+    name: "Gray Method Laptop Sleeve",
+    price: 34,
+    description:
+      "Minimal laptop sleeve for the desk, the coffee shop, or the bag between sessions.",
+    longDescription:
+      "A padded laptop sleeve with a clean Gray Method mark. Simple protection for your device without turning it into a billboard.",
+    category: "merch",
+    fulfillment: "printful",
+    url: "/shop",
+    printfulProductId: 910009,
   },
 ];
 

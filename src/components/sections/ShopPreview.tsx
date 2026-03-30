@@ -1,4 +1,4 @@
-﻿import { products } from "@/data/shop";
+﻿import { digitalProducts, merchProducts } from "@/data/shop";
 import { shopPreview } from "@/data/site";
 import FadeUp from "@/components/animations/FadeUp";
 import StaggerContainer, {
@@ -13,7 +13,7 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-const featuredProducts = products.slice(0, 4);
+const featuredProducts = [digitalProducts[0]!, ...merchProducts.slice(0, 3)];
 
 function categoryCopy(category: "digital" | "merch") {
   return category === "digital" ? "Digital download" : "Merch";
