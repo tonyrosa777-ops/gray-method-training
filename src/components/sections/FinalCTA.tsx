@@ -1,22 +1,20 @@
 import { finalCta } from "@/data/site";
 import FadeUp from "@/components/animations/FadeUp";
 import ScaleIn from "@/components/animations/ScaleIn";
-import RevealText from "@/components/animations/RevealText";
 import Button from "@/components/ui/Button";
 
 export default function FinalCTA() {
   return (
     <section
-      className="relative bg-gray-bg py-28 lg:py-40 overflow-hidden"
+      className="relative overflow-hidden bg-gray-bg py-28 lg:py-40"
       aria-label="Schedule a free discovery call with Coach Adam"
     >
-      {/* Large centered ember — atmospheric only */}
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center"
         aria-hidden="true"
       >
         <div
-          className="w-[700px] h-[700px] rounded-full"
+          className="h-[700px] w-[700px] rounded-full"
           style={{
             background:
               "radial-gradient(circle, rgba(200,169,110,0.05) 0%, rgba(232,98,26,0.03) 40%, transparent 70%)",
@@ -25,46 +23,35 @@ export default function FinalCTA() {
         />
       </div>
 
-      {/* Divider rule at top */}
-      <div
-        className="absolute top-0 inset-x-0 section-divider"
-        aria-hidden="true"
-      />
+      <div className="section-divider absolute inset-x-0 top-0" aria-hidden="true" />
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        {/* Eyebrow */}
+      <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
         <FadeUp className="mb-6">
-          <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold">
             Free Discovery Call · 20 minutes · No commitment
           </p>
         </FadeUp>
 
-        {/* Headline — char reveal */}
-        <div className="mb-8">
-          <RevealText
-            text={finalCta.headline}
-            className="font-display font-semibold text-display text-gray-text block"
-            charDelay={0.025}
-          />
-        </div>
+        <FadeUp delay={0.2} className="mb-8">
+          <h2 className="mx-auto max-w-4xl font-display text-display font-semibold leading-[0.95] text-gray-text text-balance">
+            {finalCta.headline}
+          </h2>
+        </FadeUp>
 
-        {/* Sub */}
-        <FadeUp delay={0.5} className="mb-12">
-          <p className="font-body text-lead text-gray-text-2 leading-relaxed">
+        <FadeUp delay={0.35} className="mb-12">
+          <p className="font-body text-lead leading-relaxed text-gray-text-2">
             {finalCta.sub}
           </p>
         </FadeUp>
 
-        {/* CTA */}
-        <ScaleIn delay={0.7}>
+        <ScaleIn delay={0.5}>
           <Button href={finalCta.cta.href} variant="gold" size="lg">
             {finalCta.cta.label}
           </Button>
         </ScaleIn>
 
-        {/* Reassurance */}
-        <FadeUp delay={0.9}>
-          <p className="font-body text-sm text-gray-muted mt-6">
+        <FadeUp delay={0.65}>
+          <p className="mt-6 font-body text-sm text-gray-muted">
             {finalCta.note}
           </p>
         </FadeUp>
