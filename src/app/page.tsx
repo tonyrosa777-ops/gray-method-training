@@ -6,6 +6,7 @@ import {
   AdamStory,
   GrayMethodPhilosophy,
   Programs,
+  ShopPreview,
   Stats,
   Testimonials,
   InstagramFeed,
@@ -41,6 +42,9 @@ export default function HomePage() {
         <GrayMethodPhilosophy />
         <Divider />
         <Programs />
+        <Divider />
+        <ShopPreview />
+        <Divider />
         <Stats />
         <Divider />
         <Testimonials />

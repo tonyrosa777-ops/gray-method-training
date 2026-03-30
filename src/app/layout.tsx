@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans, Space_Mono } from "next/font/google";
-import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
-import SnipcartInit from "@/components/SnipcartInit";
+import CartDrawer from "@/components/shop/CartDrawer";
+import { CartProvider } from "@/lib/cart";
 import "./globals.css";
 
 /* ---- Fonts ------------------------------------------------ */
@@ -143,23 +143,13 @@ export default function RootLayout({
             __html: JSON.stringify(localBusinessJsonLd),
           }}
         />
-        {/* Snipcart theme CSS — loaded in head so cart UI is styled on open */}
-        <link
-          rel="stylesheet"
-          href="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.css"
-        />
       </head>
-      {/* suppressHydrationWarning prevents React panicking about Snipcart's DOM injections */}
-      <body className="min-h-screen antialiased" suppressHydrationWarning>
-        {/* SnipcartInit injects #snipcart via useEffect — never in React's tree */}
-        <SnipcartInit />
-        {children}
-        <Analytics />
-        {/* lazyOnload fires after navigation settles — prevents race condition with OuterLayoutRouter */}
-        <Script
-          src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"
-          strategy="lazyOnload"
-        />
+      <body className="min-h-screen antialiased">
+        <CartProvider>
+          {children}
+          <CartDrawer />
+          <Analytics />
+        </CartProvider>
       </body>
     </html>
   );

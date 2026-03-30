@@ -15,6 +15,7 @@ export const nav = {
   links: [
     { label: "About", href: "/about" },
     { label: "Programs", href: "/programs" },
+    { label: "Shop", href: "/shop" },
     { label: "Reviews", href: "/reviews" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
@@ -128,6 +129,31 @@ export const programs = {
       cta: { label: "Learn More", href: "/programs/group" },
     },
   ],
+};
+
+/* ---- Shop Preview ----------------------------------------- */
+export const shopPreview = {
+  eyebrow: "From the shop",
+  headline: "Guides, tools, and gear that stay close to the work.",
+  sub: "A small Gray Method collection built to be useful right now: digital resources you can download immediately and merch that keeps the brand visible without turning the site into a storefront.",
+  intro:
+    "The preview below is intentionally practical. It shows the current product mix, keeps the cart accessible, and leaves room for the Printful layer later without changing the shape of the homepage.",
+  highlights: [
+    {
+      title: "Digital downloads",
+      body: "Starter materials and nutrition guidance that fit the coaching framework.",
+    },
+    {
+      title: "Merch",
+      body: "Simple apparel and accessories for the Gray Method community.",
+    },
+    {
+      title: "Saved cart",
+      body: "Items stay in place so shoppers can come back when they are ready.",
+    },
+  ],
+  cta: { label: "Browse the shop", href: "/shop" },
+  secondaryCta: { label: "Ask about a product", href: "/contact" },
 };
 
 /* ---- Stats ------------------------------------------------- */

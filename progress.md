@@ -5,10 +5,10 @@
 ---
 
 ## CURRENT STATUS
-**Phase:** Phase 10 — SEO (all pages built, Phase 9 complete)
-**Last commit:** feat: all pages, Sanity CMS, shop, blog, quiz, and API routes
+**Phase:** Phase 8 reboot — commerce migration (Stripe + custom cart + Printful APIs)
+**Last commit:** chore: harden vercel deployment setup
 **Last updated:** 2026-03-29
-**Blocked by:** Nothing — ready to continue
+**Blocked by:** Commerce architecture reset — replacing Snipcart Phase 8 with reference-style shop infrastructure
 
 ---
 
@@ -126,16 +126,26 @@
 - [x] Build: ✅ TypeScript clean, /blog static, /blog/[slug] SSG, /studio dynamic
 - [ ] ADAM TO DO: sanity init --project-id + import posts (see SETUP.md)
 
-## PHASE 8 — SHOP (Snipcart + Printful) ✅
-- [x] READ snipcart-nextjs-dom-conflict SKILL.md ✅
-- [x] `SnipcartInit.tsx` — useEffect DOM injection, never in React's tree
-- [x] `layout.tsx` updated — SnipcartInit, Script lazyOnload, suppressHydrationWarning, CSS in head
-- [x] `src/data/shop.ts` — 4 products: 2 digital + 2 merch (Printful), typed Product interface
-- [x] `src/app/shop/page.tsx` — server component with Metadata
-- [x] `src/app/shop/ShopClient.tsx` — client: tab filter (all/digital/merch), variant picker, snipcart-add-item buttons
-- [x] `loading.tsx` — added for /, /shop, /blog (Suspense boundaries per skill)
-- [x] Build: ✅ TypeScript clean, /shop static
-- [ ] ADAM TO DO: Add NEXT_PUBLIC_SNIPCART_API_KEY to .env.local
+## PHASE 8 — COMMERCE MIGRATION (Stripe + Custom Cart + Printful APIs)
+- [x] Reference repo analyzed: `tonyrosa777-ops/andrea-abella-marie-website`
+- [x] Migration direction approved: fully switch to Stripe + custom cart + Printful APIs
+- [x] Phase 8 reset in `progress.md`
+- [x] Design + implementation plan docs written in `docs/superpowers/`
+- [x] Add `CartProvider` + `useCart`
+- [x] Add global `CartDrawer` and mount from root layout
+- [ ] Add `Shop` to navbar and mobile nav
+- [ ] Add cart trigger/count in navigation
+- [ ] Add homepage `ShopPreview` section
+- [ ] Replace `src/data/shop.ts` with seeded catalog structure for Printful-backed shop
+- [ ] Add `src/lib/printful.ts`
+- [ ] Add seeded Printful fallback data
+- [ ] Add `/api/printful/products`
+- [ ] Add `/api/printful/variants/[id]`
+- [ ] Rebuild `/shop` around custom cart + live/fallback product data
+- [ ] Add `/api/stripe/checkout`
+- [ ] Remove Snipcart layout/init/script/CSS integration
+- [ ] Update `SETUP.md` from Snipcart setup to Stripe + Printful setup
+- [ ] Build: TypeScript clean, shop flow verified
 
 ## PHASE 9 — REMAINING PAGES ✅
 - [x] `/about` — full story, credentials, philosophy, stats, CTA; Navbar included
@@ -180,6 +190,8 @@
 - globals.css has @keyframes shimmer-sweep, orb-breathe, orb-breathe-slow + @utility text-shimmer
 - Quality polish pass complete: lint/build restored, missing metadata coverage filled, README refreshed, and project memory docs aligned
 - Vercel first-deploy hardening added: `vercel.json` explicitly sets the framework to `nextjs`; deploy this repo from the repo root with Root Directory left blank
+- Reference commerce architecture lives in `reference-andrea-shop/` locally for comparison while rebuilding Phase 8
+- Phase 8 is reopened by design: old Snipcart implementation is now considered transitional and scheduled for replacement
 
 ---
 
@@ -205,6 +217,12 @@
   with the current repo state. Verification complete: `npm run lint` ✅, `npm run build` ✅.
 - 2026-03-29 · Vercel deploy hardening: added `vercel.json` with explicit `nextjs` framework config and
   clarified `SETUP.md` / `README.md` so first-time Vercel imports use the repo root with the correct framework preset.
+- 2026-03-29 · Phase 8 commerce migration kicked off. Reference repo `tonyrosa777-ops/andrea-abella-marie-website`
+  analyzed locally for shop infrastructure: cart provider, cart drawer, homepage shop preview, Printful product +
+  variant APIs, and Stripe checkout. Decision made to fully replace Snipcart with the same type of architecture.
+  `progress.md` rewritten to reopen Phase 8 and track the migration in execution order.
+- 2026-03-29 · Phase 8 Task 2 complete: added `CartProvider` / `useCart`, a new global `CartDrawer`, and
+  mounted both from `src/app/layout.tsx`. Snipcart script/init wiring has been removed from layout. `npm run lint` ✅.
 
 ---
 

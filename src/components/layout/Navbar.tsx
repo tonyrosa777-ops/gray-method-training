@@ -6,10 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { nav } from "@/data/site";
 import Button from "@/components/ui/Button";
 import MobileNav from "./MobileNav";
+import { useCart } from "@/lib/cart";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { count, openCart } = useCart();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
@@ -74,6 +76,31 @@ export default function Navbar() {
               {nav.cta.label}
             </Button>
           </div>
+
+          <button
+            type="button"
+            onClick={openCart}
+            className={[
+              "inline-flex items-center gap-2 rounded-full border border-white/10 bg-gray-elevated/70 px-3 py-2",
+              "font-body text-sm text-gray-text-2 transition-colors duration-200 hover:border-gold/30 hover:text-gold",
+            ].join(" ")}
+            aria-label={`Open cart with ${count} item${count === 1 ? "" : "s"}`}
+          >
+            <span
+              className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-gray-bg text-current"
+              aria-hidden="true"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.5H9a2 2 0 0 1-2-1.5L5 3H2" />
+                <circle cx="9" cy="20" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="18" cy="20" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+              <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[11px] font-semibold leading-none text-gray-bg">
+                {count}
+              </span>
+            </span>
+            <span className="hidden sm:inline">Cart</span>
+          </button>
 
           {/* Mobile hamburger */}
           <button
