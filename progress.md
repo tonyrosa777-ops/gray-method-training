@@ -6,9 +6,9 @@
 
 ## CURRENT STATUS
 **Phase:** Phase 8 reboot — commerce migration (Stripe + custom cart + Printful APIs)
-**Last commit:** chore: harden vercel deployment setup
+**Last commit:** chore: publish commerce migration work
 **Last updated:** 2026-03-29
-**Blocked by:** Commerce architecture reset — replacing Snipcart Phase 8 with reference-style shop infrastructure
+**Blocked by:** Final shop-flow verification
 
 ---
 
@@ -133,18 +133,18 @@
 - [x] Design + implementation plan docs written in `docs/superpowers/`
 - [x] Add `CartProvider` + `useCart`
 - [x] Add global `CartDrawer` and mount from root layout
-- [ ] Add `Shop` to navbar and mobile nav
-- [ ] Add cart trigger/count in navigation
-- [ ] Add homepage `ShopPreview` section
-- [ ] Replace `src/data/shop.ts` with seeded catalog structure for Printful-backed shop
-- [ ] Add `src/lib/printful.ts`
-- [ ] Add seeded Printful fallback data
-- [ ] Add `/api/printful/products`
-- [ ] Add `/api/printful/variants/[id]`
-- [ ] Rebuild `/shop` around custom cart + live/fallback product data
-- [ ] Add `/api/stripe/checkout`
-- [ ] Remove Snipcart layout/init/script/CSS integration
-- [ ] Update `SETUP.md` from Snipcart setup to Stripe + Printful setup
+- [x] Add `Shop` to navbar and mobile nav
+- [x] Add cart trigger/count in navigation
+- [x] Add homepage `ShopPreview` section
+- [x] Replace `src/data/shop.ts` with seeded catalog structure for Printful-backed shop
+- [x] Add `src/lib/printful.ts`
+- [x] Add seeded Printful fallback data
+- [x] Add `/api/printful/products`
+- [x] Add `/api/printful/variants/[id]`
+- [x] Rebuild `/shop` around custom cart + live/fallback product data
+- [x] Add `/api/stripe/checkout`
+- [x] Remove Snipcart layout/init/script/CSS integration
+- [x] Update `SETUP.md` from Snipcart setup to Stripe + Printful setup
 - [ ] Build: TypeScript clean, shop flow verified
 
 ## PHASE 9 — REMAINING PAGES ✅
@@ -223,6 +223,11 @@
   `progress.md` rewritten to reopen Phase 8 and track the migration in execution order.
 - 2026-03-29 · Phase 8 Task 2 complete: added `CartProvider` / `useCart`, a new global `CartDrawer`, and
   mounted both from `src/app/layout.tsx`. Snipcart script/init wiring has been removed from layout. `npm run lint` ✅.
+- 2026-03-29 · Phase 8 Tasks 3-7 complete: navbar/mobile shop discovery, homepage shop preview, seeded catalog +
+  Printful helper layer, Printful API routes, custom `/shop` cart flow, and Stripe checkout route added.
+  `npm run lint` ✅ and `npm run build` ✅.
+- 2026-03-29 · Phase 8 docs updated: `SETUP.md` now points at Stripe + Printful instead of Snipcart, and
+  `README.md` reflects the new commerce stack.
 
 ---
 
