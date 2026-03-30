@@ -38,8 +38,8 @@ export default function RevealText({
     visible: { opacity: 1, transition: { duration: 0.1 } },
   };
 
-  // Split into characters, preserving spaces
-  const chars = text.split("");
+  // Split into words, then characters within each word
+  const words = text.split(" ");
 
   return (
     <motion.div
@@ -50,15 +50,26 @@ export default function RevealText({
       className={className}
       aria-label={text}
     >
-      {chars.map((char, i) => (
-        <motion.span
-          key={i}
-          variants={reduced ? undefined : charVariants}
-          className="inline-block"
-          style={{ whiteSpace: char === " " ? "pre" : "normal" }}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
+      {words.map((word, wordIndex) => (
+        <span key={wordIndex} className="inline-block whitespace-nowrap">
+          {word.split("").map((char, charIndex) => (
+            <motion.span
+              key={charIndex}
+              variants={reduced ? undefined : charVariants}
+              className="inline-block"
+            >
+              {char}
+            </motion.span>
+          ))}
+          {wordIndex < words.length - 1 && (
+            <motion.span
+              variants={reduced ? undefined : charVariants}
+              className="inline-block"
+            >
+              &nbsp;
+            </motion.span>
+          )}
+        </span>
       ))}
     </motion.div>
   );
