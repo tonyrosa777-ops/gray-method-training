@@ -12,7 +12,6 @@ interface RevealTextProps {
   delay?: number;
   /** Seconds between each character */
   charDelay?: number;
-  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
 }
 
 export default function RevealText({
@@ -20,7 +19,6 @@ export default function RevealText({
   className,
   delay = 0,
   charDelay = 0.02,
-  as: Tag = "span",
 }: RevealTextProps) {
   const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "-80px" });
   const reduced = prefersReducedMotion();

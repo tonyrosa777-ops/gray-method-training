@@ -1,5 +1,4 @@
 ﻿import type { Metadata } from "next";
-import ContactPageClient from "./ContactPageClient";
 
 export const metadata: Metadata = {
   title: "Contact Coach Adam Gray",
@@ -13,6 +12,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
-  return <ContactPageClient />;
+export default function ContactLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return children;
 }

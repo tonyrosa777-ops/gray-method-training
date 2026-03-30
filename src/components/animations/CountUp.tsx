@@ -34,10 +34,7 @@ export default function CountUp({
 
   useEffect(() => {
     if (!inView) return;
-    if (reduced) {
-      setValue(end);
-      return;
-    }
+    if (reduced) return;
 
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
@@ -56,10 +53,11 @@ export default function CountUp({
     frameRef.current = requestAnimationFrame(animate);
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      startTimeRef.current = null;
     };
   }, [inView, end, start, duration, reduced]);
 
-  const displayValue = value.toFixed(decimals);
+  const displayValue = (inView && reduced ? end : value).toFixed(decimals);
 
   return (
     <span ref={ref} className={className}>

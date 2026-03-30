@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-import FadeUp from "@/components/animations/FadeUp";
 import FadeIn from "@/components/animations/FadeIn";
 
 /* ---- Quiz data ------------------------------------------------ */

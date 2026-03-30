@@ -6,7 +6,7 @@
 
 ## CURRENT STATUS
 **Phase:** Phase 10 — SEO (all pages built, Phase 9 complete)
-**Last commit:** chore: project setup (commits pending — phases built in one session)
+**Last commit:** feat: all pages, Sanity CMS, shop, blog, quiz, and API routes
 **Last updated:** 2026-03-29
 **Blocked by:** Nothing — ready to continue
 
@@ -151,7 +151,7 @@
 - [x] Build: ✅ TypeScript clean, 18 routes, 0 errors
 
 ## PHASE 10 — SEO
-- [ ] Page-level metadata on every route
+- [x] Page-level metadata on every route
 - [ ] JSON-LD: Article (blog posts) + FAQPage (programs)
 - [ ] `next-sitemap` configured
 - [ ] All images: descriptive alt text
@@ -178,6 +178,7 @@
 - All copy in src/data/site.ts — no hardcoded strings in JSX ever
 - Hero now has full particle system (HeroParticles.tsx) + shimmer headline + breathing orbs
 - globals.css has @keyframes shimmer-sweep, orb-breathe, orb-breathe-slow + @utility text-shimmer
+- Quality polish pass complete: lint/build restored, missing metadata coverage filled, README refreshed, and project memory docs aligned
 
 ---
 
@@ -198,6 +199,9 @@
 - 2026-03-29 · Phase 9 complete: /reviews (featured story cards + client quotes + Google reviews) and
   /quiz (5-question multi-step quiz with animated transitions + program result logic, QuizClient.tsx).
   18 routes total, all TypeScript clean, all static. Next: Phase 10 SEO.
+- 2026-03-29 · Quality/SEO/docs polish: fixed lint issues in animation + quiz files, added missing
+  route metadata for `/` and `/contact`, replaced the placeholder README, and aligned `progress.md`
+  with the current repo state. Verification complete: `npm run lint` ✅, `npm run build` ✅.
 
 ---
 

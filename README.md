@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gray Method Training
 
-## Getting Started
+Marketing site, blog, quiz, and light commerce app for Coach Adam Gray, built with Next.js 16 and React 19.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Sanity Studio + `next-sanity`
+- Snipcart
+- React Hook Form + Zod
+
+## Project Structure
+
+```text
+gray-method-training/
+├── src/app/                  App Router pages, layouts, API routes
+├── src/components/           Layout, section, UI, blog, and animation components
+├── src/data/                 Centralized site and shop copy/data
+├── src/lib/                  Shared helpers and integrations
+├── src/sanity/               Sanity env, client, queries, and schema types
+├── public/                   Static assets
+├── progress.md               Project memory and phase tracking
+└── SETUP.md                  Environment and deployment setup guide
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open `http://localhost:3000`.
 
-## Learn More
+## Quality Checks
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create `.env.local` in the project root and configure the services described in [SETUP.md](./SETUP.md):
 
-## Deploy on Vercel
+- Instagram Graph API
+- Sanity CMS
+- ConvertKit
+- Snipcart
+- Resend
+- Optional analytics providers
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Content and Brand Rules
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Project-specific instructions live in [CLAUDE.md](./CLAUDE.md) and [AGENTS.md](./AGENTS.md).
+- Centralized marketing copy lives in `src/data/site.ts`.
+- Shop product data lives in `src/data/shop.ts`.
+- Session history and build status live in [progress.md](./progress.md).
+
+## Deployment
+
+Deploy to Vercel using the `gray-method-training` directory as the root if this project stays nested inside the larger repo folder. Full deployment notes and required environment variables are documented in [SETUP.md](./SETUP.md).
