@@ -157,7 +157,7 @@ export default function Hero() {
 
           {/* Photo block */}
           <motion.div
-            className="relative hidden lg:block"
+            className="relative hidden lg:block pb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
@@ -179,7 +179,7 @@ export default function Hero() {
             </div>
             {/* Floating badge */}
             <motion.div
-              className="absolute -bottom-4 -left-6 bg-gray-elevated border border-gold-dim rounded-xl px-5 py-3 shadow-card"
+              className="mt-4 ml-6 w-fit bg-gray-elevated border border-gold-dim rounded-xl px-5 py-3 shadow-card"
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
