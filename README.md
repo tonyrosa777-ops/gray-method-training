@@ -63,4 +63,9 @@ Create `.env.local` in the project root and configure the services described in 
 
 ## Deployment
 
-Deploy to Vercel using the `gray-method-training` directory as the root if this project stays nested inside the larger repo folder. Full deployment notes and required environment variables are documented in [SETUP.md](./SETUP.md).
+Deploy to Vercel from this repo root with:
+
+- Framework Preset: `Next.js`
+- Root Directory: leave blank
+
+This repo also includes [vercel.json](./vercel.json) to make the framework explicit for first-time imports. Full deployment notes and required environment variables are documented in [SETUP.md](./SETUP.md).

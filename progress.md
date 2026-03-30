@@ -179,6 +179,7 @@
 - Hero now has full particle system (HeroParticles.tsx) + shimmer headline + breathing orbs
 - globals.css has @keyframes shimmer-sweep, orb-breathe, orb-breathe-slow + @utility text-shimmer
 - Quality polish pass complete: lint/build restored, missing metadata coverage filled, README refreshed, and project memory docs aligned
+- Vercel first-deploy hardening added: `vercel.json` explicitly sets the framework to `nextjs`; deploy this repo from the repo root with Root Directory left blank
 
 ---
 
@@ -202,6 +203,8 @@
 - 2026-03-29 · Quality/SEO/docs polish: fixed lint issues in animation + quiz files, added missing
   route metadata for `/` and `/contact`, replaced the placeholder README, and aligned `progress.md`
   with the current repo state. Verification complete: `npm run lint` ✅, `npm run build` ✅.
+- 2026-03-29 · Vercel deploy hardening: added `vercel.json` with explicit `nextjs` framework config and
+  clarified `SETUP.md` / `README.md` so first-time Vercel imports use the repo root with the correct framework preset.
 
 ---
 

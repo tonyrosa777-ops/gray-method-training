@@ -129,17 +129,25 @@ Adam needs to grant access to his Instagram Business Account.
 
 ## VERCEL DEPLOYMENT
 
-**Important from project memory:** Root Directory setting must be LEFT BLANK in Vercel Project Settings → General if Next.js is deployed from the repo root.
+**Important from project memory:** This repository is already a standalone Next.js app. In Vercel, the Root Directory should be LEFT BLANK because the app lives at the repo root.
 
-If deploying from the `gray-method-training/` subdirectory, set Root Directory to: `gray-method-training`
+`vercel.json` now explicitly sets `framework: "nextjs"` so first-time imports do not rely only on Vercel auto-detection.
 
 **Steps:**
 1. Push to GitHub: `github.com/[org]/gray-method-training`
 2. Import to vercel.com → New Project → import repo
-3. Framework: Next.js (auto-detected)
-4. Root Directory: `gray-method-training` (if in subdirectory)
+3. Framework Preset: **Next.js**
+4. Root Directory: **leave blank**
 5. Add all environment variables from `.env.local`
 6. Deploy
+
+**If you see `404: NOT_FOUND` on the first deploy:**
+1. Open the Vercel project settings
+2. Confirm Framework Preset is `Next.js`
+3. Confirm Root Directory is blank
+4. Redeploy the latest production build
+
+That error usually means the project was created with the wrong framework/root settings, so the deployment URL exists but is not pointing at this Next.js app correctly.
 
 **Custom domain:** graymethodtraining.com
 - DNS: Add CNAME record pointing to Vercel
