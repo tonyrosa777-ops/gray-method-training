@@ -244,6 +244,8 @@
 - 2026-03-29 · Shop refinement pass: reduced the homepage ShopPreview to a smaller digital-product teaser, removed
   public-facing Printful language, and simplified the shop page labels/copy so the collection feels cleaner and more
   understated.
+- 2026-03-29 · Shop preview layout pass: replaced the left narrative panel with a centered 4-card grid (2 digital,
+  2 merch) and kept the CTA focused on browsing the full shop.
 
 ---
 
