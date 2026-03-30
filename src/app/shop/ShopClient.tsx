@@ -209,7 +209,7 @@ export default function ShopClient({ products }: ShopClientProps) {
             Gray Method Shop
           </p>
           <h1 className="font-display text-display font-semibold leading-[1.05] text-gray-text">
-            THE Gray Method Collection.
+            The Gray Method Collection.
           </h1>
           <p className="mt-4 font-body text-lead leading-relaxed text-gray-text-2">
             Browse at your pace. Some items are instant downloads, some ship after checkout, and all of them are built to be useful.

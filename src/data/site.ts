@@ -288,7 +288,7 @@ export const pricing = {
 /* ---- Shop Preview ----------------------------------------- */
 export const shopPreview = {
   eyebrow: "From the shop",
-  headline: "THE Gray Method Collection.",
+  headline: "The Gray Method Collection.",
   sub: "Digital resources, merch, and practical pieces for the people who want something useful, wearable, and easy to come back to.",
   cta: { label: "Browse the shop", href: "/shop" },
 };
