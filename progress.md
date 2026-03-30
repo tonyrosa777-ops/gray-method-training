@@ -250,6 +250,8 @@
   includes both digital resources and merch, with a more compelling mixed-collection headline.
 - 2026-03-29 · Shop catalog expansion: added a third digital product plus a broader merch lineup inspired by the
   reference shop so the actual `/shop` page feels fuller and the homepage teaser can show 1 digital + 3 merch items.
+- 2026-03-29 · Hero motion pass: increased the particle density, speed, and sparkle frequency on the homepage so
+  the opening screen feels more animated without changing the color system.
 
 ---
 

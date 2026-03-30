@@ -46,12 +46,12 @@ function mkStar(w: number, h: number): Particle {
   return {
     x: Math.random() * w,
     y: Math.random() * h,
-    vx: (Math.random() - 0.5) * 0.08,
-    vy: (Math.random() - 0.5) * 0.08,
-    size: Math.random() * 1.2 + 0.4,
-    opacity: Math.random() * 0.4 + 0.05,
-    opacityTarget: Math.random() * 0.55 + 0.1,
-    opacitySpeed: Math.random() * 0.006 + 0.002,
+    vx: (Math.random() - 0.5) * 0.14,
+    vy: (Math.random() - 0.5) * 0.14,
+    size: Math.random() * 1.4 + 0.45,
+    opacity: Math.random() * 0.48 + 0.06,
+    opacityTarget: Math.random() * 0.7 + 0.12,
+    opacitySpeed: Math.random() * 0.01 + 0.003,
     type: "star",
     color,
     age: 0,
@@ -65,12 +65,12 @@ function mkEmber(w: number, h: number): Particle {
   return {
     x: Math.random() * w * 0.5,
     y: h + Math.random() * 40,
-    vx: (Math.random() - 0.4) * 0.4,
-    vy: -(Math.random() * 0.65 + 0.25),
-    size: Math.random() * 2.2 + 0.7,
+    vx: (Math.random() - 0.4) * 0.6,
+    vy: -(Math.random() * 0.9 + 0.35),
+    size: Math.random() * 2.6 + 0.8,
     opacity: 0,
-    opacityTarget: Math.random() * 0.55 + 0.2,
-    opacitySpeed: Math.random() * 0.016 + 0.007,
+    opacityTarget: Math.random() * 0.7 + 0.25,
+    opacitySpeed: Math.random() * 0.022 + 0.01,
     type: "ember",
     color,
     age: 0,
@@ -85,10 +85,10 @@ function mkGlimmer(w: number, h: number): Particle {
     y: Math.random() * h * 0.85,
     vx: 0,
     vy: 0,
-    size: Math.random() * 9 + 5,
+    size: Math.random() * 11 + 6,
     opacity: 0,
-    opacityTarget: 0.65,
-    opacitySpeed: 0.028,
+    opacityTarget: 0.8,
+    opacitySpeed: 0.04,
     type: "glimmer",
     color: "rgba(223,196,138,",
     age: 0,
@@ -162,8 +162,8 @@ export default function HeroParticles() {
     window.addEventListener("resize", resize);
 
     // Seed particles
-    for (let i = 0; i < 85; i++) particles.push(mkStar(w, h));
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 145; i++) particles.push(mkStar(w, h));
+    for (let i = 0; i < 58; i++) {
       const e = mkEmber(w, h);
       // Stagger so they don't all appear at once
       e.y = Math.random() * h;
@@ -179,9 +179,9 @@ export default function HeroParticles() {
 
       // Occasionally spawn a glimmer
       glimmerCooldown--;
-      if (glimmerCooldown <= 0 && Math.random() < 0.035) {
+      if (glimmerCooldown <= 0 && Math.random() < 0.07) {
         particles.push(mkGlimmer(w, h));
-        glimmerCooldown = 60 + Math.random() * 60;
+        glimmerCooldown = 35 + Math.random() * 35;
       }
 
       // Cull dead particles
@@ -208,10 +208,10 @@ export default function HeroParticles() {
 
           // Twinkle — chase a target opacity, flip target when near
           const diff = p.opacityTarget - p.opacity;
-          if (Math.abs(diff) < 0.015) {
+          if (Math.abs(diff) < 0.012) {
             p.opacityTarget = Math.random() * 0.5 + 0.05;
           }
-          p.opacity += diff * p.opacitySpeed * 8;
+          p.opacity += diff * p.opacitySpeed * 9;
 
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -222,25 +222,25 @@ export default function HeroParticles() {
         /* -- EMBER -- */
         else if (p.type === "ember") {
           // Slight horizontal sway
-          p.vx += (Math.random() - 0.5) * 0.015;
-          p.vx *= 0.97;
+          p.vx += (Math.random() - 0.5) * 0.025;
+          p.vx *= 0.965;
 
           const lifeRatio = p.age / p.maxAge;
           if (lifeRatio < 0.18) {
             p.opacity = Math.min(p.opacity + p.opacitySpeed, p.opacityTarget);
           } else if (lifeRatio > 0.65) {
-            p.opacity = Math.max(0, p.opacity - p.opacitySpeed * 1.6);
+            p.opacity = Math.max(0, p.opacity - p.opacitySpeed * 1.8);
           }
 
           const clampedOp = Math.max(0, Math.min(1, p.opacity));
 
           // Soft glow halo
-          const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3.5);
+          const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4.2);
           glow.addColorStop(0, p.color + clampedOp * 0.7 + ")");
           glow.addColorStop(1, p.color + "0)");
           ctx.fillStyle = glow;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size * 3.5, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, p.size * 4.2, 0, Math.PI * 2);
           ctx.fill();
 
           // Core dot
