@@ -190,7 +190,7 @@ export const pricing = {
       features: [
         "Everything in Pro",
         "Shop / commerce integration",
-        "Advanced ROI or calculator section",
+        "Revenue architecture and checkout flow",
         "Expanded content structure and page set",
         "Priority revisions and launch day support",
         "1-on-1 training for future updates",
@@ -201,16 +201,21 @@ export const pricing = {
   ],
   roi: {
     eyebrow: "Run the numbers",
-    headline: "How many new clients does it take to pay this off?",
+    headline: "How quickly does the site pay for itself?",
     sub:
-      "Use conservative sales assumptions to see how quickly the site can cover its own cost. The math is simple: if the site helps you book more qualified calls, even a single close can move the needle fast.",
+      "This is a conservative sales model for selling the website itself. If the new site books more qualified calls, even one additional close can move the needle fast.",
+    proofs: [
+      "Interactive proof tool",
+      "Conservative assumptions",
+      "Warm lead benchmarks",
+    ],
     defaults: {
       monthlyLeads: 4,
       closeRate: 25,
       averageClientValue: 3000,
     },
     note:
-      "Benchmarks are informed by HubSpot's 2-5% lead-to-customer range, Close sales funnel research, and 2025 personal-training pricing references. Warm website inquiries are typically stronger than cold outreach, so adjust the sliders to match your real funnel.",
+      "Benchmarks are informed by HubSpot's 2-5% lead-to-customer range, the quiz-funnel and calculator patterns called out in the competitive brief, and 2025 personal-training pricing references. Warm website inquiries are typically stronger than cold outreach, so adjust the sliders to match your real funnel.",
   },
   comparison: {
     eyebrow: "Compare packages",
@@ -265,7 +270,7 @@ export const pricing = {
         premium: true,
       },
       {
-        feature: "Advanced calculator section",
+        feature: "Revenue architecture and checkout flow",
         starter: false,
         pro: false,
         premium: true,

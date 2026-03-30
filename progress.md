@@ -236,6 +236,9 @@
 - 2026-03-29 Ã‚Â· Pricing page shipped: added `/pricing` to the shared nav, built the Gray Method pricing hero,
   three one-time tiers ($1,500 / $3,000 / $5,500), ROI calculator, and comparison chart. The page uses the local
   competitive intelligence as the pricing/ROI reference point.
+- 2026-03-29 · Pricing refinement pass: removed the calculator from the Premium package copy, refocused Premium on
+  commerce / checkout architecture, and turned the ROI section into a clearer sales-proof panel with stronger hierarchy,
+  readability, and persuasion cues.
 
 ---
 

@@ -30,23 +30,43 @@ function formatCompactCurrency(value: number) {
   return formatCurrency(value);
 }
 
-function ResultCard({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
+function ResultCard({
+  label,
+  value,
+  detail,
+  accent = false,
+  large = false,
+}: {
+  label: string;
+  value: string;
+  detail?: string;
+  accent?: boolean;
+  large?: boolean;
+}) {
   return (
     <div
       className={[
         "rounded-2xl border p-5 lg:p-6",
-        accent ? "border-gold/30 bg-gold/10" : "border-white/5 bg-gray-elevated",
+        accent
+          ? "border-gold/30 bg-[linear-gradient(180deg,rgba(200,169,110,0.12),rgba(255,255,255,0.03))]"
+          : "border-white/5 bg-gray-elevated",
       ].join(" ")}
     >
       <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-gray-muted">
         {label}
       </p>
       <p className={[
-        "mt-2 font-display text-title-md font-semibold leading-none",
+        "mt-2 font-display font-semibold leading-none",
+        large ? "text-display" : "text-title-md",
         accent ? "text-gold" : "text-gray-text",
       ].join(" ")}>
         {value}
       </p>
+      {detail && (
+        <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-gray-text-2">
+          {detail}
+        </p>
+      )}
     </div>
   );
 }
@@ -144,9 +164,22 @@ function PricingCalculator() {
   const annualRevenue = monthlyRevenue * 12;
   const breakEvenMonths = monthlyRevenue > 0 ? selectedTier.price / monthlyRevenue : 0;
   const breakEvenClients = averageClientValue > 0 ? selectedTier.price / averageClientValue : 0;
+  const breakEvenLabel = breakEvenMonths > 0 ? (breakEvenMonths < 1 ? "Under 1 mo" : `${breakEvenMonths.toFixed(1)} mo`) : "-";
 
   return (
-    <section id="roi" className="bg-gray-bg py-24 lg:py-32">
+    <section id="roi" className="relative overflow-hidden bg-gray-bg py-24 lg:py-32">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute left-[-8rem] top-24 h-72 w-72 rounded-full bg-gold/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute right-[-8rem] bottom-0 h-80 w-80 rounded-full bg-orange-accent/10 blur-3xl"
+        aria-hidden="true"
+      />
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <FadeUp className="mb-4">
@@ -164,10 +197,20 @@ function PricingCalculator() {
               {pricing.roi.sub}
             </p>
           </FadeUp>
+          <FadeUp delay={0.15} className="mt-8 flex flex-wrap justify-center gap-3">
+            {pricing.roi.proofs.map((proof) => (
+              <span
+                key={proof}
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-text-2"
+              >
+                {proof}
+              </span>
+            ))}
+          </FadeUp>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-2xl border border-white/5 bg-gray-elevated p-6 lg:p-8">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[28px] border border-white/5 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 shadow-card lg:p-8">
             <div className="mb-6 flex flex-wrap gap-3">
               {pricing.tiers.map((tier) => {
                 const active = selectedPackage === tier.id;
@@ -191,11 +234,16 @@ function PricingCalculator() {
               })}
             </div>
 
-            <div className="space-y-6">
-              <label className="block">
-                <div className="mb-3 flex items-center justify-between gap-4">
-                  <span className="font-body text-sm text-gray-text-2">Monthly qualified leads from the site</span>
-                  <span className="font-display text-title-md font-semibold text-gray-text">
+            <div className="space-y-5">
+              <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-5">
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <div>
+                    <span className="font-body text-sm text-gray-text-2">Monthly qualified leads from the site</span>
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
+                      Warm inquiries from the new site
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1 font-display text-title-md font-semibold text-gold">
                     <CountUp end={monthlyLeads} />
                   </span>
                 </div>
@@ -214,10 +262,15 @@ function PricingCalculator() {
                 </div>
               </label>
 
-              <label className="block">
-                <div className="mb-3 flex items-center justify-between gap-4">
-                  <span className="font-body text-sm text-gray-text-2">Call-to-client close rate</span>
-                  <span className="font-display text-title-md font-semibold text-gray-text">
+              <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-5">
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <div>
+                    <span className="font-body text-sm text-gray-text-2">Call-to-client close rate</span>
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
+                      Conservative by design
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-orange-accent/20 bg-orange-accent/10 px-3 py-1 font-display text-title-md font-semibold text-orange-accent">
                     <CountUp end={closeRate} suffix="%" />
                   </span>
                 </div>
@@ -236,10 +289,15 @@ function PricingCalculator() {
                 </div>
               </label>
 
-              <label className="block">
-                <div className="mb-3 flex items-center justify-between gap-4">
-                  <span className="font-body text-sm text-gray-text-2">Average client value</span>
-                  <span className="font-display text-title-md font-semibold text-gray-text">
+              <label className="block rounded-2xl border border-white/5 bg-gray-bg/35 p-5">
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <div>
+                    <span className="font-body text-sm text-gray-text-2">Average client value</span>
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-muted">
+                      Based on your actual offer
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-display text-title-md font-semibold text-gray-text">
                     {formatCurrency(averageClientValue)}
                   </span>
                 </div>
@@ -261,19 +319,53 @@ function PricingCalculator() {
           </div>
 
           <div className="space-y-4">
-            <ResultCard label="Selected package" value={`${selectedTier.name} - ${formatCurrency(selectedTier.price)}`} />
-            <ResultCard label="Monthly revenue" value={formatCompactCurrency(monthlyRevenue)} accent />
-            <ResultCard label="Annual revenue" value={formatCompactCurrency(annualRevenue)} />
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-              <ResultCard label="Break even" value={breakEvenMonths > 0 ? `${breakEvenMonths.toFixed(1)} mo` : "-"} />
-              <ResultCard label="Clients to recoup" value={breakEvenClients > 0 ? `${Math.ceil(breakEvenClients)}` : "-"} accent />
+            <div className="rounded-[28px] border border-white/5 bg-gray-elevated p-6 lg:p-7">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-gray-muted">
+                Selected package
+              </p>
+              <p className="mt-3 font-display text-display font-semibold leading-none text-gray-text">
+                {selectedTier.name} - {formatCurrency(selectedTier.price)}
+              </p>
+              <p className="mt-3 max-w-xl font-body text-sm leading-relaxed text-gray-text-2">
+                The calculator is showing the package currently selected on the left, so Adam can see exactly how quickly the site pays for itself.
+              </p>
             </div>
-            <div className="rounded-2xl border border-white/5 bg-gray-bg/60 p-5">
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <ResultCard
+                label="Monthly revenue"
+                value={formatCompactCurrency(monthlyRevenue)}
+                detail={`${monthlyLeads} leads x ${closeRate}% close rate`}
+                accent
+                large
+              />
+              <ResultCard
+                label="Annual revenue"
+                value={formatCompactCurrency(annualRevenue)}
+                detail="Projected from the current monthly assumptions"
+              />
+              <ResultCard
+                label="Break even"
+                value={breakEvenLabel}
+                detail={`At the current ${formatCurrency(selectedTier.price)} investment`}
+              />
+              <ResultCard
+                label="Clients to recoup"
+                value={breakEvenClients > 0 ? `${Math.ceil(breakEvenClients)}` : "-"}
+                detail="How many average clients cover the build"
+                accent
+              />
+            </div>
+
+            <div className="rounded-[28px] border border-gold/20 bg-[linear-gradient(180deg,rgba(200,169,110,0.12),rgba(255,255,255,0.03))] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.35)]">
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold">
                 Why this matters
               </p>
+              <p className="mt-3 text-balance font-display text-title-lg font-semibold leading-tight text-gray-text">
+                If the site closes even one additional client a month, the payback window gets short fast.
+              </p>
               <p className="mt-3 font-body text-sm leading-relaxed text-gray-text-2">
-                If the site helps you book a few more qualified calls each month, the payback window is short. The calculator is intentionally conservative so you can test the numbers against your own close rate instead of guessing.
+                This section is intentionally conservative. It gives Adam a believable frame for saying yes without pretending every visitor becomes a client.
               </p>
             </div>
           </div>
