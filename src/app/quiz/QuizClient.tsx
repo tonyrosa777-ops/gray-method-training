@@ -1,420 +1,474 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
+import { useMemo, useState } from "react";
+import type { FormEvent } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Button from "@/components/ui/Button";
 import FadeIn from "@/components/animations/FadeIn";
 
-/* ---- Quiz data ------------------------------------------------ */
-
-type Option = {
-  id: string;
-  label: string;
+type ProblemOption = {
   value: string;
+  emoji: string;
+  label: string;
 };
 
-type Question = {
-  id: string;
-  number: string;
-  question: string;
-  subtext?: string;
-  options: Option[];
+type GoalOption = {
+  value: string;
+  emoji: string;
+  label: string;
 };
 
-const questions: Question[] = [
-  {
-    id: "situation",
-    number: "01",
-    question: "Which of these sounds most like where you are right now?",
-    subtext: "Pick the one that lands closest.",
-    options: [
-      { id: "a", label: "I've tried a lot of things. Nothing has stuck.", value: "diet-cycler" },
-      { id: "b", label: "I'm always putting everyone else first. I've lost myself in the process.", value: "caregiver" },
-      { id: "c", label: "My doctor says everything is normal. But I know something is off.", value: "dismissed" },
-      { id: "d", label: "I know what to do — I just can't seem to do it consistently.", value: "consistency" },
-      { id: "e", label: "I'm starting over after an injury, a relationship, or a hard chapter.", value: "restart" },
-    ],
-  },
-  {
-    id: "goal",
-    number: "02",
-    question: "What does success actually look like to you?",
-    subtext: "Not the \"right\" answer — the honest one.",
-    options: [
-      { id: "a", label: "More energy. I'm exhausted all the time and I'm done with it.", value: "energy" },
-      { id: "b", label: "Feeling stronger — physically and mentally.", value: "strength" },
-      { id: "c", label: "Breaking the cycle. I'm tired of starting over.", value: "cycle" },
-      { id: "d", label: "Understanding my body again. Especially around hormones and midlife.", value: "hormones" },
-      { id: "e", label: "Confidence. I want to feel like myself again.", value: "confidence" },
-    ],
-  },
-  {
-    id: "time",
-    number: "03",
-    question: "How much time do you realistically have to work on your health each week?",
-    subtext: "Be honest — not aspirational.",
-    options: [
-      { id: "a", label: "Under 2 hours. Life is full.", value: "minimal" },
-      { id: "b", label: "2–4 hours. I can carve it out if the plan actually fits.", value: "moderate" },
-      { id: "c", label: "4+ hours. I'm ready to commit.", value: "substantial" },
-      { id: "d", label: "It varies a lot week to week — I need flexibility.", value: "variable" },
-    ],
-  },
-  {
-    id: "history",
-    number: "04",
-    question: "What's the biggest reason previous attempts didn't work?",
-    options: [
-      { id: "a", label: "The program was too rigid. Real life got in the way.", value: "rigid" },
-      { id: "b", label: "I had no accountability. I'd fall off and there was no one to notice.", value: "accountability" },
-      { id: "c", label: "I was doing too much too fast and burned out.", value: "burnout" },
-      { id: "d", label: "I felt like the advice wasn't built for me — it was generic.", value: "generic" },
-      { id: "e", label: "Honestly? I'm not sure. That's part of why I'm here.", value: "unsure" },
-    ],
-  },
-  {
-    id: "support",
-    number: "05",
-    question: "What kind of support sounds most helpful to you?",
-    options: [
-      { id: "a", label: "One-on-one. I want Adam focused on me specifically.", value: "one-on-one" },
-      { id: "b", label: "A community of women in similar situations, plus personal coaching.", value: "group" },
-      { id: "c", label: "Both physical coaching AND hormonal support — especially around menopause or perimenopause.", value: "eeh" },
-      { id: "d", label: "I'm not sure. I just want to talk to someone who will actually listen.", value: "call" },
-    ],
-  },
+const problemOptions: ProblemOption[] = [
+  { value: "consistency", emoji: "⚡", label: "I cannot stay consistent" },
+  { value: "energy", emoji: "🪫", label: "I feel drained all the time" },
+  { value: "strength", emoji: "🏋️", label: "I want to feel stronger" },
+  { value: "confidence", emoji: "✨", label: "I want my confidence back" },
+  { value: "fat-loss", emoji: "📉", label: "I am stuck on body fat" },
+  { value: "stress", emoji: "🧠", label: "Stress keeps knocking me off track" },
 ];
 
-/* ---- Result logic --------------------------------------------- */
+const goalOptions: GoalOption[] = [
+  { value: "lose-weight", emoji: "🔥", label: "Lose weight without burnout" },
+  { value: "build-muscle", emoji: "💪", label: "Build strength and shape" },
+  { value: "better-habits", emoji: "🧭", label: "Build habits that actually stick" },
+  { value: "feel-better", emoji: "🌿", label: "Feel better in my body day to day" },
+];
 
-type ResultKey = "one-on-one" | "eeh" | "group" | "call";
-
-type Result = {
-  key: ResultKey;
-  headline: string;
-  body: string;
-  primaryCta: { label: string; href: string };
-  secondaryCta?: { label: string; href: string };
-  note: string;
-};
-
-const results: Record<ResultKey, Result> = {
-  "one-on-one": {
-    key: "one-on-one",
-    headline: "1:1 Online Coaching sounds like your fit.",
-    body: "You want something built around your actual life — not a template with your name on it. Adam builds every 1:1 client a plan from scratch: your equipment, your schedule, your history, your goals. No two programs look the same.",
-    primaryCta: { label: "Schedule a Free 20-Minute Call", href: "/contact" },
-    secondaryCta: { label: "Learn more about 1:1 Coaching", href: "/programs/one-on-one" },
-    note: "The call is free. No pitch. Just an honest conversation.",
-  },
-  eeh: {
-    key: "eeh",
-    headline: "Energize & Empower Her was built for where you are.",
-    body: "You're not imagining it. And you're not broken. Energize & Empower Her pairs Adam's coaching with Laura Brown, NP — a Board-Certified Women's Health Nurse Practitioner. The hormonal side and the fitness side, addressed together. The only program like it.",
-    primaryCta: { label: "Join the Waitlist", href: "/programs/energize-empower" },
-    secondaryCta: { label: "Schedule a free call first", href: "/contact" },
-    note: "Cohort spots are limited. Waitlist is open now.",
-  },
-  group: {
-    key: "group",
-    headline: "Group Coaching might be exactly what you need.",
-    body: "Personalized support inside a small group of women who get it. Adam keeps group sizes small so the coaching stays real — not a one-size-fits-all template with a group chat attached.",
-    primaryCta: { label: "Schedule a Free Call", href: "/contact" },
-    secondaryCta: { label: "Learn more about Group Coaching", href: "/programs/group" },
-    note: "Limited spots. The community matters as much as the program.",
-  },
-  call: {
-    key: "call",
-    headline: "Start with a conversation.",
-    body: "You don't need to have it figured out. A free 20-minute call with Adam — no sales pressure, no pitch, just an honest conversation about where you are and whether he can actually help. He'll tell you straight.",
-    primaryCta: { label: "Schedule Your Free 20-Minute Call", href: "/contact" },
-    note: "No commitment. No pressure. Honest advice.",
-  },
-};
-
-function getResult(answers: Record<string, string>): ResultKey {
-  const { situation, goal, support } = answers;
-
-  // EEH signal: dismissed by doctors OR hormones goal OR eeh support
-  if (
-    situation === "dismissed" ||
-    goal === "hormones" ||
-    support === "eeh"
-  ) {
-    return "eeh";
-  }
-
-  // Direct call signal
-  if (support === "call" && !situation && !goal) {
-    return "call";
-  }
-
-  // Group signal
-  if (support === "group") {
-    return "group";
-  }
-
-  // Default to 1:1 for most profiles
-  return "one-on-one";
-}
-
-/* ---- Progress bar --------------------------------------------- */
+const introBullets = [
+  "Fast, personal, and easy to finish",
+  "Built to understand where you are right now",
+  "Ends with a simple message step",
+];
 
 function ProgressBar({ current, total }: { current: number; total: number }) {
   const pct = Math.round(((current + 1) / total) * 100);
+
   return (
-    <div className="w-full h-0.5 bg-white/5 rounded-full overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+    <div
+      className="h-0.5 w-full overflow-hidden rounded-full bg-white/5"
+      role="progressbar"
+      aria-valuenow={pct}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={`Step ${current + 1} of ${total}`}
+    >
       <motion.div
-        className="h-full bg-gold rounded-full"
+        className="h-full rounded-full bg-gold"
         initial={{ width: 0 }}
         animate={{ width: `${pct}%` }}
-        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
       />
     </div>
   );
 }
 
-/* ---- Main component ------------------------------------------- */
-
 export default function QuizClient() {
-  const [step, setStep] = useState<number>(0); // 0 = intro, 1..n = questions, n+1 = result
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [selected, setSelected] = useState<string | null>(null);
+  const [step, setStep] = useState(0);
+  const [selectedProblems, setSelectedProblems] = useState<string[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const totalSteps = questions.length;
+  const totalSteps = 3;
   const isIntro = step === 0;
-  const isResult = step === totalSteps + 1;
-  const questionIndex = step - 1;
-  const currentQuestion = !isIntro && !isResult ? questions[questionIndex] : null;
+  const isComplete = step === totalSteps + 1;
 
-  const resultKey = isResult ? getResult(answers) : null;
-  const result = resultKey ? results[resultKey] : null;
+  const canContinueStep1 = selectedProblems.length > 0;
+  const canContinueStep2 = selectedGoal !== null;
+  const canSubmit =
+    form.name.trim().length > 0 &&
+    form.email.trim().length > 0 &&
+    form.message.trim().length > 0;
+
+  const selectedProblemLabels = useMemo(
+    () =>
+      problemOptions
+        .filter((option) => selectedProblems.includes(option.value))
+        .map((option) => option.label),
+    [selectedProblems]
+  );
+
+  const selectedGoalLabel = useMemo(
+    () => goalOptions.find((option) => option.value === selectedGoal)?.label ?? "",
+    [selectedGoal]
+  );
 
   function handleStart() {
     setStep(1);
-    setSelected(null);
   }
 
-  function handleSelect(value: string) {
-    setSelected(value);
+  function toggleProblem(value: string) {
+    setSelectedProblems((current) =>
+      current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value]
+    );
   }
 
   function handleNext() {
-    if (!currentQuestion || !selected) return;
-    const newAnswers = { ...answers, [currentQuestion.id]: selected };
-    setAnswers(newAnswers);
-    setSelected(null);
-    setStep((s) => s + 1);
+    setStep((current) => Math.min(current + 1, totalSteps));
   }
 
   function handleBack() {
-    if (step <= 1) return;
-    const prevQuestion = questions[step - 2];
-    setAnswers((prev) => {
-      const next = { ...prev };
-      delete next[prevQuestion?.id];
-      return next;
-    });
-    setSelected(answers[questions[step - 2]?.id] ?? null);
-    setStep((s) => s - 1);
+    setStep((current) => Math.max(current - 1, 0));
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!canSubmit) return;
+
+    setIsSubmitted(true);
+    setStep(totalSteps + 1);
   }
 
   function handleRestart() {
     setStep(0);
-    setAnswers({});
-    setSelected(null);
+    setSelectedProblems([]);
+    setSelectedGoal(null);
+    setForm({
+      name: "",
+      email: "",
+      message: "",
+    });
+    setIsSubmitted(false);
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-24">
+    <div className="flex min-h-screen flex-col items-center justify-center px-6 py-24">
       <div className="w-full max-w-2xl">
-
         <AnimatePresence mode="wait">
-
-          {/* ---- Intro ---- */}
           {isIntro && (
             <motion.div
               key="intro"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <FadeIn>
-                <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-5">
-                  2-minute quiz
+                <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                  3-step intake
                 </p>
               </FadeIn>
-              <h1 className="font-display font-semibold text-display text-gray-text leading-[1.05] mb-5">
-                Find out what&apos;s actually<br />keeping you stuck.
+              <h1 className="mb-5 font-display text-display font-semibold leading-[1.05] text-gray-text">
+                Let&apos;s start with what
+                <br />
+                you actually need.
               </h1>
-              <p className="font-body text-lead text-gray-text-2 mb-3 leading-relaxed max-w-lg">
-                5 honest questions. No generic advice. Just a real picture of where you are — and which program actually fits your life.
+              <p className="mb-3 max-w-lg font-body text-lead leading-relaxed text-gray-text-2">
+                A quick 3-step form to help us understand your biggest problems,
+                your main goal, and the message you want to send.
               </p>
-              <p className="font-body text-sm text-gray-muted mb-10 leading-relaxed max-w-lg">
-                There are no wrong answers. Coach Adam built this to understand you, not judge you.
-              </p>
+              <ul className="mb-10 max-w-lg space-y-2">
+                {introBullets.map((bullet) => (
+                  <li
+                    key={bullet}
+                    className="font-body text-sm leading-relaxed text-gray-muted"
+                  >
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
               <Button onClick={handleStart} variant="gold" size="lg">
-                Start the Quiz
+                Start the form
               </Button>
-              <p className="font-mono text-xs text-gray-muted mt-4">
-                Takes about 2 minutes · No email required
+              <p className="mt-4 font-mono text-xs text-gray-muted">
+                Takes about 60 seconds - no pressure
               </p>
             </motion.div>
           )}
 
-          {/* ---- Questions ---- */}
-          {currentQuestion && (
+          {!isIntro && !isComplete && (
             <motion.div
-              key={`q-${step}`}
+              key={`step-${step}`}
               initial={{ opacity: 0, x: 32 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -32 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
+              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              {/* Progress */}
               <div className="mb-8">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="font-mono text-xs text-gray-muted tracking-wider">
-                    Question {questionIndex + 1} of {totalSteps}
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="font-mono text-xs tracking-wider text-gray-muted">
+                    Step {step} of {totalSteps}
                   </p>
-                  <p className="font-mono text-xs text-gold">{currentQuestion.number}</p>
+                  <p className="font-mono text-xs text-gold">
+                    {step === 1 && "01"}
+                    {step === 2 && "02"}
+                    {step === 3 && "03"}
+                  </p>
                 </div>
-                <ProgressBar current={questionIndex} total={totalSteps} />
+                <ProgressBar current={step - 1} total={totalSteps} />
               </div>
 
-              {/* Question */}
-              <h2 className="font-display font-semibold text-title-xl text-gray-text leading-snug mb-3">
-                {currentQuestion.question}
-              </h2>
-              {currentQuestion.subtext && (
-                <p className="font-body text-sm text-gray-muted mb-8 leading-relaxed">
-                  {currentQuestion.subtext}
-                </p>
+              {step === 1 && (
+                <>
+                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                    Step one
+                  </p>
+                  <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
+                    What are your biggest problems?
+                  </h2>
+                  <p className="mb-8 font-body text-sm leading-relaxed text-gray-muted">
+                    Pick all that apply. We&apos;ll use this to understand what
+                    is getting in the way.
+                  </p>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {problemOptions.map((option) => {
+                      const isSelected = selectedProblems.includes(option.value);
+
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => toggleProblem(option.value)}
+                          className={[
+                            "rounded-xl border px-5 py-4 text-left transition-all duration-200",
+                            "bg-gray-elevated/50 font-body text-sm leading-relaxed",
+                            isSelected
+                              ? "border-gold bg-gray-elevated text-gray-text"
+                              : "border-white/8 text-gray-text-2 hover:border-white/20 hover:bg-gray-elevated",
+                          ].join(" ")}
+                          aria-pressed={isSelected}
+                        >
+                          <span className="mb-2 block text-lg" aria-hidden="true">
+                            {option.emoji}
+                          </span>
+                          <span className="block">{option.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-8 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text disabled:cursor-not-allowed disabled:opacity-30"
+                      disabled={step <= 0}
+                    >
+                      Back
+                    </button>
+                    <Button
+                      onClick={handleNext}
+                      variant="gold"
+                      size="md"
+                      disabled={!canContinueStep1}
+                    >
+                      Continue →
+                    </Button>
+                  </div>
+                </>
               )}
 
-              {/* Options */}
-              <div className="space-y-3 mb-8">
-                {currentQuestion.options.map((opt) => {
-                  const isSelected = selected === opt.value;
-                  return (
-                    <button
-                      key={opt.id}
-                      onClick={() => handleSelect(opt.value)}
-                      className={[
-                        "w-full text-left px-6 py-4 rounded-xl border transition-all duration-200",
-                        "font-body text-sm leading-relaxed",
-                        isSelected
-                          ? "border-gold bg-gray-elevated text-gray-text"
-                          : "border-white/8 bg-gray-elevated/50 text-gray-text-2 hover:border-white/20 hover:bg-gray-elevated",
-                      ].join(" ")}
-                      aria-pressed={isSelected}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={[
-                            "w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all duration-200",
-                            isSelected
-                              ? "border-gold bg-gold"
-                              : "border-white/20 bg-transparent",
-                          ].join(" ")}
-                          aria-hidden="true"
-                        />
-                        {opt.label}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+              {step === 2 && (
+                <>
+                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                    Step two
+                  </p>
+                  <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
+                    What is your main goal?
+                  </h2>
+                  <p className="mb-8 font-body text-sm leading-relaxed text-gray-muted">
+                    Choose the outcome that matters most right now.
+                  </p>
 
-              {/* Navigation */}
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={handleBack}
-                  disabled={step <= 1}
-                  className="font-body text-sm text-gray-muted hover:text-gray-text transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  ← Back
-                </button>
-                <Button
-                  onClick={handleNext}
-                  variant="gold"
-                  size="md"
-                  disabled={!selected}
-                >
-                  {questionIndex === totalSteps - 1 ? "See my result" : "Next →"}
-                </Button>
-              </div>
+                  <div className="space-y-3">
+                    {goalOptions.map((option) => {
+                      const isSelected = selectedGoal === option.value;
+
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => setSelectedGoal(option.value)}
+                          className={[
+                            "w-full rounded-xl border px-5 py-4 text-left transition-all duration-200",
+                            "bg-gray-elevated/50 font-body text-sm leading-relaxed",
+                            isSelected
+                              ? "border-gold bg-gray-elevated text-gray-text"
+                              : "border-white/8 text-gray-text-2 hover:border-white/20 hover:bg-gray-elevated",
+                          ].join(" ")}
+                          aria-pressed={isSelected}
+                        >
+                          <span className="mb-2 block text-lg" aria-hidden="true">
+                            {option.emoji}
+                          </span>
+                          <span className="block">{option.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-8 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
+                    >
+                      Back
+                    </button>
+                    <Button
+                      onClick={handleNext}
+                      variant="gold"
+                      size="md"
+                      disabled={!canContinueStep2}
+                    >
+                      Continue →
+                    </Button>
+                  </div>
+                </>
+              )}
+
+              {step === 3 && (
+                <form onSubmit={handleSubmit}>
+                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                    Step three
+                  </p>
+                  <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
+                    Send a message
+                  </h2>
+                  <p className="mb-6 font-body text-sm leading-relaxed text-gray-muted">
+                    Share your details and a short note. We&apos;ll take it from
+                    there.
+                  </p>
+
+                  <div className="mb-5 flex flex-wrap gap-2">
+                    {selectedProblemLabels.map((label) => (
+                      <span
+                        key={label}
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-text-2"
+                      >
+                        {label}
+                      </span>
+                    ))}
+                    {selectedGoalLabel && (
+                      <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gold">
+                        Goal: {selectedGoalLabel}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="block">
+                      <span className="mb-2 block font-body text-sm text-gray-text-2">
+                        Name
+                      </span>
+                      <input
+                        value={form.name}
+                        onChange={(event) =>
+                          setForm((current) => ({ ...current, name: event.target.value }))
+                        }
+                        className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors duration-200 placeholder:text-gray-muted focus:border-gold"
+                        placeholder="Your name"
+                        autoComplete="name"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="mb-2 block font-body text-sm text-gray-text-2">
+                        Email
+                      </span>
+                      <input
+                        type="email"
+                        value={form.email}
+                        onChange={(event) =>
+                          setForm((current) => ({ ...current, email: event.target.value }))
+                        }
+                        className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors duration-200 placeholder:text-gray-muted focus:border-gold"
+                        placeholder="you@example.com"
+                        autoComplete="email"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="mb-2 block font-body text-sm text-gray-text-2">
+                        Message
+                      </span>
+                      <textarea
+                        value={form.message}
+                        onChange={(event) =>
+                          setForm((current) => ({ ...current, message: event.target.value }))
+                        }
+                        className="min-h-32 w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors duration-200 placeholder:text-gray-muted focus:border-gold"
+                        placeholder="Tell us what you want help with..."
+                      />
+                    </label>
+                  </div>
+
+                  <div className="mt-8 flex items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
+                    >
+                      Back
+                    </button>
+                    <Button type="submit" variant="gold" size="md" disabled={!canSubmit}>
+                      Send message →
+                    </Button>
+                  </div>
+                </form>
+              )}
             </motion.div>
           )}
 
-          {/* ---- Result ---- */}
-          {isResult && result && (
+          {isComplete && isSubmitted && (
             <motion.div
-              key="result"
+              key="complete"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-5">
-                Your result
+              <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                Message sent
               </p>
-              <h2 className="font-display font-semibold text-title-xl text-gray-text leading-snug mb-5">
-                {result.headline}
+              <h2 className="mb-5 font-display text-title-xl font-semibold leading-snug text-gray-text">
+                Thanks - we have what we need.
               </h2>
-              <p className="font-body text-base text-gray-text-2 leading-relaxed mb-10 max-w-lg">
-                {result.body}
+              <p className="mb-10 max-w-lg font-body text-base leading-relaxed text-gray-text-2">
+                Your intake is in. We&apos;ll review your note and respond with
+                the next best step.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button href={result.primaryCta.href} variant="gold" size="lg">
-                  {result.primaryCta.label}
-                </Button>
-                {result.secondaryCta && (
-                  <Button href={result.secondaryCta.href} variant="ghost" size="lg">
-                    {result.secondaryCta.label}
-                  </Button>
-                )}
-              </div>
-
-              <p className="font-mono text-xs text-gray-muted mb-10">
-                {result.note}
-              </p>
-
-              {/* Divider */}
-              <div className="w-full h-px bg-white/5 mb-8" aria-hidden="true" />
-
-              {/* Not what you expected? */}
-              <div className="space-y-3">
-                <p className="font-body text-sm text-gray-muted">Not what you expected?</p>
-                <div className="flex flex-wrap gap-4">
-                  <button
-                    onClick={handleRestart}
-                    className="font-body text-sm text-gray-text-2 hover:text-gold transition-colors duration-200"
-                  >
-                    Retake the quiz →
-                  </button>
-                  <span className="font-body text-sm text-gray-muted/40" aria-hidden="true">·</span>
-                  <Link
-                    href="/programs"
-                    className="font-body text-sm text-gray-text-2 hover:text-gold transition-colors duration-200"
-                  >
-                    See all programs →
-                  </Link>
-                  <span className="font-body text-sm text-gray-muted/40" aria-hidden="true">·</span>
-                  <Link
-                    href="/contact"
-                    className="font-body text-sm text-gray-text-2 hover:text-gold transition-colors duration-200"
-                  >
-                    Just talk to Adam →
-                  </Link>
+              <div className="mb-8 space-y-3">
+                <p className="font-body text-sm text-gray-muted">What you shared</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProblemLabels.map((label) => (
+                    <span
+                      key={label}
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-text-2"
+                    >
+                      {label}
+                    </span>
+                  ))}
+                  {selectedGoalLabel && (
+                    <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gold">
+                      Goal: {selectedGoalLabel}
+                    </span>
+                  )}
                 </div>
               </div>
+
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <Button href="/contact" variant="gold" size="lg">
+                  Go to contact page
+                </Button>
+                <Button onClick={handleRestart} variant="ghost" size="lg">
+                  Start over
+                </Button>
+              </div>
+
+              <p className="mt-10 font-mono text-xs text-gray-muted">
+                If you want to keep going right now, the contact page is ready.
+              </p>
             </motion.div>
           )}
-
         </AnimatePresence>
       </div>
     </div>

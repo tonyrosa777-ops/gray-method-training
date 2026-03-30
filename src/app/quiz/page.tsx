@@ -3,13 +3,13 @@ import { Navbar } from "@/components/layout";
 import QuizClient from "./QuizClient";
 
 export const metadata: Metadata = {
-  title: "Find Your Fit — Gray Method Training",
+  title: "Find Your Fit - Gray Method Training",
   description:
-    "A 2-minute quiz to help Coach Adam understand where you are and which program is the right fit. No generic advice — real answers based on your actual situation.",
+    "A 3-step intake form to understand your biggest problems, your main goal, and the message you want to send. No generic advice - real answers based on your actual situation.",
   openGraph: {
-    title: "Find Your Fit — Gray Method Training",
+    title: "Find Your Fit - Gray Method Training",
     description:
-      "Answer a few honest questions. Find out which program fits your real life.",
+      "Answer a few honest questions. Share what is blocking you and what you want next.",
     type: "website",
   },
 };
