@@ -12,7 +12,7 @@ import FadeUp from "@/components/animations/FadeUp";
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Enter a valid email"),
-  phone: z.string().optional(),
+  phone: z.string().min(7, "Phone number is required"),
   message: z.string().min(10, "Tell Adam a bit more - at least 10 characters"),
 });
 
@@ -402,7 +402,7 @@ function ContactForm() {
               <div>
                 <label className="block">
                   <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
-                    Phone <span className="text-gray-muted">(optional)</span>
+                    Phone <span className="text-gold">*</span>
                   </span>
                   <input
                     id="phone"
@@ -412,6 +412,7 @@ function ContactForm() {
                     className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
                     placeholder="(603) 555-0100"
                   />
+                  {errors.phone && <p className="mt-1.5 font-mono text-xs text-orange-accent">{errors.phone.message}</p>}
                 </label>
               </div>
 
