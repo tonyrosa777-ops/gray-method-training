@@ -3,7 +3,6 @@ export { default as PainPoints } from "./PainPoints";
 export { default as AdamStory } from "./AdamStory";
 export { default as GrayMethodPhilosophy } from "./GrayMethodPhilosophy";
 export { default as Programs } from "./Programs";
-export { default as ShopPreview } from "./ShopPreview";
 export { default as Stats } from "./Stats";
 export { default as Testimonials } from "./Testimonials";
 export { default as InstagramFeed } from "./InstagramFeed";

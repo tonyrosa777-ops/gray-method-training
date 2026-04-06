@@ -15,8 +15,6 @@ export const nav = {
   links: [
     { label: "About", href: "/about" },
     { label: "Programs", href: "/programs" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Shop", href: "/shop" },
     { label: "Reviews", href: "/reviews" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
@@ -132,8 +130,8 @@ export const programs = {
   ],
 };
 
-/* ---- Pricing ---------------------------------------------- */
-export const pricing = {
+/* ---- Pricing (removed — Pro plan does not include a public pricing page) */
+const _pricing = {
   eyebrow: "Built to win you clients",
   headline: "A website that pays for itself should not look like a template.",
   sub:
@@ -285,8 +283,8 @@ export const pricing = {
   },
 };
 
-/* ---- Shop Preview ----------------------------------------- */
-export const shopPreview = {
+/* ---- Shop Preview (removed — Pro plan does not include shop) */
+const _shopPreview = {
   eyebrow: "From the shop",
   headline: "The Gray Method Collection.",
   sub: "Digital resources, merch, and practical pieces for the people who want something useful, wearable, and easy to come back to.",

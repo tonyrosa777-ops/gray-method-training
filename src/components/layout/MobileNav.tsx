@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { nav } from "@/data/site";
-import { useCart } from "@/lib/cart";
 
 interface MobileNavProps {
   onClose: () => void;
@@ -36,13 +35,6 @@ const linkVariants = {
 };
 
 export default function MobileNav({ onClose }: MobileNavProps) {
-  const { count, openCart } = useCart();
-
-  const handleOpenCart = () => {
-    onClose();
-    openCart();
-  };
-
   return (
     <>
       {/* Dark overlay */}
@@ -72,50 +64,15 @@ export default function MobileNav({ onClose }: MobileNavProps) {
           <span className="font-display font-semibold text-gold text-lg tracking-tight">
             Gray Method
           </span>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleOpenCart}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-gray-elevated/70 px-3 py-2 text-gray-text-2 transition-colors hover:border-gold/30 hover:text-gold"
-              aria-label={`Open cart with ${count} item${count === 1 ? "" : "s"}`}
-            >
-              <span className="relative flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-gray-bg">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  aria-hidden="true"
-                >
-                  <path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.5H9a2 2 0 0 1-2-1.5L5 3H2" />
-                  <circle cx="9" cy="20" r="1.5" fill="currentColor" stroke="none" />
-                  <circle cx="18" cy="20" r="1.5" fill="currentColor" stroke="none" />
-                </svg>
-                <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[10px] font-semibold leading-none text-gray-bg">
-                  {count}
-                </span>
-              </span>
-              <span className="font-body text-sm">Cart</span>
-            </button>
-            <button
-              onClick={onClose}
-              className="text-gray-text-2 hover:text-gray-text transition-colors p-1"
-              aria-label="Close navigation menu"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M4 4l12 12M16 4L4 16" />
-              </svg>
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-text-2 hover:text-gray-text transition-colors p-1"
+            aria-label="Close navigation menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M4 4l12 12M16 4L4 16" />
+            </svg>
+          </button>
         </div>
 
         {/* Links */}

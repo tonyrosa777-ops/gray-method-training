@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import CartDrawer from "@/components/shop/CartDrawer";
-import { CartProvider } from "@/lib/cart";
 import "./globals.css";
 
 /* ---- Fonts ------------------------------------------------ */
@@ -145,11 +143,8 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen antialiased">
-        <CartProvider>
-          {children}
-          <CartDrawer />
-          <Analytics />
-        </CartProvider>
+        {children}
+        <Analytics />
       </body>
     </html>
   );
