@@ -102,6 +102,12 @@ Adam needs to grant access to his Instagram Business Account.
 
 **Format:** `https://calendly.com/adamgray/discovery-call`
 
+**Env var required for the contact page calendar embed:**
+```
+NEXT_PUBLIC_CALENDLY_URL=https://calendly.com/YOUR_USERNAME/discovery-call
+```
+Add to Vercel → Project Settings → Environment Variables.
+
 ---
 
 ## PRINTFUL (Phase 8 — Merch)
