@@ -1,5 +1,5 @@
 # GRAY METHOD TRAINING — SETUP GUIDE
-# Pro Plan: Blog · Instagram · Calendly
+# Pro Plan: Blog · Instagram · Calendly · AI Image Generation
 # Complete all items before go-live
 
 ---
@@ -23,6 +23,7 @@ Work through this in order. Every item is required unless marked optional.
 - [ ] Adam invited to Sanity as editor
 - [ ] All photos dropped into `/public/images/` (see Photos section)
 - [ ] Contact form tested end-to-end (email received by Adam)
+- [ ] fal.ai API key added to Vercel env vars
 - [ ] ConvertKit API key + form ID added *(optional at launch)*
 
 ---
@@ -38,6 +39,9 @@ CONTACT_EMAIL_TO=Graymethodtraining@gmail.com
 
 # Calendly — contact page booking embed (REQUIRED)
 NEXT_PUBLIC_CALENDLY_URL=https://calendly.com/YOUR_USERNAME/discovery-call
+
+# fal.ai — AI image generation for blog posts (REQUIRED)
+FAL_KEY=your_fal_api_key_here
 
 # Instagram Graph API (REQUIRED for live feed)
 INSTAGRAM_ACCESS_TOKEN=your_long_lived_token_here
@@ -204,6 +208,27 @@ Training · Nutrition · Mindset · Perimenopause & Menopause · Client Stories
 5. Add to Vercel: `CONVERTKIT_API_KEY` and `CONVERTKIT_FORM_ID`
 
 The newsletter form in the footer and inline blog embed both call `/api/newsletter`. If ConvertKit is not configured, signups are silently accepted without being recorded — configure this before running any email campaigns.
+
+---
+
+## FAL.AI — BLOG POST IMAGE GENERATION
+
+Each blog post gets a quality AI-generated hero image matched to the post topic. fal.ai runs the generation on the server via an API route — Adam never needs to source or upload images manually.
+
+**Step 1 — Get the API key:**
+1. Sign up at fal.ai
+2. Dashboard → API Keys → Create new key
+3. Copy the key
+4. Add to Vercel: `FAL_KEY=your_key_here`
+5. Add to your local `.env.local` as well
+
+**How it works in the site:**
+- When Adam publishes a post in Sanity without a `mainImage`, the blog post page calls `/api/generate-image` with the post title and category
+- fal.ai generates a 1280×720 image (16:9) using a fitness/health-appropriate prompt built from the post metadata
+- The image is returned and displayed as the post hero
+- If fal.ai is not configured, the `blog-default.jpg` placeholder is used instead — no broken images
+
+**Recommended model:** `fal-ai/flux/schnell` (fast, high quality, good for editorial images)
 
 ---
 
