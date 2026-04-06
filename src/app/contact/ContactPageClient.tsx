@@ -31,20 +31,20 @@ type GoalOption = {
 };
 
 const problemOptions: ProblemOption[] = [
-  { value: "consistency", emoji: "âš¡", label: "I cannot stay consistent" },
-  { value: "energy", emoji: "ðŸª«", label: "I feel drained all the time" },
-  { value: "strength", emoji: "ðŸ‹ï¸", label: "I want to feel stronger" },
-  { value: "confidence", emoji: "âœ¨", label: "I want my confidence back" },
-  { value: "fat-loss", emoji: "ðŸ“‰", label: "I am stuck on body fat" },
-  { value: "stress", emoji: "ðŸ§ ", label: "Stress keeps knocking me off track" },
+  { value: "consistency", emoji: "⚡", label: "I cannot stay consistent" },
+  { value: "energy", emoji: "🪫", label: "I feel drained all the time" },
+  { value: "strength", emoji: "🏋️", label: "I want to feel stronger" },
+  { value: "confidence", emoji: "✨", label: "I want my confidence back" },
+  { value: "fat-loss", emoji: "📉", label: "I am stuck on body fat" },
+  { value: "stress", emoji: "🧠", label: "Stress keeps knocking me off track" },
 ];
 
 const goalOptions: GoalOption[] = [
-  { value: "lose-weight", emoji: "ðŸ”¥", label: "Lose weight without burnout" },
-  { value: "build-muscle", emoji: "ðŸ’ª", label: "Build strength and shape" },
-  { value: "better-habits", emoji: "ðŸ§­", label: "Build habits that actually stick" },
-  { value: "feel-better", emoji: "ðŸŒ¿", label: "Feel better in my body day to day" },
-  { value: "not-sure", emoji: "ðŸ’¬", label: "Not sure yet - want to talk it through" },
+  { value: "lose-weight", emoji: "🔥", label: "Lose weight without burnout" },
+  { value: "build-muscle", emoji: "💪", label: "Build strength and shape" },
+  { value: "better-habits", emoji: "🧭", label: "Build habits that actually stick" },
+  { value: "feel-better", emoji: "🌿", label: "Feel better in my body day to day" },
+  { value: "not-sure", emoji: "💬", label: "Not sure yet - want to talk it through" },
 ];
 
 const introBullets = [
@@ -276,7 +276,7 @@ function ContactForm() {
                 size="md"
                 disabled={!canContinueStep1}
               >
-                Continue â†’
+                Continue →
               </Button>
             </div>
           </div>
@@ -333,7 +333,7 @@ function ContactForm() {
                 size="md"
                 disabled={!canContinueStep2}
               >
-                Continue â†’
+                Continue →
               </Button>
             </div>
           </div>
@@ -441,7 +441,7 @@ function ContactForm() {
                 Back
               </button>
               <Button type="submit" variant="gold" size="md" disabled={status === "loading"}>
-                {status === "loading" ? "Sending..." : "Send message â†’"}
+                {status === "loading" ? "Sending..." : "Send message →"}
               </Button>
             </div>
 
@@ -455,7 +455,7 @@ function ContactForm() {
             )}
 
             <p className="mt-5 text-center font-mono text-xs text-gray-muted">
-              No commitment Â· No sales pitch Â· Adam reads every message personally
+              No commitment · No sales pitch · Adam reads every message personally
             </p>
           </form>
         )}
