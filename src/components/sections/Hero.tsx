@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { hero } from "@/data/site";
 import Button from "@/components/ui/Button";
-import PhotoPlaceholder from "@/components/ui/PhotoPlaceholder";
 import HeroParticles from "@/components/sections/HeroParticles";
 
 /* ---- Word-by-word tagline ---- */
@@ -166,15 +166,17 @@ export default function Hero() {
               {/* Gold frame glow */}
               <div
                 className="absolute inset-0 z-10 rounded-2xl pointer-events-none"
-                style={{
-                  boxShadow: "inset 0 0 0 1px rgba(200,169,110,0.15)",
-                }}
+                style={{ boxShadow: "inset 0 0 0 1px rgba(200,169,110,0.15)" }}
                 aria-hidden="true"
               />
-              <PhotoPlaceholder
-                photoKey="heroAdam"
+              <Image
+                src="/images/hero-adam.jpg"
+                alt="Coach Adam Gray — Gray Method Training"
+                width={2000}
+                height={1429}
                 sizes="(max-width: 1280px) 45vw, 560px"
                 priority
+                className="w-full h-auto object-cover object-top"
               />
             </div>
           </motion.div>
