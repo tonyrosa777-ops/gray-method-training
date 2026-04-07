@@ -74,13 +74,14 @@ export async function fetchInstagramPosts(limit = 9): Promise<BeholdPost[]> {
     return (data.posts ?? []).slice(0, limit).map((post) => ({
       id: post.id,
       mediaType: post.mediaType,
-      // Behold v2 nests mediaUrl inside sizes — fall through to whichever size exists
+      // Prefer Behold CDN URLs (sizes.*) — stable, no expiry tokens.
+      // Fall back to top-level mediaUrl (Instagram CDN) only if sizes are absent.
       mediaUrl:
-        post.mediaUrl ??
         post.sizes?.medium?.mediaUrl ??
         post.sizes?.large?.mediaUrl ??
         post.sizes?.full?.mediaUrl ??
         post.sizes?.small?.mediaUrl ??
+        post.mediaUrl ??
         "",
       thumbnailUrl: post.thumbnailUrl,
       permalink: post.permalink,
