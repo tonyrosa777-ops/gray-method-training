@@ -33,8 +33,13 @@ export async function fetchInstagramPosts(limit = 9): Promise<BeholdPost[]> {
   const feedId = process.env.NEXT_PUBLIC_BEHOLD_FEED_ID;
   if (!feedId) return [];
 
+  // Accept either the full feed URL or just the ID
+  const feedUrl = feedId.startsWith("https://")
+    ? feedId
+    : `https://feeds.behold.so/${feedId}`;
+
   try {
-    const res = await fetch(`https://feeds.behold.so/${feedId}`, {
+    const res = await fetch(feedUrl, {
       next: { revalidate: 3600 },
     });
 
