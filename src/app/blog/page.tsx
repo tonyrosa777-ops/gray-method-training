@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { BLOG_POSTS } from "@/data/static-blog-posts";
-import PostCard from "@/components/blog/PostCard";
+import BlogGrid from "@/components/blog/BlogGrid";
 import FadeIn from "@/components/animations/FadeIn";
-import StaggerContainer, {
-  StaggerItem,
-  staggerItemVariants,
-} from "@/components/animations/StaggerContainer";
 import Divider from "@/components/ui/Divider";
 import { Navbar } from "@/components/layout";
 
@@ -22,8 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const [featured, ...rest] = BLOG_POSTS;
-
   return (
     <>
       <Navbar />
@@ -43,23 +37,7 @@ export default function BlogPage() {
 
           <Divider className="mb-16" />
 
-          <FadeIn className="mb-14" delay={0.1}>
-            <PostCard post={featured} featured />
-          </FadeIn>
-
-          <p className="font-mono text-xs text-gray-muted tracking-[0.15em] uppercase mb-8">
-            More posts
-          </p>
-          <StaggerContainer
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            staggerDelay={0.08}
-          >
-            {rest.map((post) => (
-              <StaggerItem key={post.id} variants={staggerItemVariants}>
-                <PostCard post={post} />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+          <BlogGrid posts={BLOG_POSTS} />
         </div>
       </main>
     </>
