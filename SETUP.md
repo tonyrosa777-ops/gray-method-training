@@ -19,8 +19,6 @@ Work through this in order. Every item is required unless marked optional.
 - [ ] Calendly event type created + URL added to Vercel env vars
 - [ ] Instagram Business Account connected to Facebook Page
 - [ ] Instagram long-lived token generated + added to Vercel env vars
-- [ ] Sanity project initialized + project ID added to Vercel env vars
-- [ ] Adam invited to Sanity as editor
 - [ ] All photos dropped into `/public/images/` (see Photos section)
 - [ ] Contact form tested end-to-end (email received by Adam)
 - [ ] fal.ai API key added to Vercel env vars
@@ -46,11 +44,6 @@ FAL_KEY=your_fal_api_key_here
 # Instagram Graph API (REQUIRED for live feed)
 INSTAGRAM_ACCESS_TOKEN=your_long_lived_token_here
 INSTAGRAM_BUSINESS_ACCOUNT_ID=your_account_id_here
-
-# Sanity CMS — blog (REQUIRED for blog content)
-NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=your_api_token_here
 
 # Site URL — change to production URL in Vercel
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -178,24 +171,6 @@ Adam's Instagram must be a **Business account** connected to a **Facebook Page**
 5. Add to Vercel: `INSTAGRAM_ACCESS_TOKEN` and `INSTAGRAM_BUSINESS_ACCOUNT_ID`
 
 **Handle:** @adamgray_coach
-
----
-
-## SANITY CMS — BLOG
-
-The blog is live in the codebase and ready. It just needs a Sanity project pointed at it.
-
-**Steps:**
-1. `cd gray-method-training && npx sanity@latest init`
-2. Create new project → name: "Gray Method Training" → dataset: production
-3. Copy the Project ID from Sanity dashboard → add to Vercel: `NEXT_PUBLIC_SANITY_PROJECT_ID`
-4. Create an API token: sanity.io/manage → project → API → Tokens → Add token (Editor role)
-5. Add to Vercel: `SANITY_API_TOKEN`
-6. Sanity Studio lives at `/studio` once deployed
-7. Invite Adam from sanity.io/manage → Members so he can write and publish posts
-
-**Blog categories already set up in code:**
-Training · Nutrition · Mindset · Perimenopause & Menopause · Client Stories
 
 ---
 
