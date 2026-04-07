@@ -6,7 +6,7 @@ import { QUIZ_QUESTIONS, QUIZ_RESULTS, scoreQuiz, type QuizType } from "@/data/q
 import Button from "@/components/ui/Button";
 import CalendlyEmbed from "@/components/ui/CalendlyEmbed";
 
-type Phase = "intro" | "question" | "emailgate" | "results";
+type Phase = "intro" | "question" | "results";
 
 const TOTAL = QUIZ_QUESTIONS.length; // 8
 
@@ -40,23 +40,13 @@ export default function QuizClient() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizType[]>([]);
-  // Which answer the user just clicked — held for 400ms before advancing
+  // Which answer was just clicked — held for 400ms before advancing
   const [pendingAnswer, setPendingAnswer] = useState<QuizType | null>(null);
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
-
-  // Email gate fields
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [apiStatus, setApiStatus] = useState<"idle" | "loading">("idle");
-
-  // Computed result type (set on submit)
   const [resultType, setResultType] = useState<QuizType | null>(null);
-  // Whether the user completed a Calendly booking on the results screen
   const [booked, setBooked] = useState(false);
 
-  // The answer at the current question index (may exist if user went back)
+  // The answer already recorded at the current index (visible when going back)
   const existingAnswer: QuizType | null =
     phase === "question" && questionIndex < answers.length
       ? answers[questionIndex]
@@ -66,11 +56,10 @@ export default function QuizClient() {
   // Handlers
   // ---------------------------------------------------------------------------
   function handleSelectAnswer(type: QuizType) {
-    if (pendingAnswer !== null) return; // debounce during animation
+    if (pendingAnswer !== null) return; // debounce during flash animation
     setPendingAnswer(type);
 
     setTimeout(() => {
-      // Replace answer at this index, truncate any future answers
       const newAnswers = [...answers.slice(0, questionIndex), type];
       setAnswers(newAnswers);
       setPendingAnswer(null);
@@ -79,7 +68,9 @@ export default function QuizClient() {
         setDirection(1);
         setQuestionIndex((i) => i + 1);
       } else {
-        setPhase("emailgate");
+        // Last question answered — score immediately, go straight to results
+        setResultType(scoreQuiz(newAnswers));
+        setPhase("results");
       }
     }, 400);
   }
@@ -92,48 +83,7 @@ export default function QuizClient() {
       } else {
         setPhase("intro");
       }
-    } else if (phase === "emailgate") {
-      setDirection(-1);
-      setPhase("question");
-      setQuestionIndex(TOTAL - 1);
     }
-  }
-
-  function handleSubmit() {
-    let valid = true;
-    if (!name.trim() || name.trim().length < 2) {
-      setNameError("Name is required");
-      valid = false;
-    } else {
-      setNameError("");
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim() || !emailRegex.test(email.trim())) {
-      setEmailError("Enter a valid email");
-      valid = false;
-    } else {
-      setEmailError("");
-    }
-    if (!valid) return;
-
-    const computed = scoreQuiz(answers);
-    setResultType(computed);
-    setApiStatus("loading");
-
-    fetch("/api/quiz", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name.trim(),
-        email: email.trim(),
-        resultType: computed,
-        answers,
-      }),
-    })
-      .finally(() => {
-        setApiStatus("idle");
-        setPhase("results");
-      });
   }
 
   const handleBooked = useCallback(() => {
@@ -145,14 +95,9 @@ export default function QuizClient() {
     setQuestionIndex(0);
     setAnswers([]);
     setPendingAnswer(null);
-    setName("");
-    setEmail("");
-    setNameError("");
-    setEmailError("");
     setResultType(null);
-    setApiStatus("idle");
-    setDirection(1);
     setBooked(false);
+    setDirection(1);
   }
 
   const result = resultType ? QUIZ_RESULTS[resultType] : null;
@@ -185,7 +130,7 @@ export default function QuizClient() {
                 {[
                   "Takes about 2 minutes",
                   "No wrong answers — just pick what\u2019s closest to true",
-                  "Your personalized results are sent to your inbox",
+                  "See your result instantly — no email required",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2.5 font-body text-sm text-gray-muted">
                     <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-gold/60" aria-hidden="true" />
@@ -197,7 +142,7 @@ export default function QuizClient() {
                 Start the quiz
               </Button>
               <p className="mt-4 font-mono text-xs text-gray-muted">
-                8 questions · No email required until the end
+                8 questions · results on screen immediately
               </p>
             </motion.div>
           )}
@@ -211,7 +156,6 @@ export default function QuizClient() {
               exit={{ opacity: 0, x: direction * -40 }}
               transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              {/* Progress header */}
               <div className="mb-10">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="font-mono text-xs tracking-wider text-gray-muted">
@@ -268,97 +212,6 @@ export default function QuizClient() {
                   ← Back
                 </button>
               </div>
-            </motion.div>
-          )}
-
-          {/* ── Email gate ── */}
-          {phase === "emailgate" && (
-            <motion.div
-              key="emailgate"
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              <div className="mb-10">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="font-mono text-xs tracking-wider text-gray-muted">
-                    Almost there
-                  </p>
-                  <p className="font-mono text-xs text-gold">{TOTAL}/{TOTAL}</p>
-                </div>
-                <ProgressBar current={TOTAL} total={TOTAL} />
-              </div>
-
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                Your results are ready
-              </p>
-              <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
-                Where should we send them?
-              </h2>
-              <p className="mb-8 font-body text-sm leading-relaxed text-gray-muted">
-                Enter your name and email to see your personalized result and program recommendation.
-              </p>
-
-              <div className="space-y-4">
-                <label className="block">
-                  <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
-                    Name <span className="text-gold">*</span>
-                  </span>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                    autoComplete="name"
-                    placeholder="Your first name"
-                    className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
-                  />
-                  {nameError && (
-                    <p className="mt-1.5 font-mono text-xs text-orange-accent">{nameError}</p>
-                  )}
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
-                    Email <span className="text-gold">*</span>
-                  </span>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
-                  />
-                  {emailError && (
-                    <p className="mt-1.5 font-mono text-xs text-orange-accent">{emailError}</p>
-                  )}
-                </label>
-              </div>
-
-              <div className="mt-8 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
-                >
-                  ← Back
-                </button>
-                <Button
-                  onClick={handleSubmit}
-                  variant="gold"
-                  size="md"
-                  disabled={apiStatus === "loading"}
-                >
-                  {apiStatus === "loading" ? "Loading..." : "See my results →"}
-                </Button>
-              </div>
-
-              <p className="mt-5 text-center font-mono text-xs text-gray-muted">
-                No spam. One email with your results and recommendation.
-              </p>
             </motion.div>
           )}
 
@@ -440,26 +293,16 @@ export default function QuizClient() {
                     Free · 20 minutes · He&apos;ll already know your result.
                   </p>
                   <div className="overflow-hidden rounded-xl border border-white/8">
-                    <CalendlyEmbed
-                      name={name}
-                      email={email}
-                      onBooked={handleBooked}
-                    />
+                    <CalendlyEmbed name="" email="" onBooked={handleBooked} />
                   </div>
                 </div>
               )}
 
-              <div className="flex justify-center">
+              <div className="flex justify-center pt-2">
                 <Button onClick={handleRetake} variant="ghost" size="sm">
                   Retake the quiz
                 </Button>
               </div>
-
-              {email && (
-                <p className="mt-6 text-center font-mono text-xs text-gray-muted">
-                  Your results were sent to {email}
-                </p>
-              )}
             </motion.div>
           )}
 
