@@ -4,25 +4,49 @@
  * Behold handles Instagram OAuth and token refresh automatically.
  * No Meta Developer App, no 60-day expiry, no cron jobs.
  *
- * Setup: Adam goes to behold.so, connects his Instagram, copies the Feed ID.
- * That ID goes in NEXT_PUBLIC_BEHOLD_FEED_ID — that's it.
- *
- * Feed URL: https://feeds.behold.so/{FEED_ID}
+ * Actual Behold API response structure (v2):
+ * posts[].sizes.{ small | medium | large | full }.mediaUrl
+ * We normalize this to a flat mediaUrl field on BeholdPost.
  */
 
+/** Normalized post shape used by the component */
 export interface BeholdPost {
   id: string;
   mediaType: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
   mediaUrl: string;
-  /** Present on VIDEO posts — use as poster image */
   thumbnailUrl?: string;
   permalink: string;
   caption?: string;
   timestamp: string;
 }
 
+/** Raw shape returned by the Behold API */
+interface BeholdSize {
+  mediaUrl: string;
+  height: number;
+  width: number;
+}
+
+interface BeholdPostRaw {
+  id: string;
+  mediaType: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
+  sizes?: {
+    small?: BeholdSize;
+    medium?: BeholdSize;
+    large?: BeholdSize;
+    full?: BeholdSize;
+  };
+  /** Top-level mediaUrl (older API versions) */
+  mediaUrl?: string;
+  thumbnailUrl?: string;
+  permalink: string;
+  caption?: string;
+  prunedCaption?: string | null;
+  timestamp: string;
+}
+
 interface BeholdFeedResponse {
-  posts: BeholdPost[];
+  posts: BeholdPostRaw[];
 }
 
 /**
@@ -46,7 +70,23 @@ export async function fetchInstagramPosts(limit = 9): Promise<BeholdPost[]> {
     if (!res.ok) return [];
 
     const data: BeholdFeedResponse = await res.json();
-    return (data.posts ?? []).slice(0, limit);
+
+    return (data.posts ?? []).slice(0, limit).map((post) => ({
+      id: post.id,
+      mediaType: post.mediaType,
+      // Behold v2 nests mediaUrl inside sizes — fall through to whichever size exists
+      mediaUrl:
+        post.mediaUrl ??
+        post.sizes?.medium?.mediaUrl ??
+        post.sizes?.large?.mediaUrl ??
+        post.sizes?.full?.mediaUrl ??
+        post.sizes?.small?.mediaUrl ??
+        "",
+      thumbnailUrl: post.thumbnailUrl,
+      permalink: post.permalink,
+      caption: post.caption ?? post.prunedCaption ?? undefined,
+      timestamp: post.timestamp,
+    }));
   } catch {
     return [];
   }
