@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    const toEmail = process.env.CONTACT_EMAIL_TO ?? "Graymethodtraining@gmail.com";
+    const toEmail = process.env.CONTACT_EMAIL_TO ?? "coach_adam@graymethodtraining.com";
 
     if (!apiKey) {
       console.log("[quiz] Resend not configured — quiz submission:", { name, email, resultType });

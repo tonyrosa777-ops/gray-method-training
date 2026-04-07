@@ -13,7 +13,6 @@ import FadeUp from "@/components/animations/FadeUp";
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Enter a valid email"),
-  phone: z.string().min(7, "Phone number is required"),
   message: z.string().min(10, "Tell Adam a bit more - at least 10 characters"),
 });
 
@@ -155,7 +154,6 @@ function ContactForm() {
         body: JSON.stringify({
           name: data.name,
           email: data.email,
-          phone: data.phone,
           goal: selectedGoalLabel || undefined,
           message,
         }),
@@ -172,7 +170,7 @@ function ContactForm() {
 
   // ---- step 3: validate then advance to step 4 ----
   async function handleAdvanceToBooking() {
-    const valid = await trigger(["name", "email", "phone", "message"]);
+    const valid = await trigger(["name", "email", "message"]);
     if (valid) {
       setSavedFormData(getValues());
       setStep(4);
@@ -493,23 +491,6 @@ function ContactForm() {
 
                 <label className="block">
                   <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
-                    Phone <span className="text-gold">*</span>
-                  </span>
-                  <input
-                    id="phone"
-                    type="tel"
-                    autoComplete="tel"
-                    {...register("phone")}
-                    className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
-                    placeholder="(603) 555-0100"
-                  />
-                  {errors.phone && (
-                    <p className="mt-1.5 font-mono text-xs text-orange-accent">{errors.phone.message}</p>
-                  )}
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
                     Tell Adam a bit about yourself <span className="text-gold">*</span>
                   </span>
                   <textarea
@@ -586,8 +567,8 @@ function ContactForm() {
                 {apiStatus === "error" && (
                   <p className="text-center font-body text-xs text-orange-accent">
                     Something went wrong. Email Adam directly at{" "}
-                    <a href="mailto:Graymethodtraining@gmail.com" className="underline">
-                      Graymethodtraining@gmail.com
+                    <a href="mailto:coach_adam@graymethodtraining.com" className="underline">
+                      coach_adam@graymethodtraining.com
                     </a>
                   </p>
                 )}
@@ -662,23 +643,14 @@ export default function ContactPageClient() {
                 </p>
                 <div className="space-y-2">
                   <a
-                    href="mailto:Graymethodtraining@gmail.com"
+                    href="mailto:coach_adam@graymethodtraining.com"
                     className="group flex items-center gap-3 font-body text-sm text-gray-text-2 transition-colors duration-200 hover:text-gold"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold/50 transition-colors group-hover:text-gold">
                       <rect x="2" y="4" width="20" height="16" rx="2" />
                       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                     </svg>
-                    Graymethodtraining@gmail.com
-                  </a>
-                  <a
-                    href="tel:6033407281"
-                    className="group flex items-center gap-3 font-body text-sm text-gray-text-2 transition-colors duration-200 hover:text-gold"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold/50 transition-colors group-hover:text-gold">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                    </svg>
-                    (603) 340-7281
+                    coach_adam@graymethodtraining.com
                   </a>
                 </div>
               </FadeIn>

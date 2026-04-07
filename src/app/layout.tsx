@@ -97,8 +97,7 @@ const localBusinessJsonLd = {
   description:
     "Online fitness coaching for busy women by Coach Adam Gray. Specializing in perimenopause, menopause, and sustainable habit-building.",
   url: "https://graymethodtraining.com",
-  telephone: "603-340-7281",
-  email: "Graymethodtraining@gmail.com",
+  email: "coach_adam@graymethodtraining.com",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Henniker",

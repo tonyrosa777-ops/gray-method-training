@@ -110,13 +110,6 @@ export default function Footer() {
             >
               {footer.contact.email}
             </a>
-            <span aria-hidden="true">·</span>
-            <a
-              href={`tel:${footer.contact.phone.replace(/-/g, "")}`}
-              className="hover:text-gray-text-2 transition-colors"
-            >
-              {footer.contact.phone}
-            </a>
           </div>
         </div>
       </div>

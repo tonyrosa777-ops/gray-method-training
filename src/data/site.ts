@@ -417,8 +417,7 @@ export const footer = {
     },
   ],
   contact: {
-    email: "Graymethodtraining@gmail.com",
-    phone: "603-340-7281",
+    email: "coach_adam@graymethodtraining.com",
     location: "Henniker, NH",
   },
   copyright: `© ${new Date().getFullYear()} Gray Method Training. All rights reserved.`,
