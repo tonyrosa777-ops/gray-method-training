@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { QUIZ_QUESTIONS, QUIZ_RESULTS, scoreQuiz, type QuizType } from "@/data/quiz";
 import Button from "@/components/ui/Button";
+import CalendlyEmbed from "@/components/ui/CalendlyEmbed";
 
 type Phase = "intro" | "question" | "emailgate" | "results";
 
@@ -52,6 +53,8 @@ export default function QuizClient() {
 
   // Computed result type (set on submit)
   const [resultType, setResultType] = useState<QuizType | null>(null);
+  // Whether the user completed a Calendly booking on the results screen
+  const [booked, setBooked] = useState(false);
 
   // The answer at the current question index (may exist if user went back)
   const existingAnswer: QuizType | null =
@@ -133,6 +136,10 @@ export default function QuizClient() {
       });
   }
 
+  const handleBooked = useCallback(() => {
+    setBooked(true);
+  }, []);
+
   function handleRetake() {
     setPhase("intro");
     setQuestionIndex(0);
@@ -145,6 +152,7 @@ export default function QuizClient() {
     setResultType(null);
     setApiStatus("idle");
     setDirection(1);
+    setBooked(false);
   }
 
   const result = resultType ? QUIZ_RESULTS[resultType] : null;
@@ -397,18 +405,58 @@ export default function QuizClient() {
                 </Button>
               </div>
 
-              {/* CTAs */}
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button href="/contact" variant="gold" size="lg">
-                  Book a free call with Adam
-                </Button>
-                <Button onClick={handleRetake} variant="ghost" size="lg">
+              {/* Inline booking calendar */}
+              {booked ? (
+                <div className="mb-8 rounded-2xl border border-gold/20 bg-gold/5 p-8 text-center">
+                  <div
+                    className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10"
+                    aria-hidden="true"
+                  >
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.9)" strokeWidth="1.5">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <path d="M16 2v4M8 2v4M3 10h18" />
+                      <polyline points="9 16 11 18 15 14" />
+                    </svg>
+                  </div>
+                  <p className="mb-1 font-mono text-xs uppercase tracking-widest text-gold">
+                    Call booked
+                  </p>
+                  <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
+                    You&apos;re on Adam&apos;s calendar.
+                  </h3>
+                  <p className="font-body text-sm leading-relaxed text-gray-text-2">
+                    Check your email for the confirmation. He&apos;ll already know your result and come prepared.
+                  </p>
+                </div>
+              ) : (
+                <div className="mb-8">
+                  <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                    Book your free call
+                  </p>
+                  <h3 className="mb-1 font-display text-title-md font-semibold text-gray-text">
+                    Talk to Adam while it&apos;s top of mind.
+                  </h3>
+                  <p className="mb-5 font-body text-sm leading-relaxed text-gray-text-2">
+                    Free · 20 minutes · He&apos;ll already know your result.
+                  </p>
+                  <div className="overflow-hidden rounded-xl border border-white/8">
+                    <CalendlyEmbed
+                      name={name}
+                      email={email}
+                      onBooked={handleBooked}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-center">
+                <Button onClick={handleRetake} variant="ghost" size="sm">
                   Retake the quiz
                 </Button>
               </div>
 
               {email && (
-                <p className="mt-8 font-mono text-xs text-gray-muted">
+                <p className="mt-6 text-center font-mono text-xs text-gray-muted">
                   Your results were sent to {email}
                 </p>
               )}

@@ -1,17 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Navbar } from "@/components/layout";
 import Button from "@/components/ui/Button";
+import CalendlyEmbed from "@/components/ui/CalendlyEmbed";
 import FadeIn from "@/components/animations/FadeIn";
 import FadeUp from "@/components/animations/FadeUp";
-
-const CALENDLY_URL =
-  process.env.NEXT_PUBLIC_CALENDLY_URL ??
-  "https://calendly.com/graymethodtraining/discovery-call";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -67,73 +64,6 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
         style={{ width: `${pct}%` }}
       />
     </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// CalendlyEmbed — inline widget, dark-branded, pre-filled
-// ---------------------------------------------------------------------------
-function CalendlyEmbed({
-  name,
-  email,
-  onBooked,
-}: {
-  name: string;
-  email: string;
-  onBooked: () => void;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scriptLoaded = useRef(false);
-
-  const embedUrl = useMemo(() => {
-    const params = new URLSearchParams({
-      name,
-      email,
-      background_color: "111111",
-      text_color: "f5f0e8",
-      primary_color: "c9a84c",
-      hide_gdpr_banner: "1",
-      hide_event_type_details: "0",
-    });
-    return `${CALENDLY_URL}?${params.toString()}`;
-  }, [name, email]);
-
-  // Load the Calendly widget script once
-  useEffect(() => {
-    if (scriptLoaded.current) return;
-    scriptLoaded.current = true;
-
-    const existing = document.getElementById("calendly-widget-script");
-    if (!existing) {
-      const script = document.createElement("script");
-      script.id = "calendly-widget-script";
-      script.src = "https://assets.calendly.com/assets/external/widget.js";
-      script.async = true;
-      document.head.appendChild(script);
-    }
-  }, []);
-
-  // Listen for the booking-complete postMessage from Calendly's iframe
-  useEffect(() => {
-    function handleMessage(e: MessageEvent) {
-      if (
-        e.origin === "https://calendly.com" &&
-        (e.data as { event?: string })?.event === "calendly.event_scheduled"
-      ) {
-        onBooked();
-      }
-    }
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [onBooked]);
-
-  return (
-    <div
-      ref={containerRef}
-      className="calendly-inline-widget w-full overflow-hidden rounded-xl"
-      data-url={embedUrl}
-      style={{ minWidth: "320px", height: "660px" }}
-    />
   );
 }
 
