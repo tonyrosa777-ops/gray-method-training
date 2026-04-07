@@ -1,12 +1,13 @@
 /**
  * Instagram Graph API — shared fetch logic
  *
- * Uses Basic Display API or Instagram Graph API (business accounts).
- * Access token is stored in INSTAGRAM_ACCESS_TOKEN env var.
- * ISR revalidation: 3600s (hourly) — baked into the fetch call.
- *
- * SETUP: See SETUP.md for long-lived token instructions.
+ * Token is read from Upstash Redis via token-store.ts.
+ * Falls back to INSTAGRAM_ACCESS_TOKEN env var on first deploy before Redis is seeded.
+ * Token is automatically refreshed every 30 days by /api/cron/refresh-instagram.
+ * Adam never needs to touch this.
  */
+
+import { getInstagramToken } from "@/lib/token-store";
 
 export interface InstagramPost {
   id: string;
@@ -29,7 +30,7 @@ interface GraphAPIResponse {
  * Returns an empty array (never throws) so callers can always render a fallback.
  */
 export async function fetchInstagramPosts(limit = 12): Promise<InstagramPost[]> {
-  const token = process.env.INSTAGRAM_ACCESS_TOKEN;
+  const token = await getInstagramToken();
 
   // No token configured — return empty so the fallback renders
   if (!token) return [];
