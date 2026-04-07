@@ -1,48 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { FormEvent } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { QUIZ_QUESTIONS, QUIZ_RESULTS, scoreQuiz, type QuizType } from "@/data/quiz";
 import Button from "@/components/ui/Button";
-import FadeIn from "@/components/animations/FadeIn";
 
-type ProblemOption = {
-  value: string;
-  emoji: string;
-  label: string;
-};
+type Phase = "intro" | "question" | "emailgate" | "results";
 
-type GoalOption = {
-  value: string;
-  emoji: string;
-  label: string;
-};
+const TOTAL = QUIZ_QUESTIONS.length; // 8
 
-const problemOptions: ProblemOption[] = [
-  { value: "consistency", emoji: "⚡", label: "I cannot stay consistent" },
-  { value: "energy", emoji: "🪫", label: "I feel drained all the time" },
-  { value: "strength", emoji: "🏋️", label: "I want to feel stronger" },
-  { value: "confidence", emoji: "✨", label: "I want my confidence back" },
-  { value: "fat-loss", emoji: "📉", label: "I am stuck on body fat" },
-  { value: "stress", emoji: "🧠", label: "Stress keeps knocking me off track" },
-];
-
-const goalOptions: GoalOption[] = [
-  { value: "lose-weight", emoji: "🔥", label: "Lose weight without burnout" },
-  { value: "build-muscle", emoji: "💪", label: "Build strength and shape" },
-  { value: "better-habits", emoji: "🧭", label: "Build habits that actually stick" },
-  { value: "feel-better", emoji: "🌿", label: "Feel better in my body day to day" },
-];
-
-const introBullets = [
-  "Fast, personal, and easy to finish",
-  "Built to understand where you are right now",
-  "Ends with a simple message step",
-];
-
+// ---------------------------------------------------------------------------
+// ProgressBar
+// ---------------------------------------------------------------------------
 function ProgressBar({ current, total }: { current: number; total: number }) {
-  const pct = Math.round(((current + 1) / total) * 100);
-
+  const pct = Math.round((current / total) * 100);
   return (
     <div
       className="h-0.5 w-full overflow-hidden rounded-full bg-white/5"
@@ -50,11 +21,10 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
       aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label={`Step ${current + 1} of ${total}`}
     >
       <motion.div
         className="h-full rounded-full bg-gold"
-        initial={{ width: 0 }}
+        initial={false}
         animate={{ width: `${pct}%` }}
         transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
       />
@@ -62,413 +32,389 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// QuizClient
+// ---------------------------------------------------------------------------
 export default function QuizClient() {
-  const [step, setStep] = useState(0);
-  const [selectedProblems, setSelectedProblems] = useState<string[]>([]);
-  const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [phase, setPhase] = useState<Phase>("intro");
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<QuizType[]>([]);
+  // Which answer the user just clicked — held for 400ms before advancing
+  const [pendingAnswer, setPendingAnswer] = useState<QuizType | null>(null);
+  const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
 
-  const totalSteps = 3;
-  const isIntro = step === 0;
-  const isComplete = step === totalSteps + 1;
+  // Email gate fields
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [apiStatus, setApiStatus] = useState<"idle" | "loading">("idle");
 
-  const canContinueStep1 = selectedProblems.length > 0;
-  const canContinueStep2 = selectedGoal !== null;
-  const canSubmit =
-    form.name.trim().length > 0 &&
-    form.email.trim().length > 0 &&
-    form.message.trim().length > 0;
+  // Computed result type (set on submit)
+  const [resultType, setResultType] = useState<QuizType | null>(null);
 
-  const selectedProblemLabels = useMemo(
-    () =>
-      problemOptions
-        .filter((option) => selectedProblems.includes(option.value))
-        .map((option) => option.label),
-    [selectedProblems]
-  );
+  // The answer at the current question index (may exist if user went back)
+  const existingAnswer: QuizType | null =
+    phase === "question" && questionIndex < answers.length
+      ? answers[questionIndex]
+      : null;
 
-  const selectedGoalLabel = useMemo(
-    () => goalOptions.find((option) => option.value === selectedGoal)?.label ?? "",
-    [selectedGoal]
-  );
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+  function handleSelectAnswer(type: QuizType) {
+    if (pendingAnswer !== null) return; // debounce during animation
+    setPendingAnswer(type);
 
-  function handleStart() {
-    setStep(1);
-  }
+    setTimeout(() => {
+      // Replace answer at this index, truncate any future answers
+      const newAnswers = [...answers.slice(0, questionIndex), type];
+      setAnswers(newAnswers);
+      setPendingAnswer(null);
 
-  function toggleProblem(value: string) {
-    setSelectedProblems((current) =>
-      current.includes(value)
-        ? current.filter((item) => item !== value)
-        : [...current, value]
-    );
-  }
-
-  function handleNext() {
-    setStep((current) => Math.min(current + 1, totalSteps));
+      if (questionIndex < TOTAL - 1) {
+        setDirection(1);
+        setQuestionIndex((i) => i + 1);
+      } else {
+        setPhase("emailgate");
+      }
+    }, 400);
   }
 
   function handleBack() {
-    setStep((current) => Math.max(current - 1, 0));
+    if (phase === "question") {
+      if (questionIndex > 0) {
+        setDirection(-1);
+        setQuestionIndex((i) => i - 1);
+      } else {
+        setPhase("intro");
+      }
+    } else if (phase === "emailgate") {
+      setDirection(-1);
+      setPhase("question");
+      setQuestionIndex(TOTAL - 1);
+    }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!canSubmit) return;
+  function handleSubmit() {
+    let valid = true;
+    if (!name.trim() || name.trim().length < 2) {
+      setNameError("Name is required");
+      valid = false;
+    } else {
+      setNameError("");
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim() || !emailRegex.test(email.trim())) {
+      setEmailError("Enter a valid email");
+      valid = false;
+    } else {
+      setEmailError("");
+    }
+    if (!valid) return;
 
-    setIsSubmitted(true);
-    setStep(totalSteps + 1);
+    const computed = scoreQuiz(answers);
+    setResultType(computed);
+    setApiStatus("loading");
+
+    fetch("/api/quiz", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name.trim(),
+        email: email.trim(),
+        resultType: computed,
+        answers,
+      }),
+    })
+      .finally(() => {
+        setApiStatus("idle");
+        setPhase("results");
+      });
   }
 
-  function handleRestart() {
-    setStep(0);
-    setSelectedProblems([]);
-    setSelectedGoal(null);
-    setForm({
-      name: "",
-      email: "",
-      message: "",
-    });
-    setIsSubmitted(false);
+  function handleRetake() {
+    setPhase("intro");
+    setQuestionIndex(0);
+    setAnswers([]);
+    setPendingAnswer(null);
+    setName("");
+    setEmail("");
+    setNameError("");
+    setEmailError("");
+    setResultType(null);
+    setApiStatus("idle");
+    setDirection(1);
   }
+
+  const result = resultType ? QUIZ_RESULTS[resultType] : null;
+  const currentQuestion = phase === "question" ? QUIZ_QUESTIONS[questionIndex] : null;
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6 py-24">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-bg px-6 py-24">
       <div className="w-full max-w-2xl">
-        <AnimatePresence mode="wait">
-          {isIntro && (
+        <AnimatePresence mode="wait" initial={false}>
+
+          {/* ── Intro ── */}
+          {phase === "intro" && (
             <motion.div
               key="intro"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <FadeIn>
-                <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                  3-step intake
-                </p>
-              </FadeIn>
-              <h1 className="mb-5 font-display text-display font-semibold leading-[1.05] text-gray-text">
-                Let&apos;s start with what
-                <br />
-                you actually need.
-              </h1>
-              <p className="mb-3 max-w-lg font-body text-lead leading-relaxed text-gray-text-2">
-                A quick 3-step form to help us understand your biggest problems,
-                your main goal, and the message you want to send.
+              <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                Find your fit
               </p>
-              <ul className="mb-10 max-w-lg space-y-2">
-                {introBullets.map((bullet) => (
-                  <li
-                    key={bullet}
-                    className="font-body text-sm leading-relaxed text-gray-muted"
-                  >
-                    {bullet}
+              <h1 className="mb-5 font-display text-display font-semibold leading-[1.05] text-gray-text">
+                What kind of client<br />are you?
+              </h1>
+              <p className="mb-8 max-w-lg font-body text-lead leading-relaxed text-gray-text-2">
+                8 quick questions. Honest answers. You&apos;ll get a result that maps to your actual situation — and a recommendation for the kind of help that fits you right now.
+              </p>
+              <ul className="mb-10 space-y-2.5">
+                {[
+                  "Takes about 2 minutes",
+                  "No wrong answers — just pick what\u2019s closest to true",
+                  "Your personalized results are sent to your inbox",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-2.5 font-body text-sm text-gray-muted">
+                    <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-gold/60" aria-hidden="true" />
+                    {b}
                   </li>
                 ))}
               </ul>
-              <Button onClick={handleStart} variant="gold" size="lg">
-                Start the form
+              <Button onClick={() => setPhase("question")} variant="gold" size="lg">
+                Start the quiz
               </Button>
               <p className="mt-4 font-mono text-xs text-gray-muted">
-                Takes about 60 seconds - no pressure
+                8 questions · No email required until the end
               </p>
             </motion.div>
           )}
 
-          {!isIntro && !isComplete && (
+          {/* ── Question ── */}
+          {phase === "question" && currentQuestion && (
             <motion.div
-              key={`step-${step}`}
-              initial={{ opacity: 0, x: 32 }}
+              key={`q-${questionIndex}`}
+              initial={{ opacity: 0, x: direction * 40 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -32 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+              exit={{ opacity: 0, x: direction * -40 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <div className="mb-8">
+              {/* Progress header */}
+              <div className="mb-10">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="font-mono text-xs tracking-wider text-gray-muted">
-                    Step {step} of {totalSteps}
+                    Question {questionIndex + 1} of {TOTAL}
                   </p>
                   <p className="font-mono text-xs text-gold">
-                    {step === 1 && "01"}
-                    {step === 2 && "02"}
-                    {step === 3 && "03"}
+                    {String(questionIndex + 1).padStart(2, "0")}
                   </p>
                 </div>
-                <ProgressBar current={step - 1} total={totalSteps} />
+                <ProgressBar current={questionIndex} total={TOTAL} />
               </div>
 
-              {step === 1 && (
-                <>
-                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                    Step one
-                  </p>
-                  <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
-                    What are your biggest problems?
-                  </h2>
-                  <p className="mb-8 font-body text-sm leading-relaxed text-gray-muted">
-                    Pick all that apply. We&apos;ll use this to understand what
-                    is getting in the way.
-                  </p>
+              <h2 className="mb-8 font-display text-title-xl font-semibold leading-snug text-gray-text">
+                {currentQuestion.question}
+              </h2>
 
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {problemOptions.map((option) => {
-                      const isSelected = selectedProblems.includes(option.value);
+              <div className="space-y-3">
+                {currentQuestion.answers.map((answer) => {
+                  const isPending = pendingAnswer === answer.type;
+                  const isExisting = existingAnswer === answer.type && pendingAnswer === null;
+                  const isDimmed = pendingAnswer !== null && !isPending;
 
-                      return (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => toggleProblem(option.value)}
-                          className={[
-                            "rounded-xl border px-5 py-4 text-left transition-all duration-200",
-                            "bg-gray-elevated/50 font-body text-sm leading-relaxed",
-                            isSelected
-                              ? "border-gold bg-gray-elevated text-gray-text"
-                              : "border-white/8 text-gray-text-2 hover:border-white/20 hover:bg-gray-elevated",
-                          ].join(" ")}
-                          aria-pressed={isSelected}
-                        >
-                          <span className="mb-2 block text-lg" aria-hidden="true">
-                            {option.emoji}
-                          </span>
-                          <span className="block">{option.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-8 flex items-center justify-between">
+                  return (
                     <button
+                      key={answer.type}
                       type="button"
-                      onClick={handleBack}
-                      className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text disabled:cursor-not-allowed disabled:opacity-30"
-                      disabled={step <= 0}
+                      onClick={() => handleSelectAnswer(answer.type)}
+                      disabled={pendingAnswer !== null}
+                      className={[
+                        "w-full rounded-xl border px-5 py-4 text-left font-body text-sm leading-relaxed",
+                        "transition-all duration-200",
+                        isPending
+                          ? "scale-[0.985] border-gold bg-gold/10 text-gray-text"
+                          : isExisting
+                          ? "border-gold bg-gray-elevated text-gray-text"
+                          : "border-white/8 bg-gray-elevated/30 text-gray-text-2 hover:border-white/20 hover:bg-gray-elevated hover:text-gray-text",
+                        isDimmed ? "opacity-30" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
                     >
-                      Back
+                      {answer.label}
                     </button>
-                    <Button
-                      onClick={handleNext}
-                      variant="gold"
-                      size="md"
-                      disabled={!canContinueStep1}
-                    >
-                      Continue →
-                    </Button>
-                  </div>
-                </>
-              )}
+                  );
+                })}
+              </div>
 
-              {step === 2 && (
-                <>
-                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                    Step two
-                  </p>
-                  <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
-                    What is your main goal?
-                  </h2>
-                  <p className="mb-8 font-body text-sm leading-relaxed text-gray-muted">
-                    Choose the outcome that matters most right now.
-                  </p>
-
-                  <div className="space-y-3">
-                    {goalOptions.map((option) => {
-                      const isSelected = selectedGoal === option.value;
-
-                      return (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => setSelectedGoal(option.value)}
-                          className={[
-                            "w-full rounded-xl border px-5 py-4 text-left transition-all duration-200",
-                            "bg-gray-elevated/50 font-body text-sm leading-relaxed",
-                            isSelected
-                              ? "border-gold bg-gray-elevated text-gray-text"
-                              : "border-white/8 text-gray-text-2 hover:border-white/20 hover:bg-gray-elevated",
-                          ].join(" ")}
-                          aria-pressed={isSelected}
-                        >
-                          <span className="mb-2 block text-lg" aria-hidden="true">
-                            {option.emoji}
-                          </span>
-                          <span className="block">{option.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-8 flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
-                    >
-                      Back
-                    </button>
-                    <Button
-                      onClick={handleNext}
-                      variant="gold"
-                      size="md"
-                      disabled={!canContinueStep2}
-                    >
-                      Continue →
-                    </Button>
-                  </div>
-                </>
-              )}
-
-              {step === 3 && (
-                <form onSubmit={handleSubmit}>
-                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                    Step three
-                  </p>
-                  <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
-                    Send a message
-                  </h2>
-                  <p className="mb-6 font-body text-sm leading-relaxed text-gray-muted">
-                    Share your details and a short note. We&apos;ll take it from
-                    there.
-                  </p>
-
-                  <div className="mb-5 flex flex-wrap gap-2">
-                    {selectedProblemLabels.map((label) => (
-                      <span
-                        key={label}
-                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-text-2"
-                      >
-                        {label}
-                      </span>
-                    ))}
-                    {selectedGoalLabel && (
-                      <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gold">
-                        Goal: {selectedGoalLabel}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="space-y-4">
-                    <label className="block">
-                      <span className="mb-2 block font-body text-sm text-gray-text-2">
-                        Name
-                      </span>
-                      <input
-                        value={form.name}
-                        onChange={(event) =>
-                          setForm((current) => ({ ...current, name: event.target.value }))
-                        }
-                        className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors duration-200 placeholder:text-gray-muted focus:border-gold"
-                        placeholder="Your name"
-                        autoComplete="name"
-                      />
-                    </label>
-
-                    <label className="block">
-                      <span className="mb-2 block font-body text-sm text-gray-text-2">
-                        Email
-                      </span>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(event) =>
-                          setForm((current) => ({ ...current, email: event.target.value }))
-                        }
-                        className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors duration-200 placeholder:text-gray-muted focus:border-gold"
-                        placeholder="you@example.com"
-                        autoComplete="email"
-                      />
-                    </label>
-
-                    <label className="block">
-                      <span className="mb-2 block font-body text-sm text-gray-text-2">
-                        Message
-                      </span>
-                      <textarea
-                        value={form.message}
-                        onChange={(event) =>
-                          setForm((current) => ({ ...current, message: event.target.value }))
-                        }
-                        className="min-h-32 w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors duration-200 placeholder:text-gray-muted focus:border-gold"
-                        placeholder="Tell us what you want help with..."
-                      />
-                    </label>
-                  </div>
-
-                  <div className="mt-8 flex items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
-                    >
-                      Back
-                    </button>
-                    <Button type="submit" variant="gold" size="md" disabled={!canSubmit}>
-                      Send message →
-                    </Button>
-                  </div>
-                </form>
-              )}
+              <div className="mt-8">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
+                >
+                  ← Back
+                </button>
+              </div>
             </motion.div>
           )}
 
-          {isComplete && isSubmitted && (
+          {/* ── Email gate ── */}
+          {phase === "emailgate" && (
             <motion.div
-              key="complete"
-              initial={{ opacity: 0, y: 24 }}
+              key="emailgate"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="mb-10">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="font-mono text-xs tracking-wider text-gray-muted">
+                    Almost there
+                  </p>
+                  <p className="font-mono text-xs text-gold">{TOTAL}/{TOTAL}</p>
+                </div>
+                <ProgressBar current={TOTAL} total={TOTAL} />
+              </div>
+
+              <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                Your results are ready
+              </p>
+              <h2 className="mb-3 font-display text-title-xl font-semibold leading-snug text-gray-text">
+                Where should we send them?
+              </h2>
+              <p className="mb-8 font-body text-sm leading-relaxed text-gray-muted">
+                Enter your name and email to see your personalized result and program recommendation.
+              </p>
+
+              <div className="space-y-4">
+                <label className="block">
+                  <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
+                    Name <span className="text-gold">*</span>
+                  </span>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                    autoComplete="name"
+                    placeholder="Your first name"
+                    className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+                  />
+                  {nameError && (
+                    <p className="mt-1.5 font-mono text-xs text-orange-accent">{nameError}</p>
+                  )}
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
+                    Email <span className="text-gold">*</span>
+                  </span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    className="w-full rounded-xl border border-white/10 bg-gray-elevated/60 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+                  />
+                  {emailError && (
+                    <p className="mt-1.5 font-mono text-xs text-orange-accent">{emailError}</p>
+                  )}
+                </label>
+              </div>
+
+              <div className="mt-8 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
+                >
+                  ← Back
+                </button>
+                <Button
+                  onClick={handleSubmit}
+                  variant="gold"
+                  size="md"
+                  disabled={apiStatus === "loading"}
+                >
+                  {apiStatus === "loading" ? "Loading..." : "See my results →"}
+                </Button>
+              </div>
+
+              <p className="mt-5 text-center font-mono text-xs text-gray-muted">
+                No spam. One email with your results and recommendation.
+              </p>
+            </motion.div>
+          )}
+
+          {/* ── Results ── */}
+          {phase === "results" && result && (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                Message sent
+              <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                Your result
               </p>
-              <h2 className="mb-5 font-display text-title-xl font-semibold leading-snug text-gray-text">
-                Thanks - we have what we need.
+              <h2 className="mb-2 font-display text-display font-semibold leading-[1.05] text-gray-text">
+                {result.name}
               </h2>
-              <p className="mb-10 max-w-lg font-body text-base leading-relaxed text-gray-text-2">
-                Your intake is in. We&apos;ll review your note and respond with
-                the next best step.
+              <p className="mb-10 font-body text-lead leading-relaxed text-gray-text-2">
+                {result.tagline}
               </p>
 
-              <div className="mb-8 space-y-3">
-                <p className="font-body text-sm text-gray-muted">What you shared</p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedProblemLabels.map((label) => (
-                    <span
-                      key={label}
-                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-text-2"
-                    >
-                      {label}
-                    </span>
-                  ))}
-                  {selectedGoalLabel && (
-                    <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gold">
-                      Goal: {selectedGoalLabel}
-                    </span>
-                  )}
-                </div>
+              <div className="mb-10 space-y-5 border-t border-white/5 pt-8">
+                {result.body.map((paragraph, i) => (
+                  <p key={i} className="font-body text-sm leading-[1.8] text-gray-text-2">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
 
-              <div className="flex flex-col gap-4 sm:flex-row">
+              {/* Recommended program card */}
+              <div className="mb-10 rounded-2xl border border-gold/20 bg-gold/5 p-6">
+                <p className="mb-1 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+                  Recommended for you
+                </p>
+                <p className="mb-2 font-display text-title-md font-semibold text-gray-text">
+                  {result.recommendedProgram.name}
+                </p>
+                <p className="mb-5 font-body text-sm leading-relaxed text-gray-text-2">
+                  {result.recommendedProgram.reason}
+                </p>
+                <Button href={result.recommendedProgram.href} variant="gold" size="md">
+                  Learn more
+                </Button>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Button href="/contact" variant="gold" size="lg">
-                  Go to contact page
+                  Book a free call with Adam
                 </Button>
-                <Button onClick={handleRestart} variant="ghost" size="lg">
-                  Start over
+                <Button onClick={handleRetake} variant="ghost" size="lg">
+                  Retake the quiz
                 </Button>
               </div>
 
-              <p className="mt-10 font-mono text-xs text-gray-muted">
-                If you want to keep going right now, the contact page is ready.
-              </p>
+              {email && (
+                <p className="mt-8 font-mono text-xs text-gray-muted">
+                  Your results were sent to {email}
+                </p>
+              )}
             </motion.div>
           )}
+
         </AnimatePresence>
       </div>
     </div>
