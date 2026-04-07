@@ -373,7 +373,7 @@ function ContactForm() {
           </div>
         )}
 
-        <div className={step === 4 ? "px-6 pb-0 lg:px-8" : "px-6 pb-6 lg:px-8 lg:pb-8"}>
+        <div className={step === 4 ? "px-6 pb-0 pt-8 lg:px-8 lg:pt-10" : "px-6 pb-6 pt-8 lg:px-8 lg:pb-8 lg:pt-10"}>
 
           {/* ── Step 0: Intro ── */}
           {step === 0 && (
