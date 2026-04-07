@@ -1,61 +1,47 @@
 /**
- * Instagram Graph API — shared fetch logic
+ * Instagram feed via Behold.so
  *
- * Token is read from Upstash Redis via token-store.ts.
- * Falls back to INSTAGRAM_ACCESS_TOKEN env var on first deploy before Redis is seeded.
- * Token is automatically refreshed every 30 days by /api/cron/refresh-instagram.
- * Adam never needs to touch this.
+ * Behold handles Instagram OAuth and token refresh automatically.
+ * No Meta Developer App, no 60-day expiry, no cron jobs.
+ *
+ * Setup: Adam goes to behold.so, connects his Instagram, copies the Feed ID.
+ * That ID goes in NEXT_PUBLIC_BEHOLD_FEED_ID — that's it.
+ *
+ * Feed URL: https://feeds.behold.so/{FEED_ID}
  */
 
-import { getInstagramToken } from "@/lib/token-store";
-
-export interface InstagramPost {
+export interface BeholdPost {
   id: string;
-  media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
-  media_url: string;
-  /** Only present for VIDEO type — use this as the poster image */
-  thumbnail_url?: string;
+  mediaType: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
+  mediaUrl: string;
+  /** Present on VIDEO posts — use as poster image */
+  thumbnailUrl?: string;
   permalink: string;
   caption?: string;
   timestamp: string;
 }
 
-interface GraphAPIResponse {
-  data?: InstagramPost[];
-  error?: { message: string; type: string; code: number };
+interface BeholdFeedResponse {
+  posts: BeholdPost[];
 }
 
 /**
- * Fetch recent Instagram posts.
- * Returns an empty array (never throws) so callers can always render a fallback.
+ * Fetch recent posts from Behold.
+ * Returns empty array on any failure so the section always renders a fallback.
  */
-export async function fetchInstagramPosts(limit = 12): Promise<InstagramPost[]> {
-  const token = await getInstagramToken();
-
-  // No token configured — return empty so the fallback renders
-  if (!token) return [];
+export async function fetchInstagramPosts(limit = 9): Promise<BeholdPost[]> {
+  const feedId = process.env.NEXT_PUBLIC_BEHOLD_FEED_ID;
+  if (!feedId) return [];
 
   try {
-    const url = new URL("https://graph.instagram.com/me/media");
-    url.searchParams.set(
-      "fields",
-      "id,media_type,media_url,thumbnail_url,permalink,caption,timestamp"
-    );
-    url.searchParams.set("limit", String(limit));
-    url.searchParams.set("access_token", token);
-
-    const res = await fetch(url.toString(), {
+    const res = await fetch(`https://feeds.behold.so/${feedId}`, {
       next: { revalidate: 3600 },
     });
 
     if (!res.ok) return [];
 
-    const json: GraphAPIResponse = await res.json();
-
-    // Graph API returned an error object
-    if (json.error) return [];
-
-    return json.data ?? [];
+    const data: BeholdFeedResponse = await res.json();
+    return (data.posts ?? []).slice(0, limit);
   } catch {
     return [];
   }

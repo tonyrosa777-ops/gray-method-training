@@ -1,15 +1,34 @@
-import Image from "next/image";
 import { social } from "@/data/site";
-import { fetchInstagramPosts, truncateCaption, type InstagramPost } from "@/lib/instagram";
+import { fetchInstagramPosts, truncateCaption, type BeholdPost } from "@/lib/instagram";
 import FadeIn from "@/components/animations/FadeIn";
 import StaggerContainer, { StaggerItem, staggerItemScaleVariants } from "@/components/animations/StaggerContainer";
 
 /* ------------------------------------------------------------------ */
-/*  Individual tile components                                          */
+/*  Tile components                                                     */
 /* ------------------------------------------------------------------ */
 
-function VideoTile({ post }: { post: InstagramPost }) {
-  const posterSrc = post.thumbnail_url ?? post.media_url;
+function HoverOverlay({ caption }: { caption: string }) {
+  return (
+    <div
+      className="absolute inset-0 bg-gray-bg/75 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-10"
+      aria-hidden="true"
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-gold mb-2 flex-shrink-0">
+        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+      </svg>
+      {caption && (
+        <p className="font-body text-xs text-gray-text text-center leading-relaxed line-clamp-3">
+          {caption}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function VideoTile({ post }: { post: BeholdPost }) {
+  const posterSrc = post.thumbnailUrl ?? post.mediaUrl;
   const caption = truncateCaption(post.caption);
 
   return (
@@ -20,14 +39,13 @@ function VideoTile({ post }: { post: InstagramPost }) {
       className="relative aspect-square bg-gray-elevated rounded-sm overflow-hidden group block"
       aria-label={caption || "Instagram video post"}
     >
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={posterSrc}
         alt={caption || "Instagram video"}
-        fill
-        sizes="(max-width: 640px) 33vw, (max-width: 1280px) 25vw, 200px"
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
-      {/* Play icon */}
       <div
         className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
         aria-hidden="true"
@@ -43,9 +61,9 @@ function VideoTile({ post }: { post: InstagramPost }) {
   );
 }
 
-function ImageTile({ post }: { post: InstagramPost }) {
+function ImageTile({ post }: { post: BeholdPost }) {
   const caption = truncateCaption(post.caption);
-  const isCarousel = post.media_type === "CAROUSEL_ALBUM";
+  const isCarousel = post.mediaType === "CAROUSEL_ALBUM";
 
   return (
     <a
@@ -55,19 +73,15 @@ function ImageTile({ post }: { post: InstagramPost }) {
       className="relative aspect-square bg-gray-elevated rounded-sm overflow-hidden group block"
       aria-label={caption || "Instagram post"}
     >
-      <Image
-        src={post.media_url}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={post.mediaUrl}
         alt={caption || "Instagram post"}
-        fill
-        sizes="(max-width: 640px) 33vw, (max-width: 1280px) 25vw, 200px"
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
-      {/* Carousel indicator */}
       {isCarousel && (
-        <div
-          className="absolute top-2 right-2 z-10 pointer-events-none"
-          aria-hidden="true"
-        >
+        <div className="absolute top-2 right-2 z-10 pointer-events-none" aria-hidden="true">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="drop-shadow-md">
             <rect x="6" y="1" width="11" height="11" rx="1.5" stroke="white" strokeWidth="1.5" />
             <rect x="1" y="6" width="11" height="11" rx="1.5" stroke="white" strokeWidth="1.5" fill="rgba(0,0,0,0.4)" />
@@ -79,30 +93,6 @@ function ImageTile({ post }: { post: InstagramPost }) {
   );
 }
 
-function HoverOverlay({ caption }: { caption: string }) {
-  return (
-    <div
-      className="absolute inset-0 bg-gray-bg/75 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 z-10"
-      aria-hidden="true"
-    >
-      {/* Instagram icon */}
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-gold mb-2 flex-shrink-0">
-        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
-      </svg>
-      {caption && (
-        <p className="font-body text-xs text-gray-text text-center leading-relaxed line-clamp-3">
-          {caption}
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Placeholder tile (shown when no token or API fails)               */
-/* ------------------------------------------------------------------ */
 function PlaceholderTile({ index }: { index: number }) {
   return (
     <div className="relative aspect-square bg-gray-elevated border border-white/5 rounded-sm overflow-hidden group">
@@ -120,7 +110,7 @@ function PlaceholderTile({ index }: { index: number }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Main section — Server Component, ISR 3600s                        */
+/*  Main section — Server Component, ISR 3600s via Behold             */
 /* ------------------------------------------------------------------ */
 export default async function InstagramFeed() {
   const posts = await fetchInstagramPosts(9);
@@ -132,7 +122,6 @@ export default async function InstagramFeed() {
       aria-label={`Follow ${social.instagramHandle} on Instagram`}
     >
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <FadeIn className="flex items-center justify-between mb-10">
           <div>
             <p className="font-body text-sm text-gray-muted tracking-wide mb-1">
@@ -159,15 +148,11 @@ export default async function InstagramFeed() {
           </a>
         </FadeIn>
 
-        {/* Grid */}
         {hasLiveData ? (
-          <StaggerContainer
-            className="grid grid-cols-3 gap-1.5"
-            staggerDelay={0.06}
-          >
+          <StaggerContainer className="grid grid-cols-3 gap-1.5" staggerDelay={0.06}>
             {posts.map((post) => (
               <StaggerItem key={post.id} variants={staggerItemScaleVariants}>
-                {post.media_type === "VIDEO" ? (
+                {post.mediaType === "VIDEO" ? (
                   <VideoTile post={post} />
                 ) : (
                   <ImageTile post={post} />
@@ -176,21 +161,18 @@ export default async function InstagramFeed() {
             ))}
           </StaggerContainer>
         ) : (
-          /* Fallback grid — always renders so the section is never broken */
           <FadeIn delay={0.1}>
             <div className="grid grid-cols-3 gap-1.5" aria-label="Instagram feed placeholder">
               {Array.from({ length: 9 }, (_, i) => (
                 <PlaceholderTile key={i} index={i + 1} />
               ))}
             </div>
-            {/* Dev note */}
             <p className="font-mono text-xs text-gray-muted mt-4 text-center opacity-40">
-              Add INSTAGRAM_ACCESS_TOKEN to .env.local to show live posts · See SETUP.md
+              Add NEXT_PUBLIC_BEHOLD_FEED_ID to show live posts
             </p>
           </FadeIn>
         )}
 
-        {/* Mobile CTA */}
         <div className="mt-8 text-center sm:hidden">
           <a
             href={social.instagram}
