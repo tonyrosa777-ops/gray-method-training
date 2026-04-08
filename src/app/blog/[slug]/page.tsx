@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import { BLOG_POSTS, getPost } from "@/data/static-blog-posts";
 import PostBody from "@/components/blog/PostBody";
 import TableOfContents from "@/components/blog/TableOfContents";
-import NewsletterSignup from "@/components/blog/NewsletterSignup";
 import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import FadeIn from "@/components/animations/FadeIn";
 import FadeUp from "@/components/animations/FadeUp";
 import { Navbar } from "@/components/layout";
@@ -119,7 +119,30 @@ export default async function BlogPostPage({
               <PostBody body={post.body} />
 
               <div className="mt-16 pt-10 border-t border-white/5">
-                <NewsletterSignup />
+                <div className="rounded-2xl bg-gray-elevated border border-gold/20 p-8 md:p-10">
+                  <p className="font-mono text-xs text-gold tracking-widest uppercase mb-4">
+                    Ready to put this into practice?
+                  </p>
+                  <h3 className="font-display font-semibold text-2xl md:text-3xl text-gray-text leading-tight mb-3">
+                    Stop reading about it. Start doing it.
+                  </h3>
+                  <p className="font-body text-gray-text-2 mb-8 max-w-md">
+                    Take the 2-minute quiz to find out which Gray Method program fits where you are right now — or book a free call and we'll figure it out together.
+                  </p>
+                  <div className="flex flex-wrap gap-4">
+                    <Button href="/quiz" variant="gold" size="lg">
+                      Find My Program
+                    </Button>
+                    <Button
+                      href={process.env.NEXT_PUBLIC_CALENDLY_URL ?? "/contact"}
+                      variant="ghost"
+                      size="lg"
+                      external={!!process.env.NEXT_PUBLIC_CALENDLY_URL}
+                    >
+                      Schedule a Free Call
+                    </Button>
+                  </div>
+                </div>
               </div>
             </article>
 
