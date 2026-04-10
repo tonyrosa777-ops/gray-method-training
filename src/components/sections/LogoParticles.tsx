@@ -139,7 +139,7 @@ export default function LogoParticles({
           // Exclude the banner/subtitle text band so sparkles never land on text.
           if (brightness > 200) {
             const yFrac = hy / W; // canvas is square so W === H
-            if (yFrac < 0.36 || yFrac > 0.68) {
+            if (yFrac < 0.36 || yFrac > 0.74) {
               spots.push({ x: hx, y: hy });
             }
           }
@@ -336,7 +336,7 @@ export default function LogoParticles({
         // never interferes with text readability. evenodd fill rule: a full
         // canvas rect + a banner-band rect means the banner band is excluded.
         const bannerY0 = canvas.height * 0.36;
-        const bannerY1 = canvas.height * 0.68;
+        const bannerY1 = canvas.height * 0.74;
 
         ctx.save();
         ctx.beginPath();
