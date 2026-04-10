@@ -24,7 +24,12 @@ export const nav = {
 
 /* ---- Hero ------------------------------------------------- */
 export const hero = {
-  headline: "Gray Method Online Health & Fitness",
+  eyebrow: "Online Coaching for Busy Women",
+  headlineLines: [
+    "Stronger.",
+    "More energized.",
+    "Finally free from the diet cycle.",
+  ],
   tagline:
     "There is no black and white, everyone is different, everything is a gray area. Let's find the perfect plan for YOU!",
   ctaPrimary: { label: "Schedule a Free Call with Coach Adam", href: "/contact" },

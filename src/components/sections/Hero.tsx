@@ -111,19 +111,19 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Online Health & Fitness Coaching
+              {hero.eyebrow}
             </motion.p>
 
-            {/* Headline */}
+            {/* Headline — outcome-led, Adam's mission statement */}
             <motion.h1
               className="font-display font-semibold text-display text-gray-text leading-[1.05]"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <span className="text-shimmer">Gray Method</span>{" "}
-              <span className="block mt-1">Online Health</span>
-              <span className="block">&amp; Fitness</span>
+              <span className="block">{hero.headlineLines[0]}</span>
+              <span className="block mt-1">{hero.headlineLines[1]}</span>
+              <span className="block text-shimmer">{hero.headlineLines[2]}</span>
             </motion.h1>
 
             {/* Tagline — word-by-word */}

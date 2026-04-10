@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { nav } from "@/data/site";
 
@@ -61,9 +62,13 @@ export default function MobileNav({ onClose }: MobileNavProps) {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-          <span className="font-display font-semibold text-gold text-lg tracking-tight">
-            Gray Method
-          </span>
+          <Image
+            src="/images/gray-method-logo.png"
+            alt={`${nav.logo} Training`}
+            width={44}
+            height={44}
+            className="h-11 w-11 drop-shadow-[0_0_10px_rgba(200,169,110,0.25)]"
+          />
           <button
             onClick={onClose}
             className="text-gray-text-2 hover:text-gray-text transition-colors p-1"

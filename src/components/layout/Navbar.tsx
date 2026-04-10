@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { nav } from "@/data/site";
@@ -38,13 +39,24 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo — image-only, the badge IS the wordmark */}
           <Link
             href="/"
-            className="font-display font-semibold text-gold text-xl tracking-tight hover:text-gold-light transition-colors duration-200"
-            aria-label="Gray Method Training — home"
+            className="group flex items-center"
+            aria-label={`${nav.logo} Training — home`}
           >
-            Gray Method
+            <Image
+              src="/images/gray-method-logo.png"
+              alt={`${nav.logo} Training`}
+              width={56}
+              height={56}
+              priority
+              className={[
+                "transition-all duration-300",
+                scrolled ? "h-11 w-11" : "h-14 w-14",
+                "drop-shadow-[0_0_12px_rgba(200,169,110,0.25)] group-hover:drop-shadow-[0_0_18px_rgba(200,169,110,0.5)] group-hover:scale-[1.03]",
+              ].join(" ")}
+            />
           </Link>
 
           {/* Desktop nav links */}
