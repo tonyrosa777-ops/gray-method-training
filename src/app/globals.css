@@ -26,7 +26,7 @@
   --font-mono:    var(--font-space-mono), monospace;
 
   /* Type scale */
-  --text-display:   4.5rem;
+  --text-display:   clamp(2.5rem, 8vw, 4.5rem);
   --text-title-xl:  3rem;
   --text-title-lg:  2.25rem;
   --text-title-md:  1.5rem;
@@ -37,7 +37,7 @@
 
 /* Font-size + line-height + tracking composites */
 @utility text-display {
-  font-size: 4.5rem;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
