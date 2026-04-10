@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { adamStory, philosophy, stats } from "@/data/site";
-import PhotoPlaceholder from "@/components/ui/PhotoPlaceholder";
 import Button from "@/components/ui/Button";
 import Divider from "@/components/ui/Divider";
 import FadeIn from "@/components/animations/FadeIn";
@@ -88,7 +88,15 @@ export default function AboutPage() {
                     style={{ boxShadow: "inset 0 0 0 1px rgba(200,169,110,0.12)" }}
                     aria-hidden="true"
                   />
-                  <PhotoPlaceholder photoKey="adamAboutFull" sizes="(max-width: 1280px) 45vw, 560px" />
+                  <Image
+                    src="/images/hero-adam.jpg"
+                    alt="Coach Adam Gray — Gray Method Training"
+                    width={2000}
+                    height={1429}
+                    sizes="(max-width: 1280px) 45vw, 560px"
+                    priority
+                    className="w-full h-auto object-cover object-top"
+                  />
                 </div>
               </SlideIn>
             </div>
@@ -167,41 +175,26 @@ export default function AboutPage() {
 
         {/* ---- Credentials ---- */}
         <section className="py-24 lg:py-32">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[45fr_55fr] gap-16 items-start">
-              {/* Photo */}
-              <SlideIn direction="left" className="hidden lg:block">
-                <div className="relative rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
-                  <PhotoPlaceholder photoKey="aboutBjj" sizes="(max-width: 1280px) 45vw, 500px" />
-                </div>
-                <p className="font-mono text-xs text-gray-muted mt-3 text-center">
-                  Adam training BJJ — still a proud white belt
-                </p>
-              </SlideIn>
-
-              {/* Credentials */}
-              <div>
-                <FadeIn className="mb-10">
-                  <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Credentials & background</p>
-                  <h2 className="font-display font-semibold text-title-xl text-gray-text">
-                    11 years. 1,000 clients.<br />Still learning.
-                  </h2>
-                </FadeIn>
-                <StaggerContainer className="space-y-4" staggerDelay={0.07}>
-                  {credentials.map((cred) => (
-                    <StaggerItem key={cred.label} variants={staggerItemVariants}>
-                      <div className="flex items-start gap-4 p-5 rounded-xl bg-gray-elevated border border-white/5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-gold mt-2 flex-shrink-0" aria-hidden="true" />
-                        <div>
-                          <p className="font-body font-medium text-gray-text text-sm">{cred.label}</p>
-                          <p className="font-body text-xs text-gray-muted mt-0.5">{cred.note}</p>
-                        </div>
-                      </div>
-                    </StaggerItem>
-                  ))}
-                </StaggerContainer>
-              </div>
-            </div>
+          <div className="max-w-3xl mx-auto px-6">
+            <FadeIn className="mb-10 text-center">
+              <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Credentials & background</p>
+              <h2 className="font-display font-semibold text-title-xl text-gray-text">
+                11 years. 1,000 clients.<br />Still learning.
+              </h2>
+            </FadeIn>
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-4" staggerDelay={0.07}>
+              {credentials.map((cred) => (
+                <StaggerItem key={cred.label} variants={staggerItemVariants}>
+                  <div className="flex items-start gap-4 p-5 rounded-xl bg-gray-elevated border border-white/5 h-full">
+                    <div className="w-1.5 h-1.5 rounded-full bg-gold mt-2 flex-shrink-0" aria-hidden="true" />
+                    <div>
+                      <p className="font-body font-medium text-gray-text text-sm">{cred.label}</p>
+                      <p className="font-body text-xs text-gray-muted mt-0.5">{cred.note}</p>
+                    </div>
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
           </div>
         </section>
 

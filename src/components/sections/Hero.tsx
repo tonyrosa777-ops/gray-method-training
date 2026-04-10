@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { hero } from "@/data/site";
 import Button from "@/components/ui/Button";
 import HeroParticles from "@/components/sections/HeroParticles";
+import LogoParticles from "@/components/sections/LogoParticles";
 
 /* ---- Word-by-word tagline ---- */
 function TaglineReveal({ text }: { text: string }) {
@@ -155,30 +155,14 @@ export default function Hero() {
             </motion.p>
           </div>
 
-          {/* Photo block */}
+          {/* Logo particle field — canvas-sampled Gray Method badge */}
           <motion.div
             className="relative hidden lg:block"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
-            <div className="relative rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
-              {/* Gold frame glow */}
-              <div
-                className="absolute inset-0 z-10 rounded-2xl pointer-events-none"
-                style={{ boxShadow: "inset 0 0 0 1px rgba(200,169,110,0.15)" }}
-                aria-hidden="true"
-              />
-              <Image
-                src="/images/hero-adam.jpg"
-                alt="Coach Adam Gray — Gray Method Training"
-                width={2000}
-                height={1429}
-                sizes="(max-width: 1280px) 45vw, 560px"
-                priority
-                className="w-full h-auto object-cover object-top"
-              />
-            </div>
+            <LogoParticles />
           </motion.div>
         </div>
       </div>

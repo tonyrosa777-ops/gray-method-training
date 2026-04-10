@@ -2,37 +2,6 @@ import Link from "next/link";
 import { testimonials } from "@/data/site";
 import FadeUp from "@/components/animations/FadeUp";
 import StaggerContainer, { StaggerItem, staggerItemVariants } from "@/components/animations/StaggerContainer";
-import PhotoPlaceholder from "@/components/ui/PhotoPlaceholder";
-import { photos } from "@/lib/photos";
-
-/* ---- Avatar — uses PhotoPlaceholder which handles its own error fallback ---- */
-function Avatar({ photoKey, name }: { photoKey: string; name: string }) {
-  const slot = photos[photoKey as keyof typeof photos];
-
-  if (slot) {
-    return (
-      <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gold/20 flex-shrink-0 flex-none">
-        <PhotoPlaceholder photoKey={photoKey as keyof typeof photos} sizes="48px" className="rounded-full" />
-      </div>
-    );
-  }
-
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-
-  return (
-    <div
-      className="w-12 h-12 rounded-full bg-gray-subtle border border-gold/20 flex items-center justify-center flex-shrink-0"
-      aria-label={`${name} — client`}
-    >
-      <span className="font-mono text-gold text-sm">{initials}</span>
-    </div>
-  );
-}
 
 export default function Testimonials() {
   return (
@@ -80,16 +49,13 @@ export default function Testimonials() {
                 </p>
 
                 {/* Client identity */}
-                <div className="flex items-center gap-3">
-                  <Avatar photoKey={t.photoKey} name={t.name} />
-                  <div>
-                    <p className="font-body text-sm font-medium text-gray-text">
-                      {t.name}
-                    </p>
-                    <p className="font-mono text-xs text-gray-muted tracking-wide">
-                      {t.context}
-                    </p>
-                  </div>
+                <div>
+                  <p className="font-body text-sm font-medium text-gray-text">
+                    {t.name}
+                  </p>
+                  <p className="font-mono text-xs text-gray-muted tracking-wide mt-0.5">
+                    {t.context}
+                  </p>
                 </div>
               </article>
             </StaggerItem>

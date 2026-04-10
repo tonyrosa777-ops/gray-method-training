@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { adamStory } from "@/data/site";
 import SlideIn from "@/components/animations/SlideIn";
 import FadeUp from "@/components/animations/FadeUp";
-import PhotoPlaceholder from "@/components/ui/PhotoPlaceholder";
 
 export default function AdamStory() {
   return (
@@ -21,16 +21,13 @@ export default function AdamStory() {
                 style={{ boxShadow: "inset 0 0 0 1px rgba(200,169,110,0.12)" }}
                 aria-hidden="true"
               />
-              <PhotoPlaceholder
-                photoKey="adamStoryMain"
+              <Image
+                src="/images/hero-adam.jpg"
+                alt="Coach Adam Gray — Gray Method Training"
+                width={2000}
+                height={1429}
                 sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-            </div>
-            {/* Optional secondary inset photo */}
-            <div className="absolute -bottom-6 -right-6 w-32 hidden xl:block rounded-xl overflow-hidden border border-gold/20 shadow-card">
-              <PhotoPlaceholder
-                photoKey="adamStorySecondary"
-                sizes="128px"
+                className="w-full h-auto object-cover object-top"
               />
             </div>
           </SlideIn>
