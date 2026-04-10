@@ -135,9 +135,13 @@ export default function LogoParticles({
 
           next.push({ hx, hy, sx, sy, cx, cy, r, g, b });
 
-          // Collect the very brightest pixels for sparkle spawning
+          // Collect the very brightest pixels for sparkle spawning.
+          // Exclude the banner/subtitle text band so sparkles never land on text.
           if (brightness > 200) {
-            spots.push({ x: hx, y: hy });
+            const yFrac = hy / W; // canvas is square so W === H
+            if (yFrac < 0.36 || yFrac > 0.68) {
+              spots.push({ x: hx, y: hy });
+            }
           }
         }
       }
@@ -328,9 +332,24 @@ export default function LogoParticles({
 
       // ---- Idle energy effects ----
       if (phase === "idle") {
+        // Clip out the "GRAY METHOD" banner + subtitle band so flowing energy
+        // never interferes with text readability. evenodd fill rule: a full
+        // canvas rect + a banner-band rect means the banner band is excluded.
+        const bannerY0 = canvas.height * 0.36;
+        const bannerY1 = canvas.height * 0.68;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, canvas.width, canvas.height);
+        ctx.rect(0, bannerY0, canvas.width, bannerY1 - bannerY0);
+        ctx.clip("evenodd");
+
         drawRingPulse(elapsed);
         drawShimmerSweep(elapsed);
 
+        ctx.restore();
+
+        // Sparkles layer on top (already filtered to non-banner spots)
         if (elapsed >= nextSparkleAt) {
           spawnSparkle(elapsed);
           if (Math.random() < 0.3) spawnSparkle(elapsed);
