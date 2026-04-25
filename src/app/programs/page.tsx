@@ -163,7 +163,7 @@ export default function ProgramsPage() {
                         Ready to start?
                       </p>
                       <p className="font-body text-sm text-gray-text-2 leading-relaxed">
-                        Send a quick note first. Adam&apos;s team will follow up, ask the right questions, and help decide what belongs next.
+                        Tell Adam what you&apos;re dealing with first. A Gray Method team member will help you figure out what belongs next.
                       </p>
                       <Button href={program.ctaHref} variant={program.isFeatured ? "gold" : "ghost"} size="md" className="w-full justify-center">
                         {program.cta}

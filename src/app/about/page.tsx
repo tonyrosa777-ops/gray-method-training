@@ -256,7 +256,7 @@ export default function AboutPage() {
                 No pitch. No pressure. Just the right next step.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8">
-                Send Adam a quick note about where you are. His team will follow up, ask the right questions, and make sure you are pointed in the right direction.
+                Tell Adam what you&apos;re dealing with. A Gray Method team member will reach out and help you take the next right step.
               </p>
               <Button href="/contact" variant="gold" size="lg">
                 Tell Adam What&apos;s Going On

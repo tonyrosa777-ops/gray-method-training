@@ -83,13 +83,13 @@ function QuizLeadForm({
           </svg>
         </div>
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-gold">
-          Sent
+          You&apos;re in
         </p>
         <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
-          Adam&apos;s team has your quiz result.
+          The Gray Method team has your quiz result.
         </h3>
         <p className="font-body text-sm leading-relaxed text-gray-text-2">
-          They will follow up with better context than a blank appointment request could give them.
+          A Gray Method team member will reach out with your answers in mind, so you do not have to start from zero.
         </p>
       </div>
     );
@@ -98,13 +98,13 @@ function QuizLeadForm({
   return (
     <form onSubmit={handleSubmit} className="mb-8 rounded-2xl border border-gold/20 bg-gold/5 p-6">
       <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-        Want Adam&apos;s team to follow up?
+        Want help turning this into a plan?
       </p>
       <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
         Send your result to Adam.
       </h3>
       <p className="mb-6 font-body text-sm leading-relaxed text-gray-text-2">
-        Your answers give him useful context. Add your info here and his team can reach out with the right questions.
+        Your answers give Adam a real starting point. Add your info here and a Gray Method team member can help you figure out what belongs next.
       </p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -149,7 +149,7 @@ function QuizLeadForm({
           value={form.phone}
           onChange={(e) => setForm((cur) => ({ ...cur, phone: e.target.value }))}
           className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
-          placeholder="Best number to reach you"
+          placeholder="Best number for a quick follow-up"
         />
       </label>
 
@@ -171,7 +171,7 @@ function QuizLeadForm({
           {status === "loading" ? "Sending..." : "Send My Result"}
         </Button>
         <p className="font-mono text-xs leading-relaxed text-gray-muted">
-          No self-booking. Just context.
+          Your result gives Adam a better starting point.
         </p>
       </div>
 

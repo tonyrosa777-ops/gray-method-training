@@ -376,9 +376,9 @@ export const quizCta = {
 /* ---- Final CTA -------------------------------------------- */
 export const finalCta = {
   headline: "Ready to stop starting over?",
-  sub: "Send a quick note about where you are right now. Adam or his team will follow up, ask the right questions, and help figure out the next step.",
+  sub: "Tell Adam what has been getting in the way. A Gray Method team member will reach out and help you take the next right step.",
   cta: { label: "Tell Adam What's Going On", href: "/contact" },
-  note: "No commitment. No pressure. Just a real next step.",
+  note: "Private. Personal. No pressure.",
 };
 
 /* ---- Footer ----------------------------------------------- */

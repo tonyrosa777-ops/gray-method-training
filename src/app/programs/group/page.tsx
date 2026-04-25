@@ -95,7 +95,7 @@ export default function GroupCoachingPage() {
           <div className="max-w-2xl mx-auto px-6">
             <FadeIn>
               <h2 className="font-display font-semibold text-title-xl text-gray-text mb-4">Reach out first.</h2>
-              <p className="font-body text-lead text-gray-text-2 mb-8">Adam&apos;s team will follow up and help figure out whether group coaching is right for where you are, or whether you&apos;d be better served by something else.</p>
+              <p className="font-body text-lead text-gray-text-2 mb-8">Tell Adam what you&apos;re dealing with. A Gray Method team member will help figure out whether group coaching is right for where you are, or whether you&apos;d be better served by something else.</p>
               <Button href="/contact" variant="gold" size="lg">Tell Adam What&apos;s Going On</Button>
             </FadeIn>
           </div>

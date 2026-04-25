@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
 
           <div style="text-align:center; padding: 28px 0; border-top: 1px solid #2a2a2a;">
             <p style="font-size: 15px; color: #c8c0b0; margin: 0 0 16px;">
-              Adam's team has your result. If it looks like there may be a fit, they will reach out with the right questions.
+              The Gray Method team has your result. If it looks like there may be a fit, a team member will reach out and help you take the next right step.
             </p>
           </div>
 

@@ -383,7 +383,7 @@ export default function ReviewsPage() {
                 Your story could be next.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8 max-w-xl mx-auto leading-relaxed">
-                Every client above started by reaching out. No pressure, no pitch, just enough context for Adam&apos;s team to ask the right questions.
+                Every client above started by reaching out with what they were dealing with. No pressure, no pitch, just the first step toward a plan that fit.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button href="/contact" variant="gold" size="lg">

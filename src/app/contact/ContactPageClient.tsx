@@ -128,13 +128,13 @@ function ContactForm() {
           </svg>
         </div>
         <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-          Message sent
+          You&apos;re in
         </p>
         <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
-          Adam&apos;s team has your info.
+          The Gray Method team has your info.
         </h3>
         <p className="font-body text-sm leading-relaxed text-gray-text-2">
-          Adam or his setter will follow up, ask the right questions, and help figure out the next step.
+          A Gray Method team member will reach out soon and help you take the next right step.
         </p>
         <div className="mt-6 flex justify-center">
           <Button onClick={() => setApiStatus("idle")} variant="ghost" size="sm">
@@ -148,13 +148,13 @@ function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-white/5 bg-gray-elevated p-6 shadow-card lg:p-8">
       <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-        Start here
+        Your next step
       </p>
       <h2 className="mb-3 font-display text-title-md font-semibold leading-tight text-gray-text">
-        Tell Adam what is going on.
+        Let&apos;s find what actually fits.
       </h2>
       <p className="mb-7 font-body text-sm leading-relaxed text-gray-text-2">
-        Send the basics here. Adam or his setter will follow up with the right questions before anything gets scheduled.
+        Share a little about your goals and what has been getting in the way. Adam or a Gray Method team member will take it from there.
       </p>
 
       <div className="space-y-6">
@@ -251,7 +251,7 @@ function ContactForm() {
             autoComplete="tel"
             {...register("phone")}
             className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
-            placeholder="Best number to reach you"
+            placeholder="Best number for a quick follow-up"
           />
           {errors.phone && <p className="mt-1.5 font-mono text-xs text-orange-accent">{errors.phone.message}</p>}
         </label>
@@ -271,10 +271,10 @@ function ContactForm() {
 
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Button type="submit" variant="gold" size="lg" disabled={apiStatus === "loading"}>
-          {apiStatus === "loading" ? "Sending..." : "Send My Info"}
+          {apiStatus === "loading" ? "Sending..." : "Start My Next Step"}
         </Button>
         <p className="font-mono text-xs leading-relaxed text-gray-muted">
-          No pressure. No pitch. Just the right next step.
+          Private. Personal. No pressure.
         </p>
       </div>
 
@@ -301,33 +301,33 @@ export default function ContactPageClient() {
             <div className="lg:pt-4">
               <FadeIn>
                 <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                  Get started
+                  Get your plan started
                 </p>
               </FadeIn>
               <FadeUp delay={0.05}>
                 <h1 className="mb-6 font-display text-display font-semibold leading-[1.05] text-gray-text">
-                  Tell Adam what is going on.
+                  Start with what you&apos;re dealing with.
                 </h1>
               </FadeUp>
               <FadeUp delay={0.1}>
                 <p className="mb-8 font-body text-lead leading-relaxed text-gray-text-2">
-                  Send a quick note about where you are right now. Adam or his team will follow up, ask a few questions, and help figure out the right next step.
+                  Tell Adam where you are right now: what feels stuck, what you&apos;ve tried, and what you want to feel different. A Gray Method team member will reach out and help you take the next right step.
                 </p>
               </FadeUp>
 
               <FadeIn delay={0.2} className="space-y-4">
                 {[
                   {
-                    title: "No self-booking.",
-                    body: "You will not be dropped into the wrong call. Adam's team will qualify the lead first.",
+                    title: "Built around you.",
+                    body: "Your history, schedule, equipment, and goals all matter. That is the whole point of the Gray Method.",
                   },
                   {
-                    title: "Adam still sees the context.",
-                    body: "The form sends your details and your note so the first follow-up starts in the right place.",
+                    title: "Real support, no pressure.",
+                    body: "You can say where you are honestly. Nobody is here to shame you or force a plan that does not fit.",
                   },
                   {
                     title: "Not sure what to say?",
-                    body: "A sentence or two is enough. The setter can ask the detailed questions after you reach out.",
+                    body: "A sentence or two is enough. Start with what feels hardest right now.",
                   },
                 ].map((item) => (
                   <div
