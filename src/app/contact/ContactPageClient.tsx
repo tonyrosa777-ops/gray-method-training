@@ -274,7 +274,7 @@ function ContactForm() {
           {apiStatus === "loading" ? "Sending..." : "Start My Next Step"}
         </Button>
         <p className="font-mono text-xs leading-relaxed text-gray-muted">
-          Private. Personal. No pressure.
+          Private. Personal. At your pace.
         </p>
       </div>
 
@@ -322,8 +322,8 @@ export default function ContactPageClient() {
                     body: "Your history, schedule, equipment, and goals all matter. That is the whole point of the Gray Method.",
                   },
                   {
-                    title: "Real support, no pressure.",
-                    body: "You can say where you are honestly. Nobody is here to shame you or force a plan that does not fit.",
+                    title: "Real support, on your terms.",
+                    body: "Say where you are honestly. Whatever's actually going on, that's the right starting point — and Adam will listen first.",
                   },
                   {
                     title: "Not sure what to say?",

@@ -253,7 +253,7 @@ export default function AboutPage() {
             <FadeIn>
               <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Ready to reach out?</p>
               <h2 className="font-display font-semibold text-title-xl text-gray-text mb-4">
-                No pitch. No pressure. Just the right next step.
+                Honest support. Real follow-up. The right next step.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8">
                 Tell Adam what you&apos;re dealing with. A Gray Method team member will reach out and help you take the next right step.

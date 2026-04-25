@@ -96,7 +96,7 @@ export const philosophy = {
     {
       number: "03",
       title: "Supportive, Not Restrictive",
-      body: "No 'bad foods.' No 'cheat meals.' No shame spiral. Lean protein, supportive carbohydrates, healthy fat — your body needs all of it.",
+      body: "Food is fuel, not failure. Lean protein, supportive carbohydrates, healthy fat — your body needs all of it. The Gray Method works with food, not against it.",
     },
   ],
 };
@@ -378,7 +378,7 @@ export const finalCta = {
   headline: "Ready to stop starting over?",
   sub: "Tell Adam what has been getting in the way. A Gray Method team member will reach out and help you take the next right step.",
   cta: { label: "Tell Adam What's Going On", href: "/contact" },
-  note: "Private. Personal. No pressure.",
+  note: "Private. Personal. At your pace.",
 };
 
 /* ---- Footer ----------------------------------------------- */

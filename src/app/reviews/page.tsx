@@ -383,7 +383,7 @@ export default function ReviewsPage() {
                 Your story could be next.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8 max-w-xl mx-auto leading-relaxed">
-                Every client above started by reaching out with what they were dealing with. No pressure, no pitch, just the first step toward a plan that fit.
+                Every client above started by reaching out with what they were dealing with. One honest message was the first step toward a plan that actually fit.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button href="/contact" variant="gold" size="lg">
@@ -396,7 +396,7 @@ export default function ReviewsPage() {
                   Not sure where to start? Take the quiz →
                 </Link>
               </div>
-              <p className="font-mono text-xs text-gray-muted mt-6">No commitment. No pressure. Honest advice.</p>
+              <p className="font-mono text-xs text-gray-muted mt-6">Real follow-up. Honest advice. At your pace.</p>
             </FadeIn>
           </div>
         </section>

@@ -216,7 +216,10 @@ export async function POST(req: NextRequest) {
         adminStatus: adminRes.status,
         userStatus: userRes.status,
       });
-      return NextResponse.json({ sent: false, note: "Email delivery issue." });
+      return NextResponse.json(
+        { sent: false, note: "Email delivery issue." },
+        { status: 502 }
+      );
     }
 
     return NextResponse.json({ sent: true });

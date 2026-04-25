@@ -198,7 +198,7 @@ export default function ProgramsPage() {
               <Button href="/contact" variant="gold" size="lg">
                 Tell Adam What&apos;s Going On
               </Button>
-              <p className="font-mono text-xs text-gray-muted mt-4">No commitment. No pressure. Honest advice.</p>
+              <p className="font-mono text-xs text-gray-muted mt-4">Real follow-up. Honest advice. At your pace.</p>
             </FadeIn>
           </div>
         </section>

@@ -28,7 +28,7 @@ export default function FinalCTA() {
       <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
         <FadeUp className="mb-6">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold">
-            Quick note - real follow-up - no pressure
+            Quick note - real follow-up - on your terms
           </p>
         </FadeUp>
 

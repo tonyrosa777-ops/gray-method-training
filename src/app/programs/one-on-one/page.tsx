@@ -50,7 +50,7 @@ export default function OneOnOnePage() {
             </FadeUp>
             <FadeIn delay={0.25}>
               <Button href="/contact" variant="gold" size="lg">Tell Adam What&apos;s Going On</Button>
-              <p className="font-mono text-xs text-gray-muted mt-3">No commitment. No pitch. Just the right next step.</p>
+              <p className="font-mono text-xs text-gray-muted mt-3">Real follow-up. Honest support. The right next step.</p>
             </FadeIn>
           </div>
         </section>
