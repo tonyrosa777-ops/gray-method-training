@@ -5,10 +5,10 @@
 ---
 
 ## CURRENT STATUS
-**Phase:** Phase 8 reboot + pricing page launch (Stripe + custom cart + Printful APIs)
-**Last commit:** feat: add gray method pricing page
-**Last updated:** 2026-03-29
-**Blocked by:** None
+**Phase:** Post-launch polish — lead intake hardening + mobile UX fixes
+**Last commit:** fix(type): make text-title-xl and text-title-lg responsive via clamp (89b5f86)
+**Last updated:** 2026-04-24
+**Blocked by:** None — Resend sender domain verification status unconfirmed; submit one live test from each form to confirm DKIM/SPF reach inbox.
 
 ---
 
@@ -252,6 +252,31 @@
   reference shop so the actual `/shop` page feels fuller and the homepage teaser can show 1 digital + 3 merch items.
 - 2026-03-29 · Hero motion pass: increased the particle density, speed, and sparkle frequency on the homepage so
   the opening screen feels more animated without changing the color system.
+
+- 2026-04-24 · Lead intake review (Codex 5.5 commits 7d0a3d6 + e6d186a): confirmed Calendly removal + new lead form
+  shipping correctly. Ran live verification on graymethodtraining.com at 375 / 390 / 428 / 1440 — 0 console errors,
+  no horizontal overflow, clean layout. Pulled Vercel runtime logs to confirm `RESEND_API_KEY` + `CONTACT_EMAIL_TO`
+  set in production and `/api/contact` returning 200 on submission.
+- 2026-04-24 · feat(contact): added user confirmation email so submitters get a branded "Your note landed" reply,
+  mirroring the quiz route's two-email pattern. Reply-to routes back to coach_adam@graymethodtraining.com so direct
+  replies in Gmail/etc. land in Adam's inbox. Also: swept all "no pressure / no sales pitch / no commitment / no
+  shame" microcopy across hero, contact, programs, reviews, about, FinalCTA, and finalCta data — replaced with
+  affirmative copy ("at your pace," "real follow-up," "honest support," "on your terms"). Negation reassurance
+  plants the exact concern it tries to dispel. /api/quiz also now returns 502 (was 200) when Resend fails so the
+  client can't show false success. Commit 69d4ecc.
+- 2026-04-24 · fix(nav): Get Started CTA repointed from /contact to /quiz. Nav had two slots (Contact link + Get
+  Started button) routing to the same page. Footer Programs column updated for consistency. Hero, finalCta, and
+  per-program-page Get Started buttons left on /contact intentionally — those are higher-intent surfaces. Commit
+  9f7a030.
+- 2026-04-24 · fix(forms): bumped input/textarea font-size from text-sm (14px) to text-base md:text-sm — i.e. 16px
+  on mobile, 14px on desktop+. Below 16px iOS Safari auto-zooms when an input is tapped, breaking mobile UX. Both
+  `/contact` and `/quiz` lead forms affected. Verified live at 390px: all four contact inputs and all four quiz
+  inputs report computed font-size 16px. Commit f441641.
+- 2026-04-24 · fix(type): made --text-title-xl and --text-title-lg responsive via clamp(). At narrow viewports
+  (e.g. 565px) the quiz question heading was rendering at the fixed 3rem (48px) and wrapping to 6+ lines, dominating
+  the screen. text-title-xl: 3rem → clamp(2rem, 5vw, 3rem). text-title-lg: 2.25rem → clamp(1.75rem, 4vw, 2.25rem).
+  Used by 16 files — every section heading site-wide now scales responsively for free. Same fix pattern as 702bc80c
+  (text-display clamp). Verified live at 565px: heading is now 32px and wraps cleanly to 2 lines. Commit 89b5f86.
 
 ---
 
