@@ -127,19 +127,18 @@ export default async function BlogPostPage({
                     Stop reading about it. Start doing it.
                   </h3>
                   <p className="font-body text-gray-text-2 mb-8 max-w-md">
-                    Take the 2-minute quiz to find out which Gray Method program fits where you are right now — or book a free call and we'll figure it out together.
+                    Take the 2-minute quiz to find out which Gray Method program fits where you are right now, or send Adam a quick note.
                   </p>
                   <div className="flex flex-wrap gap-4">
                     <Button href="/quiz" variant="gold" size="lg">
                       Find My Program
                     </Button>
                     <Button
-                      href={process.env.NEXT_PUBLIC_CALENDLY_URL ?? "/contact"}
+                      href="/contact"
                       variant="ghost"
                       size="lg"
-                      external={!!process.env.NEXT_PUBLIC_CALENDLY_URL}
                     >
-                      Schedule a Free Call
+                      Tell Adam What&apos;s Going On
                     </Button>
                   </div>
                 </div>

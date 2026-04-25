@@ -19,7 +19,7 @@ export const nav = {
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ],
-  cta: { label: "Schedule a Free Call", href: "/contact" },
+  cta: { label: "Get Started", href: "/contact" },
 };
 
 /* ---- Hero ------------------------------------------------- */
@@ -32,7 +32,7 @@ export const hero = {
   ],
   tagline:
     "There is no black and white, everyone is different, everything is a gray area. Let's find the perfect plan for YOU!",
-  ctaPrimary: { label: "Schedule a Free Call with Coach Adam", href: "/contact" },
+  ctaPrimary: { label: "Tell Adam What's Going On", href: "/contact" },
   ctaSecondary: { label: "Take the Quiz", href: "/quiz" },
   scrollLabel: "Scroll to explore",
 };
@@ -140,7 +140,7 @@ const _pricing = {
   eyebrow: "Built to win you clients",
   headline: "A website that pays for itself should not look like a template.",
   sub:
-    "Three one-time package options for a Gray Method site that feels premium, earns trust fast, and turns the right visitors into booked calls.",
+    "Three one-time package options for a Gray Method site that feels premium, earns trust fast, and turns the right visitors into qualified leads.",
   chips: [
     "One-time payment",
     "Mobile-first",
@@ -206,7 +206,7 @@ const _pricing = {
     eyebrow: "Run the numbers",
     headline: "How quickly does the site pay for itself?",
     sub:
-      "This is a conservative sales model for selling the website itself. If the new site books more qualified calls, even one additional close can move the needle fast.",
+      "This is a conservative sales model for selling the website itself. If the new site creates more qualified leads, even one additional close can move the needle fast.",
     proofs: [
       "Interactive proof tool",
       "Conservative assumptions",
@@ -237,7 +237,7 @@ const _pricing = {
         premium: true,
       },
       {
-        feature: "Contact / call booking flow",
+        feature: "Contact / lead intake flow",
         starter: true,
         pro: true,
         premium: true,
@@ -368,7 +368,7 @@ export const quizCta = {
   sub: "A 2-minute quiz. Real answers, not generic advice.",
   ctaPrimary: { label: "Take the Quiz", href: "/quiz" },
   ctaSecondary: {
-    label: "Or schedule a free 20-minute call with Coach Adam",
+    label: "Or send Adam a quick note",
     href: "/contact",
   },
 };
@@ -376,9 +376,9 @@ export const quizCta = {
 /* ---- Final CTA -------------------------------------------- */
 export const finalCta = {
   headline: "Ready to stop starting over?",
-  sub: "A free 20-minute call with Coach Adam. Not a sales pitch — just an honest conversation about where you are and where you want to go.",
-  cta: { label: "Schedule Your Free Call", href: "/contact" },
-  note: "No commitment. No pressure. Just a conversation.",
+  sub: "Send a quick note about where you are right now. Adam or his team will follow up, ask the right questions, and help figure out the next step.",
+  cta: { label: "Tell Adam What's Going On", href: "/contact" },
+  note: "No commitment. No pressure. Just a real next step.",
 };
 
 /* ---- Footer ----------------------------------------------- */
@@ -400,7 +400,7 @@ export const footer = {
         { label: "1:1 Online Coaching", href: "/programs/one-on-one" },
         { label: "Energize & Empower Her", href: "/programs/energize-empower" },
         { label: "Group Coaching", href: "/programs/group" },
-        { label: "Free Discovery Call", href: "/contact" },
+        { label: "Get Started", href: "/contact" },
       ],
     },
     {

@@ -47,7 +47,7 @@ export default function GroupCoachingPage() {
               </p>
             </FadeUp>
             <FadeIn delay={0.25}>
-              <Button href="/contact" variant="gold" size="lg">Schedule a Free Call</Button>
+              <Button href="/contact" variant="gold" size="lg">Get Started</Button>
               <p className="font-mono text-xs text-gray-muted mt-3">Spots are limited to keep quality high</p>
             </FadeIn>
           </div>
@@ -94,9 +94,9 @@ export default function GroupCoachingPage() {
         <section className="py-20 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <FadeIn>
-              <h2 className="font-display font-semibold text-title-xl text-gray-text mb-4">Talk to Adam first.</h2>
-              <p className="font-body text-lead text-gray-text-2 mb-8">He&apos;ll tell you honestly whether group coaching is right for where you are — or whether you&apos;d be better served by something else.</p>
-              <Button href="/contact" variant="gold" size="lg">Schedule a Free Call</Button>
+              <h2 className="font-display font-semibold text-title-xl text-gray-text mb-4">Reach out first.</h2>
+              <p className="font-body text-lead text-gray-text-2 mb-8">Adam&apos;s team will follow up and help figure out whether group coaching is right for where you are, or whether you&apos;d be better served by something else.</p>
+              <Button href="/contact" variant="gold" size="lg">Tell Adam What&apos;s Going On</Button>
             </FadeIn>
           </div>
         </section>

@@ -7,7 +7,7 @@ export default function FinalCTA() {
   return (
     <section
       className="relative overflow-hidden bg-gray-bg py-28 lg:py-40"
-      aria-label="Schedule a free discovery call with Coach Adam"
+      aria-label="Send a message to Coach Adam"
     >
       <div
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
@@ -28,7 +28,7 @@ export default function FinalCTA() {
       <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
         <FadeUp className="mb-6">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold">
-            Free Discovery Call · 20 minutes · No commitment
+            Quick note - real follow-up - no pressure
           </p>
         </FadeUp>
 

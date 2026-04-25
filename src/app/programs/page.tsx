@@ -37,7 +37,7 @@ const programDetails = [
       "Video form reviews on request",
       "Direct access to Coach Adam, any time",
     ],
-    cta: "Schedule a Free Call",
+    cta: "Get Started",
     ctaHref: "/contact",
     secondaryCta: "Learn More",
     secondaryHref: "/programs/one-on-one",
@@ -79,7 +79,7 @@ const programDetails = [
       "Private community access",
       "Limited to keep quality high",
     ],
-    cta: "Schedule a Free Call",
+    cta: "Get Started",
     ctaHref: "/contact",
     secondaryCta: "Learn More",
     secondaryHref: "/programs/group",
@@ -163,7 +163,7 @@ export default function ProgramsPage() {
                         Ready to start?
                       </p>
                       <p className="font-body text-sm text-gray-text-2 leading-relaxed">
-                        The best next step is a free 20-minute call. No commitment, no pitch — just a real conversation.
+                        Send a quick note first. Adam&apos;s team will follow up, ask the right questions, and help decide what belongs next.
                       </p>
                       <Button href={program.ctaHref} variant={program.isFeatured ? "gold" : "ghost"} size="md" className="w-full justify-center">
                         {program.cta}
@@ -190,15 +190,15 @@ export default function ProgramsPage() {
             <FadeIn>
               <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Not sure which to pick?</p>
               <h2 className="font-display font-semibold text-title-lg text-gray-text mb-4">
-                Start with a free call. Adam will tell you honestly.
+                Start with a quick note. Adam will tell you honestly.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8">
                 If 1:1 isn&apos;t the right fit right now, Adam will say so. He&apos;d rather point you in the right direction than sell you something that doesn&apos;t serve you.
               </p>
               <Button href="/contact" variant="gold" size="lg">
-                Schedule Your Free 20-Minute Call
+                Tell Adam What&apos;s Going On
               </Button>
-              <p className="font-mono text-xs text-gray-muted mt-4">No commitment · No pressure · Honest advice</p>
+              <p className="font-mono text-xs text-gray-muted mt-4">No commitment. No pressure. Honest advice.</p>
             </FadeIn>
           </div>
         </section>

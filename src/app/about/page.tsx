@@ -75,7 +75,7 @@ export default function AboutPage() {
                 </FadeUp>
                 <FadeIn delay={0.45}>
                   <Button href="/contact" variant="gold" size="lg">
-                    Schedule a Free Call with Adam
+                    Tell Adam What&apos;s Going On
                   </Button>
                 </FadeIn>
               </div>
@@ -251,15 +251,15 @@ export default function AboutPage() {
         <section className="py-24 lg:py-32">
           <div className="max-w-2xl mx-auto px-6 text-center">
             <FadeIn>
-              <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Ready to talk?</p>
+              <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Ready to reach out?</p>
               <h2 className="font-display font-semibold text-title-xl text-gray-text mb-4">
-                No pitch. No pressure. Just a conversation.
+                No pitch. No pressure. Just the right next step.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8">
-                A free 20-minute call with Adam. He&apos;ll listen to where you are, answer your questions honestly, and tell you exactly what he thinks would help.
+                Send Adam a quick note about where you are. His team will follow up, ask the right questions, and make sure you are pointed in the right direction.
               </p>
               <Button href="/contact" variant="gold" size="lg">
-                Schedule Your Free Call
+                Tell Adam What&apos;s Going On
               </Button>
             </FadeIn>
           </div>

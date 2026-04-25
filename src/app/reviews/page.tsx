@@ -383,11 +383,11 @@ export default function ReviewsPage() {
                 Your story could be next.
               </h2>
               <p className="font-body text-lead text-gray-text-2 mb-8 max-w-xl mx-auto leading-relaxed">
-                Every client above started with a free 20-minute call. Not a pitch — just an honest conversation about where you are and whether Adam can actually help.
+                Every client above started by reaching out. No pressure, no pitch, just enough context for Adam&apos;s team to ask the right questions.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button href="/contact" variant="gold" size="lg">
-                  Schedule Your Free Call
+                  Tell Adam What&apos;s Going On
                 </Button>
                 <Link
                   href="/quiz"
@@ -396,7 +396,7 @@ export default function ReviewsPage() {
                   Not sure where to start? Take the quiz →
                 </Link>
               </div>
-              <p className="font-mono text-xs text-gray-muted mt-6">No commitment · No pressure · Honest advice</p>
+              <p className="font-mono text-xs text-gray-muted mt-6">No commitment. No pressure. Honest advice.</p>
             </FadeIn>
           </div>
         </section>

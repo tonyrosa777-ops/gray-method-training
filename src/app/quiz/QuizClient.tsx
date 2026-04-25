@@ -1,18 +1,14 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { QUIZ_QUESTIONS, QUIZ_RESULTS, scoreQuiz, type QuizType } from "@/data/quiz";
 import Button from "@/components/ui/Button";
-import CalendlyEmbed from "@/components/ui/CalendlyEmbed";
 
 type Phase = "intro" | "question" | "results";
 
-const TOTAL = QUIZ_QUESTIONS.length; // 8
+const TOTAL = QUIZ_QUESTIONS.length;
 
-// ---------------------------------------------------------------------------
-// ProgressBar
-// ---------------------------------------------------------------------------
 function ProgressBar({ current, total }: { current: number; total: number }) {
   const pct = Math.round((current / total) * 100);
   return (
@@ -33,30 +29,180 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// QuizClient
-// ---------------------------------------------------------------------------
+function QuizLeadForm({
+  resultType,
+  answers,
+}: {
+  resultType: QuizType;
+  answers: QuizType[];
+}) {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("loading");
+
+    try {
+      const res = await fetch("/api/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          resultType,
+          answers,
+        }),
+      });
+
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+      setForm({ name: "", email: "", phone: "", message: "" });
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div className="mb-8 rounded-2xl border border-gold/20 bg-gold/5 p-8 text-center">
+        <div
+          className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10"
+          aria-hidden="true"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="rgba(201,168,76,0.9)" strokeWidth="1.5">
+            <polyline points="4 10 8 14 16 6" />
+          </svg>
+        </div>
+        <p className="mb-1 font-mono text-xs uppercase tracking-widest text-gold">
+          Sent
+        </p>
+        <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
+          Adam&apos;s team has your quiz result.
+        </h3>
+        <p className="font-body text-sm leading-relaxed text-gray-text-2">
+          They will follow up with better context than a blank appointment request could give them.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mb-8 rounded-2xl border border-gold/20 bg-gold/5 p-6">
+      <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-gold">
+        Want Adam&apos;s team to follow up?
+      </p>
+      <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
+        Send your result to Adam.
+      </h3>
+      <p className="mb-6 font-body text-sm leading-relaxed text-gray-text-2">
+        Your answers give him useful context. Add your info here and his team can reach out with the right questions.
+      </p>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <label className="block">
+          <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
+            Name <span className="text-gold">*</span>
+          </span>
+          <input
+            required
+            type="text"
+            autoComplete="name"
+            value={form.name}
+            onChange={(e) => setForm((cur) => ({ ...cur, name: e.target.value }))}
+            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+            placeholder="Your name"
+          />
+        </label>
+        <label className="block">
+          <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
+            Email <span className="text-gold">*</span>
+          </span>
+          <input
+            required
+            type="email"
+            autoComplete="email"
+            value={form.email}
+            onChange={(e) => setForm((cur) => ({ ...cur, email: e.target.value }))}
+            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+            placeholder="you@example.com"
+          />
+        </label>
+      </div>
+
+      <label className="mt-4 block">
+        <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
+          Phone <span className="text-gold">*</span>
+        </span>
+        <input
+          required
+          type="tel"
+          autoComplete="tel"
+          value={form.phone}
+          onChange={(e) => setForm((cur) => ({ ...cur, phone: e.target.value }))}
+          className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+          placeholder="Best number to reach you"
+        />
+      </label>
+
+      <label className="mt-4 block">
+        <span className="mb-2 block font-body text-xs uppercase tracking-wide text-gray-text-2">
+          Anything you want Adam to know?
+        </span>
+        <textarea
+          rows={4}
+          value={form.message}
+          onChange={(e) => setForm((cur) => ({ ...cur, message: e.target.value }))}
+          className="w-full resize-none rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+          placeholder="What made this result feel accurate? What have you tried already?"
+        />
+      </label>
+
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Button type="submit" variant="gold" size="md" disabled={status === "loading"}>
+          {status === "loading" ? "Sending..." : "Send My Result"}
+        </Button>
+        <p className="font-mono text-xs leading-relaxed text-gray-muted">
+          No self-booking. Just context.
+        </p>
+      </div>
+
+      {status === "error" && (
+        <p className="mt-4 font-body text-sm text-orange-accent">
+          Something went wrong. Email Adam directly at{" "}
+          <a href="mailto:coach_adam@graymethodtraining.com" className="underline">
+            coach_adam@graymethodtraining.com
+          </a>
+          .
+        </p>
+      )}
+    </form>
+  );
+}
+
 export default function QuizClient() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizType[]>([]);
-  // Which answer was just clicked — held for 400ms before advancing
   const [pendingAnswer, setPendingAnswer] = useState<QuizType | null>(null);
-  const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
+  const [direction, setDirection] = useState(1);
   const [resultType, setResultType] = useState<QuizType | null>(null);
-  const [booked, setBooked] = useState(false);
 
-  // The answer already recorded at the current index (visible when going back)
   const existingAnswer: QuizType | null =
     phase === "question" && questionIndex < answers.length
       ? answers[questionIndex]
       : null;
 
-  // ---------------------------------------------------------------------------
-  // Handlers
-  // ---------------------------------------------------------------------------
   function handleSelectAnswer(type: QuizType) {
-    if (pendingAnswer !== null) return; // debounce during flash animation
+    if (pendingAnswer !== null) return;
     setPendingAnswer(type);
 
     setTimeout(() => {
@@ -68,7 +214,6 @@ export default function QuizClient() {
         setDirection(1);
         setQuestionIndex((i) => i + 1);
       } else {
-        // Last question answered — score immediately, go straight to results
         setResultType(scoreQuiz(newAnswers));
         setPhase("results");
       }
@@ -86,17 +231,12 @@ export default function QuizClient() {
     }
   }
 
-  const handleBooked = useCallback(() => {
-    setBooked(true);
-  }, []);
-
   function handleRetake() {
     setPhase("intro");
     setQuestionIndex(0);
     setAnswers([]);
     setPendingAnswer(null);
     setResultType(null);
-    setBooked(false);
     setDirection(1);
   }
 
@@ -107,8 +247,6 @@ export default function QuizClient() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-bg px-6 py-24">
       <div className="w-full max-w-2xl">
         <AnimatePresence mode="wait" initial={false}>
-
-          {/* ── Intro ── */}
           {phase === "intro" && (
             <motion.div
               key="intro"
@@ -124,13 +262,13 @@ export default function QuizClient() {
                 What kind of client<br />are you?
               </h1>
               <p className="mb-8 max-w-lg font-body text-lead leading-relaxed text-gray-text-2">
-                8 quick questions. Honest answers. You&apos;ll get a result that maps to your actual situation — and a recommendation for the kind of help that fits you right now.
+                8 quick questions. Honest answers. You will get a result that maps to your actual situation and a recommendation for the kind of help that fits you right now.
               </p>
               <ul className="mb-10 space-y-2.5">
                 {[
                   "Takes about 2 minutes",
-                  "No wrong answers — just pick what\u2019s closest to true",
-                  "See your result instantly — no email required",
+                  "No wrong answers, just pick what is closest to true",
+                  "See your result instantly, no email required",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2.5 font-body text-sm text-gray-muted">
                     <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-gold/60" aria-hidden="true" />
@@ -142,12 +280,11 @@ export default function QuizClient() {
                 Start the quiz
               </Button>
               <p className="mt-4 font-mono text-xs text-gray-muted">
-                8 questions · results on screen immediately
+                8 questions. Results on screen immediately.
               </p>
             </motion.div>
           )}
 
-          {/* ── Question ── */}
           {phase === "question" && currentQuestion && (
             <motion.div
               key={`q-${questionIndex}`}
@@ -209,14 +346,13 @@ export default function QuizClient() {
                   onClick={handleBack}
                   className="font-body text-sm text-gray-muted transition-colors duration-200 hover:text-gray-text"
                 >
-                  ← Back
+                  Back
                 </button>
               </div>
             </motion.div>
           )}
 
-          {/* ── Results ── */}
-          {phase === "results" && result && (
+          {phase === "results" && result && resultType && (
             <motion.div
               key="results"
               initial={{ opacity: 0, y: 28 }}
@@ -242,7 +378,6 @@ export default function QuizClient() {
                 ))}
               </div>
 
-              {/* Recommended program card */}
               <div className="mb-10 rounded-2xl border border-gold/20 bg-gold/5 p-6">
                 <p className="mb-1 font-mono text-xs uppercase tracking-[0.2em] text-gold">
                   Recommended for you
@@ -258,45 +393,7 @@ export default function QuizClient() {
                 </Button>
               </div>
 
-              {/* Inline booking calendar */}
-              {booked ? (
-                <div className="mb-8 rounded-2xl border border-gold/20 bg-gold/5 p-8 text-center">
-                  <div
-                    className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10"
-                    aria-hidden="true"
-                  >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.9)" strokeWidth="1.5">
-                      <rect x="3" y="4" width="18" height="18" rx="2" />
-                      <path d="M16 2v4M8 2v4M3 10h18" />
-                      <polyline points="9 16 11 18 15 14" />
-                    </svg>
-                  </div>
-                  <p className="mb-1 font-mono text-xs uppercase tracking-widest text-gold">
-                    Call booked
-                  </p>
-                  <h3 className="mb-2 font-display text-title-md font-semibold text-gray-text">
-                    You&apos;re on Adam&apos;s calendar.
-                  </h3>
-                  <p className="font-body text-sm leading-relaxed text-gray-text-2">
-                    Check your email for the confirmation. He&apos;ll already know your result and come prepared.
-                  </p>
-                </div>
-              ) : (
-                <div className="mb-8">
-                  <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-gold">
-                    Book your free call
-                  </p>
-                  <h3 className="mb-1 font-display text-title-md font-semibold text-gray-text">
-                    Talk to Adam while it&apos;s top of mind.
-                  </h3>
-                  <p className="mb-5 font-body text-sm leading-relaxed text-gray-text-2">
-                    Free · 20 minutes · He&apos;ll already know your result.
-                  </p>
-                  <div className="overflow-hidden rounded-xl border border-white/8">
-                    <CalendlyEmbed name="" email="" onBooked={handleBooked} />
-                  </div>
-                </div>
-              )}
+              <QuizLeadForm resultType={resultType} answers={answers} />
 
               <div className="flex justify-center pt-2">
                 <Button onClick={handleRetake} variant="ghost" size="sm">
@@ -305,7 +402,6 @@ export default function QuizClient() {
               </div>
             </motion.div>
           )}
-
         </AnimatePresence>
       </div>
     </div>

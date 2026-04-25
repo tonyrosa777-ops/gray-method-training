@@ -49,8 +49,8 @@ export default function OneOnOnePage() {
               </p>
             </FadeUp>
             <FadeIn delay={0.25}>
-              <Button href="/contact" variant="gold" size="lg">Schedule a Free 20-Minute Call</Button>
-              <p className="font-mono text-xs text-gray-muted mt-3">No commitment · No pitch · Just a real conversation</p>
+              <Button href="/contact" variant="gold" size="lg">Tell Adam What&apos;s Going On</Button>
+              <p className="font-mono text-xs text-gray-muted mt-3">No commitment. No pitch. Just the right next step.</p>
             </FadeIn>
           </div>
         </section>
@@ -102,8 +102,8 @@ export default function OneOnOnePage() {
             <FadeIn>
               <p className="font-mono text-xs text-gold tracking-[0.2em] uppercase mb-4">Ready to start?</p>
               <h2 className="font-display font-semibold text-title-xl text-gray-text mb-4">Let&apos;s find out if it&apos;s a good fit.</h2>
-              <p className="font-body text-lead text-gray-text-2 mb-8">A free 20-minute call with Adam. He&apos;ll listen, ask good questions, and tell you honestly whether 1:1 coaching is right for where you are.</p>
-              <Button href="/contact" variant="gold" size="lg">Schedule Your Free Call</Button>
+              <p className="font-body text-lead text-gray-text-2 mb-8">Send a quick note about where you are. Adam&apos;s team will follow up, ask the right questions, and help figure out whether 1:1 coaching is right for you.</p>
+              <Button href="/contact" variant="gold" size="lg">Get Started</Button>
             </FadeIn>
           </div>
         </section>

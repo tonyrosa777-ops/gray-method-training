@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * POST /api/contact
  *
- * Sends contact form submissions to Adam's email via Resend.
+ * Sends lead form submissions to Adam's email via Resend.
  * Requires: RESEND_API_KEY + CONTACT_EMAIL_TO in .env.local
  * See SETUP.md for Resend setup instructions.
  *
@@ -12,20 +12,36 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, phone, message, goal } = await req.json();
+    const { name, email, phone, message, goal, source } = await req.json();
 
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: "Name, email, and message are required." }, { status: 400 });
+    if (!name || !email || !phone || !message) {
+      return NextResponse.json(
+        { error: "Name, email, phone, and message are required." },
+        { status: 400 }
+      );
     }
 
     const apiKey = process.env.RESEND_API_KEY;
     const toEmail = process.env.CONTACT_EMAIL_TO ?? "coach_adam@graymethodtraining.com";
 
-    // If Resend is not configured, log and return success so dev testing works
     if (!apiKey) {
-      console.log("[contact] Resend not configured — form submission:", { name, email, goal });
+      console.log("[contact] Resend not configured - lead submission:", {
+        name,
+        email,
+        phone,
+        goal,
+        source,
+      });
       return NextResponse.json({ sent: true });
     }
+
+    const leadSource = source ?? "Simple Contact Lead";
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safePhone = escapeHtml(phone);
+    const safeGoal = goal ? escapeHtml(goal) : "";
+    const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
+    const safeLeadSource = escapeHtml(leadSource);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -37,15 +53,16 @@ export async function POST(req: NextRequest) {
         from: "Gray Method Website <noreply@graymethodtraining.com>",
         to: [toEmail],
         reply_to: email,
-        subject: `New contact from ${name} — Gray Method`,
+        subject: `New lead from ${name} - Gray Method`,
         html: `
-          <h2>New contact form submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
-          ${goal ? `<p><strong>Goal:</strong> ${goal}</p>` : ""}
+          <h2>New website lead</h2>
+          <p><strong>Source:</strong> ${safeLeadSource}</p>
+          <p><strong>Name:</strong> ${safeName}</p>
+          <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+          <p><strong>Phone:</strong> ${safePhone}</p>
+          ${safeGoal ? `<p><strong>Goal:</strong> ${safeGoal}</p>` : ""}
           <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, "<br>")}</p>
+          <p>${safeMessage}</p>
         `,
       }),
     });
@@ -58,4 +75,13 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Internal error." }, { status: 500 });
   }
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

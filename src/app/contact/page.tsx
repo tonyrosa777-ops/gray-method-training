@@ -4,11 +4,11 @@ import ContactPageClient from "./ContactPageClient";
 export const metadata: Metadata = {
   title: "Contact Coach Adam Gray",
   description:
-    "Schedule a free 20-minute call with Coach Adam Gray or send a message directly. Honest support for busy women who want a plan that fits real life.",
+    "Send Coach Adam Gray a quick note about where you are right now. His team will follow up and help figure out the right next step.",
   openGraph: {
     title: "Contact Coach Adam Gray — Gray Method Training",
     description:
-      "Reach out to Coach Adam Gray for a free discovery call or a direct conversation about where you are and what might actually help.",
+      "Reach out to Coach Adam Gray with a simple lead form built around honest support and the right next step.",
     type: "website",
   },
 };
