@@ -221,7 +221,7 @@ function ContactForm() {
               type="text"
               autoComplete="name"
               {...register("name")}
-              className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+              className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
               placeholder="Your name"
             />
             {errors.name && <p className="mt-1.5 font-mono text-xs text-orange-accent">{errors.name.message}</p>}
@@ -235,7 +235,7 @@ function ContactForm() {
               type="email"
               autoComplete="email"
               {...register("email")}
-              className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+              className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
               placeholder="you@example.com"
             />
             {errors.email && <p className="mt-1.5 font-mono text-xs text-orange-accent">{errors.email.message}</p>}
@@ -250,7 +250,7 @@ function ContactForm() {
             type="tel"
             autoComplete="tel"
             {...register("phone")}
-            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
             placeholder="Best number for a quick follow-up"
           />
           {errors.phone && <p className="mt-1.5 font-mono text-xs text-orange-accent">{errors.phone.message}</p>}
@@ -263,7 +263,7 @@ function ContactForm() {
           <textarea
             rows={5}
             {...register("message")}
-            className="w-full resize-none rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+            className="w-full resize-none rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
             placeholder="Where are you right now, what have you tried, what feels stuck?"
           />
         </label>

@@ -118,7 +118,7 @@ function QuizLeadForm({
             autoComplete="name"
             value={form.name}
             onChange={(e) => setForm((cur) => ({ ...cur, name: e.target.value }))}
-            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
             placeholder="Your name"
           />
         </label>
@@ -132,7 +132,7 @@ function QuizLeadForm({
             autoComplete="email"
             value={form.email}
             onChange={(e) => setForm((cur) => ({ ...cur, email: e.target.value }))}
-            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+            className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
             placeholder="you@example.com"
           />
         </label>
@@ -148,7 +148,7 @@ function QuizLeadForm({
           autoComplete="tel"
           value={form.phone}
           onChange={(e) => setForm((cur) => ({ ...cur, phone: e.target.value }))}
-          className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+          className="w-full rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
           placeholder="Best number for a quick follow-up"
         />
       </label>
@@ -161,7 +161,7 @@ function QuizLeadForm({
           rows={4}
           value={form.message}
           onChange={(e) => setForm((cur) => ({ ...cur, message: e.target.value }))}
-          className="w-full resize-none rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-sm text-gray-text outline-none transition-colors placeholder:text-gray-muted focus:border-gold"
+          className="w-full resize-none rounded-xl border border-white/10 bg-gray-bg/35 px-4 py-3 font-body text-base text-gray-text outline-none md:text-sm transition-colors placeholder:text-gray-muted focus:border-gold"
           placeholder="What made this result feel accurate? What have you tried already?"
         />
       </label>
