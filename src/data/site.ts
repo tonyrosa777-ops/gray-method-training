@@ -19,7 +19,7 @@ export const nav = {
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ],
-  cta: { label: "Get Started", href: "/contact" },
+  cta: { label: "Get Started", href: "/quiz" },
 };
 
 /* ---- Hero ------------------------------------------------- */
@@ -400,7 +400,7 @@ export const footer = {
         { label: "1:1 Online Coaching", href: "/programs/one-on-one" },
         { label: "Energize & Empower Her", href: "/programs/energize-empower" },
         { label: "Group Coaching", href: "/programs/group" },
-        { label: "Get Started", href: "/contact" },
+        { label: "Get Started", href: "/quiz" },
       ],
     },
     {
